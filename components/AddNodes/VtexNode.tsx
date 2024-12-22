@@ -55,7 +55,7 @@ export function VtexCommerceNode({ data }:{data:any}) {
                 <div className="space-y-2">
                   <h4 className="font-medium leading-none">Connection Settings</h4>
                   <p className="text-sm text-muted-foreground">
-                    Configure your payment processor settings
+                    Configure your VTEX Ecommerce settings
                   </p>
                 </div>
                 <div className="grid gap-2">

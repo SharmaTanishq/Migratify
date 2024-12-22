@@ -20,8 +20,9 @@ import {
 import { useDnD } from '@/components/AddNodes/DnDContext';
 import '@xyflow/react/dist/style.css';
 import { DockDemo } from '../../dock';
-import { TextUpdaterNode } from './textUpdaternode';
+
 import { VtexCommerceNode } from '@/components/AddNodes/VtexNode';
+import {FileUploadNode} from '@/components/FileUploadNode/UploadFileNode';
 
 const initialNodes = [
     {
@@ -43,7 +44,9 @@ export default function Page() {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const nodeTypes = useMemo(() => ({ vtexNode: VtexCommerceNode }), []);
+  const nodeTypes = useMemo(() => ({  
+      vtexNode: VtexCommerceNode, 
+      fileUploadNode: FileUploadNode }), []);
 
   const { screenToFlowPosition } = useReactFlow();
   const [type] = useDnD();

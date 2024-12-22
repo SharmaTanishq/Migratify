@@ -26,7 +26,7 @@ export function DockDemo() {
         <DockIcon onDragStart={(event) => onDragStart(event, 'Drive')} >
           <Icons.googleDrive className="size-6" />
         </DockIcon>
-        <DockIcon onDragStart={(event) => onDragStart(event, 'Notion')} >
+        <DockIcon onDragStart={(event) => onDragStart(event, 'fileUploadNode')} >
           <Icons.notion className="size-6" />
         </DockIcon>
         <DockIcon onDragStart={(event) => onDragStart(event, 'vtexNode')} >
