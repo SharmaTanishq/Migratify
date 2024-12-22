@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { Card } from '../ui/card';
-import { Plus, CloudUpload,  FileText, X, Trash2 } from 'lucide-react';
+import { Plus, CloudUpload, FileText, X, Trash2 } from 'lucide-react';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -15,7 +15,7 @@ const DEFAULT_HANDLE_STYLE = {
   background: 'var(--handle-color)',
 };
  
-export function FileUploadNode({ data }:{data:any}) {
+export function CustomerFileNode({ data }:{data:any}) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,27 +47,14 @@ export function FileUploadNode({ data }:{data:any}) {
           id="input"
           isConnectable={true}
         />
-        <Handle
-          type="target"
-          style={{
-            ...DEFAULT_HANDLE_STYLE,
-            left: -8,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            background: '#9ca3af'
-          }}
-          position={Position.Right}
-          id="input"
-          isConnectable={true}
-        />
         
         {/* Header Section */}
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center space-x-2">
             <CloudUpload className="w-8 h-8 text-coral-500" />
             <div>
-              <h3 className="font-medium text-black">Products</h3>
-              <p className="text-lg font-semibold">Add Products</p>
+              <h3 className="font-medium text-black">Customers</h3>
+              <p className="text-lg font-semibold">Add Customers</p>
             </div>
           </div>
         </div>
@@ -133,4 +120,4 @@ export function FileUploadNode({ data }:{data:any}) {
       </Card>
     </>
   );
-}
+} 

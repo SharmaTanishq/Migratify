@@ -20,10 +20,13 @@ export function DockDemo() {
   return (
     <div className="relative">
       <Dock direction="middle" >
-        <DockIcon onDragStart={(event) => onDragStart(event, 'Github')} >
+      <DockIcon onDragStart={(event) => onDragStart(event, 'inventoryFileNode')} >
           <Icons.gitHub className="size-6" />
         </DockIcon>
-        <DockIcon onDragStart={(event) => onDragStart(event, 'Drive')} >
+        <DockIcon onDragStart={(event) => onDragStart(event, 'customerFileNode')} >
+          <Icons.gitHub className="size-6" />
+        </DockIcon>
+        <DockIcon onDragStart={(event) => onDragStart(event, 'categoryFileNode')} >
           <Icons.googleDrive className="size-6" />
         </DockIcon>
         <DockIcon onDragStart={(event) => onDragStart(event, 'fileUploadNode')} >

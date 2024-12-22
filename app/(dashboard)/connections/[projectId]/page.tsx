@@ -23,6 +23,9 @@ import { DockDemo } from '../../dock';
 
 import { VtexCommerceNode } from '@/components/AddNodes/VtexNode';
 import {FileUploadNode} from '@/components/FileUploadNode/UploadFileNode';
+import { CategoryFileNode } from '@/components/FileUploadNode/CategoryFile';
+import { CustomerFileNode } from '@/components/FileUploadNode/CustomerFile';
+import { InventoryFileNode } from '@/components/FileUploadNode/InventoryFile';
 
 const initialNodes = [
     {
@@ -46,7 +49,11 @@ export default function Page() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const nodeTypes = useMemo(() => ({  
       vtexNode: VtexCommerceNode, 
-      fileUploadNode: FileUploadNode }), []);
+      fileUploadNode: FileUploadNode,
+      categoryFileNode: CategoryFileNode,
+      customerFileNode: CustomerFileNode,
+      inventoryFileNode: InventoryFileNode,
+    }), []);
 
   const { screenToFlowPosition } = useReactFlow();
   const [type] = useDnD();
