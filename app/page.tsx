@@ -8,14 +8,13 @@ import {
   useQuery,
 } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Code } from "@/components/typography/code";
-import { Link } from "@/components/typography/link";
+
 import { SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
 import { StickyHeader } from "@/components/layout/sticky-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import Signout from "./Signout";
 import { ModeToggle } from "@/components/helpers/ThemeToggler";
-import { AnimatedBeamDemo } from "@/components/Organisms/AnimatedBeam";
+
 
 export default function Home() {
   return (

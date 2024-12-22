@@ -13,6 +13,19 @@ export default defineSchema(
         subFieldOne: v.array(v.number()),
       }),
     }),
+
+   
+
+    projects:defineTable({
+      
+      userId:v.string(),
+      projectName:v.string(),
+      projectDescription:v.string(),
+      ecommercePlatform:v.string(),
+      integration:v.array(v.object({label:v.string()}))
+      
+      
+    }).index("by_user",["userId"]),      
     // This definition matches the example query and mutation code:
     numbers: defineTable({
       value: v.number(),

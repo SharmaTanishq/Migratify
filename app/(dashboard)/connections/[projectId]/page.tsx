@@ -1,7 +1,7 @@
 'use client'
 
 
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect, useMemo } from 'react';
 import { Background, Panel } from '@xyflow/react';
 
 import {
@@ -16,10 +16,12 @@ import {
   
 } from '@xyflow/react';
  
-import RightSideBar from '@/components/AddNodes/RightSideBar';
-import { DnDProvider,useDnD } from '@/components/AddNodes/DnDContext';
+
+import { useDnD } from '@/components/AddNodes/DnDContext';
 import '@xyflow/react/dist/style.css';
-import { DockDemo } from '../dock';
+import { DockDemo } from '../../dock';
+import { TextUpdaterNode } from './textUpdaternode';
+import { VtexCommerceNode } from '@/components/AddNodes/VtexNode';
 
 const initialNodes = [
     {
@@ -27,21 +29,28 @@ const initialNodes = [
       type: 'input',
       data: { label: 'input node' },
       position: { x: 250, y: 5 },
-    },
+    }
+    
   ];
    
   let id = 0;
   const getId = () => `dndnode_${id++}`;
 
 
-  const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
+ 
 
 export default function Page() {
-    const reactFlowWrapper = useRef(null);
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const nodeTypes = useMemo(() => ({ vtexNode: VtexCommerceNode }), []);
+
   const { screenToFlowPosition } = useReactFlow();
   const [type] = useDnD();
+
+  useEffect(()=>{
+    console.log('nodes',nodes)
+  },[setNodes])
  
   const onConnect = useCallback(
     //@ts-ignore
@@ -83,7 +92,7 @@ export default function Page() {
     [screenToFlowPosition, type],
   );
     return(
-        <div className='w-full h-full p-8'>
+        <div className='w-full h-full p-8 '>
             <div className='w-full h-full flex flex-col justify-start '>
                 <h1 className='text-4xl font-semibold'>Connections</h1>
                 <p className='text-primary'>Connections between your product and your users’ accounts on third-party software.</p>
@@ -94,10 +103,11 @@ export default function Page() {
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     onConnect={onConnect}
+                    nodeTypes={nodeTypes}
                     onDrop={onDrop}
                     onDragOver={onDragOver}
                     fitView
-                    style={{ backgroundColor: "#F7F9FB", borderRadius:"10px"}}
+                    style={{  borderRadius:"10px"}}
                     >
                         <Panel>
                         <div className='z-[999]'>
@@ -105,7 +115,7 @@ export default function Page() {
                         </div>
                             </Panel>                        
                         <Controls />
-                        <Background />
+                        <Background  color="#ccc" />
                         <MiniMap nodeStrokeWidth={1} style={{borderRadius:"50px"}}  />
                        
                     </ReactFlow>

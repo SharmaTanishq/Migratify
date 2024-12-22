@@ -41,17 +41,17 @@ const Signout = () => {
                 
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-4 w-full mt-10'>
                     <div className='p-4 border rounded-lg flex flex-col items-start'>
-                        <img src='/path/to/logo1.png' alt='Logo 1' className='mb-4' />
+                        <div className='mb-4'><icons.catalog/></div>
                         <h2 className='text-xl font-semibold mb-2'>Card Title 1</h2>
                         <p className='text-base'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</p>
                     </div>
                     <div className='p-4 border rounded-lg flex flex-col items-start'>
-                        <img src='/path/to/logo2.png' alt='Logo 2' className='mb-4' />
+                         <div className='mb-4'><icons.connections/></div>
                         <h2 className='text-xl font-semibold mb-2'>Card Title 2</h2>
                         <p className='text-base'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</p>
                     </div>
                     <div className='p-4 border rounded-lg flex flex-col items-start'>
-                        <img src='/path/to/logo3.png' alt='Logo 3' className='mb-4' />
+                        <div className='mb-4'><icons.cart/></div>
                         <h2 className='text-xl font-semibold mb-2'>Card Title 3</h2>
                         <p className='text-base'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</p>
                     </div>
@@ -84,3 +84,20 @@ const Signout = () => {
 };
 
 export default Signout;
+
+const icons ={
+
+    catalog:()=>(
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m15 11-1 9"/><path d="m19 11-4-7"/><path d="M2 11h20"/><path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4"/><path d="M4.5 15.5h15"/><path d="m5 11 4-7"/><path d="m9 11 1 9"/></svg>
+    ),
+
+    connections:()=>(
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>
+    ),
+
+    cart:()=>(
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+    )
+
+
+}

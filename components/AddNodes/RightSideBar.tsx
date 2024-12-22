@@ -3,7 +3,8 @@ import { useDnD } from './DnDContext';
  
 export default () => {
   const [_, setType] = useDnD();
- 
+  
+
   const onDragStart = (event:any, nodeType:any) => {
     
     if (setType === null) return;

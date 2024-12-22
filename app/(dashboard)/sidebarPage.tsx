@@ -20,8 +20,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 // Menu items.
 const items = [
   {
-    title: "Connections",
-    url: "/connections",
+    title: "Projects",
+    url: "/projects",
     icon: Home,
   },
   {
@@ -30,8 +30,8 @@ const items = [
     icon: Inbox,
   },
   {
-    title: "Configuration",
-    url: "",
+    title: "Connections",
+    url: "/connections",
     icon: Calendar,
   },
   {
