@@ -30,6 +30,32 @@ export default defineSchema(
     numbers: defineTable({
       value: v.number(),
     }),
+
+    nodes:defineTable({
+      projectId:v.string(),
+      data:v.any(),
+      nodeId:v.string(),
+      measured:v.object({height:v.number(),width:v.number()}),
+      position:v.object({x:v.number(),y:v.number()}),
+      type:v.string(),
+    }).index("by_project",["projectId"]),
+
+    edges:defineTable({
+      projectId:v.string(),
+      source:v.string(),
+      sourceHandle:v.string(),
+      target:v.string(),
+      targetHandle:v.string(),
+     
+
+    }).index("by_project",["projectId"]),
+
+    flows: defineTable({
+      projectId: v.string(),
+      nodes: v.array(v.any()),
+      edges: v.array(v.any()),
+    })
+      .index('by_project', ['projectId']),
   },
   // If you ever get an error about schema mismatch
   // between your data and your schema, and you cannot

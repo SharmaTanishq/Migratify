@@ -1,11 +1,8 @@
-import { useCallback, useState } from 'react';
+import {  useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { Card } from '../ui/card';
 import { Plus, CloudUpload,  FileText, X, Trash2 } from 'lucide-react';
 import { Label } from '../ui/label';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import { cn } from '@/lib/utils';
 
 const DEFAULT_HANDLE_STYLE = {
   width: 8,

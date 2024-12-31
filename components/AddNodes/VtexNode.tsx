@@ -23,6 +23,7 @@ const DEFAULT_HANDLE_STYLE = {
 };
  
 export function VtexCommerceNode({ data }:{data:any}) {
+  
   return (
     <>
       

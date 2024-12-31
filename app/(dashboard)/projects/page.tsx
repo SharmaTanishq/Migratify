@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DialogComponent from "./dialog";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";

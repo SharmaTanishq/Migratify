@@ -1,7 +1,7 @@
 'use client'
 
 
-import React, { useRef, useCallback, useEffect, useMemo } from 'react';
+import React, { useRef, useCallback, useEffect, useMemo, use, useState } from 'react';
 import { Background, Panel } from '@xyflow/react';
 
 import {
@@ -22,31 +22,51 @@ import '@xyflow/react/dist/style.css';
 import { DockDemo } from '../../dock';
 
 import { VtexCommerceNode } from '@/components/AddNodes/VtexNode';
-import {FileUploadNode} from '@/components/FileUploadNode/UploadFileNode';
+import { FileUploadNode } from '@/components/FileUploadNode/UploadFileNode';
 import { CategoryFileNode } from '@/components/FileUploadNode/CategoryFile';
 import { CustomerFileNode } from '@/components/FileUploadNode/CustomerFile';
 import { InventoryFileNode } from '@/components/FileUploadNode/InventoryFile';
+import { useMutation, useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { useParams } from 'next/navigation';
+import { useShallow } from 'zustand/react/shallow';
+import useStore from '@/components/Store/store';
+import { initialNodes } from '@/components/AddNodes/initialNode';
 
-const initialNodes = [
-    {
-      id: '1',
-      type: 'input',
-      data: { label: 'input node' },
-      position: { x: 250, y: 5 },
-    }
-    
-  ];
+
+const selector = (state:any) => ({
+  nodes: state.nodes,
+  edges: state.edges,
+  setNodes:state.setNodes,
+  onNodesChange: state.onNodesChange,
+  onEdgesChange: state.onEdgesChange,
+  onConnect: state.onConnect,
+  addNode:state.addNode,
+  addEdge:state.addEdge,
+});
+
    
-  let id = 0;
-  const getId = () => `dndnode_${id++}`;
+let id = 0;
+const getId = () => `dndnode_${id++}`;
 
 
  
 
 export default function Page() {
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const params = useParams();
+  const projectId = params.projectId as string;
+
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect,setNodes,addNode,addEdge } = useStore(
+    useShallow(selector),
+  );
+
+  const data = useQuery(api.flows.nodes.getNodes,{projectId:projectId})
+
+  useEffect(()=>{
+    if(data) setNodes(data);   
+  },[data])
+  //Types of nodes created
   const nodeTypes = useMemo(() => ({  
       vtexNode: VtexCommerceNode, 
       fileUploadNode: FileUploadNode,
@@ -56,27 +76,23 @@ export default function Page() {
     }), []);
 
   const { screenToFlowPosition } = useReactFlow();
+
   const [type] = useDnD();
 
-  useEffect(()=>{
-    console.log('nodes',nodes)
-  },[setNodes])
+    
  
-  const onConnect = useCallback(
-    //@ts-ignore
-    (params:any) => setEdges((eds) => addEdge(params, eds)),
-    [],
-  );
+  
  
   const onDragOver = useCallback((event:any) => {
     event.preventDefault();
+    
     event.dataTransfer.dropEffect = 'move';
   }, []);
  
   const onDrop = useCallback(
     (event:any) => {
       event.preventDefault();
- 
+      
       // check if the dropped element is valid
       if (!type) {
         return;
@@ -89,15 +105,16 @@ export default function Page() {
         x: event.clientX,
         y: event.clientY,
       });
+
       const newNode = {
-        id: getId(),
+        id: "node" + Math.floor(Math.random() * 10000).toString(),
         type,
         position,
         data: { label: `${type}`  },
-      };
+      };                    
 
       //@ts-ignore
-      setNodes((nds) => nds.concat(newNode));
+      addNode(newNode);      
     },
     [screenToFlowPosition, type],
   );
@@ -112,10 +129,11 @@ export default function Page() {
                     edges={edges}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
-                    onConnect={onConnect}
+                    onConnect={addEdge}
                     nodeTypes={nodeTypes}
                     onDrop={onDrop}
                     onDragOver={onDragOver}
+                    
                     fitView
                     style={{  borderRadius:"10px"}}
                     >
