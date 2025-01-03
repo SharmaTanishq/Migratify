@@ -8,6 +8,7 @@ import { ModeToggle } from "@/components/helpers/ThemeToggler";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
+
  
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -28,6 +29,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="h-full px-4 py-4">
           
           {children}
+          
         </div>
       </main>
       

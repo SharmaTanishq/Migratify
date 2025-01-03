@@ -15,8 +15,9 @@ import {
     onNodesChange: OnNodesChange<AppNode>;
     onEdgesChange: OnEdgesChange;
     onConnect: OnConnect;
-    setNodes: (nodes: AppNode[]) => void;
+    setInitialNodes: (nodes: AppNode[]) => void;
     setEdges: (edges: Edge[]) => void;
+    setInitialEdges:(edges: Edge[]) => void;
     addNode:(type:string,x:number,y:number)=>void;
     data:any[];
   };

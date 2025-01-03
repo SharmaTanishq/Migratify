@@ -20,15 +20,20 @@ export default function Home() {
   return (
     <>
       <StickyHeader className="px-4 py-2">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-center items-center  ">
+        <div className="flex justify-between items-center w-full max-w-7xl"> 
          <h1>Migratify</h1>
-         <ModeToggle/>
-          <SignInAndSignUpButtons />
+
+         <div className="flex items-center gap-4">
+            <ModeToggle/>
+            <SignInAndSignUpButtons />
+          </div>
+          </div>
         </div>
       </StickyHeader>
       
         <Authenticated>
-          <SignedInContent />
+          <Signout />
         </Authenticated>
         <Unauthenticated>
            {/* Added mx-4 for margin left and right */}           

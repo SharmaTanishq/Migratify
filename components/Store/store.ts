@@ -11,6 +11,8 @@ const useStore = create<AppState>((set, get) => ({
   edges: [],  
   
   onNodesChange: (changes) => {
+
+   
     set({
       nodes: applyNodeChanges(changes, get().nodes),
     });
@@ -26,21 +28,31 @@ const useStore = create<AppState>((set, get) => ({
       edges: addEdge(connection, get().edges),
     });
   },
-  setNodes: (nodes) => {
+  setInitialNodes: (nodes) => {
     
     set({nodes});   
   },
 
-  addEdge:(edge:any)=>{
-      set({edges:[...get().edges,edge]})
-      console.log("edge",get().edges);
+  setInitialEdges:(edges)=>{
+    const edgesWithId = edges.map((edge:any)=>({
+      ...edge,
+      id:edge._id
+    }))
+    set({edges:edgesWithId})
   },
 
+  addEdge: (edge: any) => {
+    const newEdge = {
+      ...edge,
+      id: `edge-${Math.random()}`,
+    };
+    set({ edges: [...get().edges, newEdge] });
+  },
 
   addNode:(nodes)=>{
     const id = Math.floor(Math.random() * 10000).toString();
     set({ nodes: [...get().nodes, nodes ] });    
-    console.log("nodes",get().nodes)
+   
     
   },
   updateNodeColor: (nodeId: string, color: string) => {

@@ -44,19 +44,7 @@ export function FileUploadNode({ data }:{data:any}) {
           id="input"
           isConnectable={true}
         />
-        <Handle
-          type="target"
-          style={{
-            ...DEFAULT_HANDLE_STYLE,
-            left: -8,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            background: '#9ca3af'
-          }}
-          position={Position.Right}
-          id="input"
-          isConnectable={true}
-        />
+       
         
         {/* Header Section */}
         <div className="flex items-center justify-between w-full">

@@ -3,10 +3,15 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "./(dashboard)/sidebarPage";
+import { Poppins } from 'next/font/google'
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-poppins',
+})
+
+//const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "My App Title",
@@ -19,13 +24,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={poppins.variable}>
+      <body className="font-poppins">
         <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange>
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange>
          
           
           <ConvexClientProvider>
