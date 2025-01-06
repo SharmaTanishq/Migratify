@@ -139,6 +139,7 @@ export default function Page() {
         id: newNode.id,
         measured: { height: newNode.position.y, width: newNode.position.x },
         position: newNode.position,
+        //@ts-ignore
         type: type,
       });
     },

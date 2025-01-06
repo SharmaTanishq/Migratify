@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 
 export default function Page() {
-    const [dialog,setDialog] = useState(false);
+    
     const data = useQuery(api.projects.listProjects,{})
     const router = useRouter();
     
@@ -23,9 +23,9 @@ export default function Page() {
                 <div className="flex flex-col w-full h-full justify-start items-start border px-4 py-4 mt-10 rounded-xl ">
                     <div className="flex align-start w-full  justify-end items-start">
 
-                        <DialogComponent>
+                        <DialogComponent/>
 
-                        </DialogComponent>
+                        
                         
                     </div>
 
