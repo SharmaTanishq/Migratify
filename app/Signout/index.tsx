@@ -3,6 +3,8 @@ import { BentoDemo } from '@/components/Organisms/BentoGrid';
 import { Button } from '@/components/ui/button';
 import WordPullUp from "@/components/ui/word-pull-up";
 import { MagicCard } from "@/components/ui/magic-card";
+import { ArrowRight } from 'lucide-react';
+import { RulerCard } from "@/components/ui/ruler-card";
 
 
 
@@ -10,14 +12,20 @@ import { MagicCard } from "@/components/ui/magic-card";
 const Signout = () => {
     return (
     <div className='flex flex-col w-full justify-center items-center px-4 py-5'>
-        <div className='max-w-6xl grid grid-cols-2 w-full h-full '>
-            <div className='flex flex-col h-full  justify-center items-start'>
+        <div className='max-w-6xl mt-10  grid grid-cols-2 w-full h-full '>
+            
+            <div className='flex flex-col h-full  justify-center items-start mt-10'>
+            <div className="inline-flex items-center mb-6 gap-2 px-4 py-2 rounded-full bg-[#0f1011] border border-white/10 text-sm">
+                <span className="text-purple-300">New</span>
+                <span className="text-white/70">AI-Powered Migration Assistant</span>
+                <ArrowRight className="w-4 h-4 text-white/50" />
+            </div>  
                 <WordPullUp
                     className="text-2xl font-semibold mb-10 tracking-[-0.02em] text-left text-black dark:text-white md:text-7xl md:leading-[5rem] leading-normal"
                     words="Fast Track Your Migration"
                 />
-                <p className='max-w-[50ch] tracking-wide mb-10'>
-                Migratify helps warehouses drive more business by connecting to any e-commerce platform – and provides an AI assistant that automates data entry into WMS & ERPs platforms.
+                <p className='max-w-[50ch] tracking-wide mb-10 text-[#8a8f98] font-light'>
+                Connect your e-commerce platform to our AI-powered assistant and automate your data migration. Transform weeks of manual work into minutes.
                 </p>
                 <div className='flex w-[50%] justify-between '>
                     <Button variant={'default'} className='bg-gradient-primary text-xl font-light text-white p-5'>
@@ -33,7 +41,7 @@ const Signout = () => {
             </div>
         </div>
         {/* Section Two Bento Grid*/}
-        <div className='flex justify-start items-start w-full  max-w-6xl '>
+        <div className='flex justify-start items-start w-full  max-w-6xl mt-10 '>
 
             <div>
                 <h1 className='text-5xl font-normal w-[30ch] leading-snug'>Expand across platforms. <br/> Automate your Integrations. <br/>
@@ -44,17 +52,17 @@ const Signout = () => {
                     <MagicCard className='p-4  rounded-lg flex flex-col items-start'>
                         <div className='mb-4'><icons.catalog/></div>
                         <h2 className='text-xl font-semibold mb-2'>Select from Multiple E-commerce Platforms</h2>
-                        <p className='text-sm text-gray-400'>Use our pre-built integrations or build your own custom integrations using Simple flows</p>
+                        <p className='text-sm text-[#8a8f98]'>Use our pre-built integrations or build your own custom integrations using Simple flows</p>
                     </MagicCard>
                     <MagicCard className='p-4 rounded-lg flex flex-col items-start'>
                          <div className='mb-4'><icons.connections/></div>
                         <h2 className='text-xl font-semibold mb-2'>Migrate Quickly and Easily</h2>
-                        <p className='text-sm text-gray-400'>Migrate with ease and speed, reduce the time to market by 50%</p>
+                        <p className='text-sm text-[#8a8f98]'>Migrate with ease and speed, reduce the time to market by 50%</p>
                     </MagicCard>
                     <MagicCard className='p-4 rounded-lg flex flex-col items-start'>
                         <div className='mb-4'><icons.cart/></div>
                         <h2 className='text-xl font-semibold mb-2'>Automate Data Entry with AI</h2>
-                        <p className='text-sm text-gray-400'>Let our AI assistant handle data entry tasks by automatically mapping and transforming data between platforms</p>
+                        <p className='text-sm text-[#8a8f98]'>Let our AI assistant handle data entry tasks by automatically mapping and transforming data between platforms</p>
                     </MagicCard>
                 </div>
 
@@ -76,8 +84,22 @@ const Signout = () => {
             </div> */}
         {/* Section Three */}
             
-        <div className='flex justify-start items-start w-full  max-w-6xl mt-14'>
-            <BentoDemo/>
+        <div className='flex justify-start items-start w-full max-w-6xl mt-14 flex-col gap-8'>
+            <RulerCard
+                title="Automate Your E-commerce Platform Migration"
+                description="Move your entire store between platforms effortlessly with AI-assisted data mapping and real-time progress tracking."
+                className="w-full h-[250px]"
+            />
+            <RulerCard
+                title="Seamless Data Synchronization"
+                description="Keep your product data, orders, and customer information synchronized across multiple platforms in real-time."
+                className="w-full h-[250px]"
+            />
+            <RulerCard
+                title="Custom Integration Builder"
+                description="Create and customize your own integration workflows with our intuitive drag-and-drop interface and AI-powered suggestions."
+                className="w-full h-[250px]"
+            />
         </div>
         
         {/* Section how it works */}

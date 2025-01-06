@@ -41,31 +41,45 @@ export function AnimatedBeamDemo() {
     >
       <div className="flex size-full flex-col max-w-lg max-h-[200px] items-stretch justify-between gap-10">
         <div className="flex flex-row items-center justify-between">
+          <div className="drop-shadow-[0_0_15px_rgba(106,130,251,0.5)]">
           <Circle ref={div1Ref}>
             <Icons.googleDrive />
           </Circle>
+          </div>
+          <div className="drop-shadow-[0_0_15px_rgba(106,130,251,0.5)]">
           <Circle ref={div5Ref}>
             <Icons.googleDocs />
           </Circle>
+          </div>
         </div>
         <div className="flex flex-row items-center justify-between">
+          <div className="drop-shadow-[0_0_15px_rgba(106,130,251,0.5)]">
           <Circle ref={div2Ref}>
             <Icons.Shopify />
           </Circle>
-          <Circle ref={div4Ref} className="size-16">
+          </div>
+          <div ref={div4Ref} className="drop-shadow-[0_0_15px_rgba(106,130,251,0.5)]">
+          <Circle  className="size-16">
             <Icons.openai />
           </Circle>
+          </div>
+          <div className="drop-shadow-[0_0_15px_rgba(106,130,251,0.5)]">
           <Circle ref={div6Ref}>
             <Icons.zapier />
           </Circle>
+          </div>
         </div>
         <div className="flex flex-row items-center justify-between">
+          <div className="drop-shadow-[0_0_15px_rgba(106,130,251,0.5)]">
           <Circle ref={div3Ref}>
             <Icons.whatsapp />
           </Circle>
+          </div>
+          <div className="drop-shadow-[0_0_15px_rgba(106,130,251,0.5)]">
           <Circle ref={div7Ref}>
             <Icons.messenger />
           </Circle>
+          </div>
         </div>
       </div>
 

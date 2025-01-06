@@ -15,6 +15,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Signout from "./Signout";
 import { ModeToggle } from "@/components/helpers/ThemeToggler";
 
+import { NavigationMenuLinks } from "@/components/NavigationMenu";
+
 
 export default function Home() {
   return (
@@ -24,8 +26,11 @@ export default function Home() {
         <div className="flex justify-between items-center w-full max-w-7xl"> 
          <h1>Migratify</h1>
 
+        
+
          <div className="flex items-center gap-4">
-            <ModeToggle/>
+            <NavigationMenuLinks/>
+              <ModeToggle/>
             <SignInAndSignUpButtons />
           </div>
           </div>
