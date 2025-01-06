@@ -6,7 +6,7 @@ import { MagicCard } from "@/components/ui/magic-card";
 import { ArrowRight } from 'lucide-react';
 import { RulerCard } from "@/components/ui/ruler-card";
 
-
+import VtexNodeImage from "@/public/assets/VtexNode.png"
 
 
 const Signout = () => {
@@ -27,11 +27,16 @@ const Signout = () => {
                 <p className='max-w-[50ch] tracking-wide mb-10 text-[#8a8f98] font-light'>
                 Connect your e-commerce platform to our AI-powered assistant and automate your data migration. Transform weeks of manual work into minutes.
                 </p>
-                <div className='flex w-[50%] justify-between '>
-                    <Button variant={'default'} className='bg-gradient-primary text-xl font-light text-white p-5'>
+                <div className='flex w-[50%] justify-between'>
+                    <Button 
+                        variant={'default'} 
+                        className='bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-xl font-light text-white p-5 transition-all duration-200'
+                    >
                         Let's Talk
                     </Button>
-                    <Button className='bg-primary text-lg p-5'>
+                    <Button 
+                        className='bg-[#0f1011] border border-white/10 text-white hover:bg-[#1a1b1d] text-lg p-5 transition-colors'
+                    >
                         Free Demo
                     </Button>
                 </div>
@@ -50,18 +55,18 @@ const Signout = () => {
                 
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-4 w-full mt-10'>
                     <MagicCard className='p-4  rounded-lg flex flex-col items-start'>
-                        <div className='mb-4'><icons.catalog/></div>
-                        <h2 className='text-xl font-semibold mb-2'>Select from Multiple E-commerce Platforms</h2>
+                        <div className='mb-4 text-white'><icons.catalog/></div>
+                        <h2 className='text-xl text-white font-semibold mb-2'>Select from Multiple E-commerce Platforms</h2>
                         <p className='text-sm text-[#8a8f98]'>Use our pre-built integrations or build your own custom integrations using Simple flows</p>
                     </MagicCard>
                     <MagicCard className='p-4 rounded-lg flex flex-col items-start'>
-                         <div className='mb-4'><icons.connections/></div>
-                        <h2 className='text-xl font-semibold mb-2'>Migrate Quickly and Easily</h2>
+                         <div className='mb-4 text-white'><icons.connections/></div>
+                        <h2 className='text-xl text-white font-semibold mb-2'>Migrate Quickly and Easily</h2>
                         <p className='text-sm text-[#8a8f98]'>Migrate with ease and speed, reduce the time to market by 50%</p>
                     </MagicCard>
                     <MagicCard className='p-4 rounded-lg flex flex-col items-start'>
-                        <div className='mb-4'><icons.cart/></div>
-                        <h2 className='text-xl font-semibold mb-2'>Automate Data Entry with AI</h2>
+                        <div className='mb-4 text-white'><icons.cart/></div>
+                        <h2 className='text-xl text-white font-semibold mb-2'>Automate Data Entry with AI</h2>
                         <p className='text-sm text-[#8a8f98]'>Let our AI assistant handle data entry tasks by automatically mapping and transforming data between platforms</p>
                     </MagicCard>
                 </div>
@@ -71,18 +76,7 @@ const Signout = () => {
             </div>
             
         </div>
-         {/* Section Five Integrations */}
-         {/* <div className="flex flex-col w-full max-w-6xl py-16">
-                    <h2 className="text-3xl font-semibold mb-10">Supported Platforms</h2>
-                    <div className="grid grid-cols-4 gap-8">
-                        
-                        <div className="h-20 bg-gray-100 rounded-lg flex items-center justify-center">
-                            Platform 1
-                        </div>
-                        
-                    </div>
-            </div> */}
-        {/* Section Three */}
+        
             
         <div className='flex justify-start items-start w-full max-w-6xl mt-14 flex-col gap-8'>
             <RulerCard
@@ -99,6 +93,7 @@ const Signout = () => {
                 title="Custom Integration Builder"
                 description="Create and customize your own integration workflows with our intuitive drag-and-drop interface and AI-powered suggestions."
                 className="w-full h-[250px]"
+                imageSrc="/assets/VtexNode.png"
             />
         </div>
         
@@ -127,8 +122,8 @@ const Signout = () => {
         {/* Section four Request demo */}
         <MagicCard className="flex flex-col items-center w-full max-w-6xl py-16 bg-secondary rounded-xl">
             <div className="flex flex-col items-center justify-center">
-                <h2 className="text-3xl font-semibold mb-4 text-center">Ready to Simplify Your Migration?</h2>
-                <p className="text-gray-600 mb-8 text-center max-w-[50ch]">
+                <h2 className="text-3xl font-semibold mb-4 text-center text-white">Ready to Simplify Your Migration?</h2>
+                <p className="text-gray-600 mb-8 text-center max-w-[50ch] ">
                     Schedule a demo to see how Migratify can transform your warehouse operations
                 </p>
                 <Button className="bg-gradient-primary text-white text-lg px-8 py-4">

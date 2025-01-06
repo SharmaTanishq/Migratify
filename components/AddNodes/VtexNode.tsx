@@ -29,7 +29,7 @@ export function VtexCommerceNode({ data }:{data:any}) {
       
       
      
-      <Card className="w-[300px] p-4 space-y-4 bg-gray-50/50 border border-gray-200 relative">
+      <Card className="w-[300px] p-4 space-y-4 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 relative">
       
      
      

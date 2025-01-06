@@ -21,8 +21,8 @@
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-    --gradient-primary-start: #da4453;
-    --gradient-primary-end: #89216b;
+    --gradient-primary-start: #4F46E5;
+    --gradient-primary-end: #7C3AED;
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
@@ -66,8 +66,20 @@
     --chart-5: 340 75% 55%;
   }
 
+  /* Dark theme background */
   .dark body {
     @apply bg-neutral-950;
+    background-image: radial-gradient(
+      ellipse 80% 80% at 50% -20%,
+      rgba(120, 119, 198, 0.3),
+      rgba(255, 255, 255, 0)
+    );
+    background-attachment: fixed;
+  }
+
+  /* Light theme background */
+  body {
+    @apply bg-white;
     background-image: radial-gradient(
       ellipse 80% 80% at 50% -20%,
       rgba(120, 119, 198, 0.3),

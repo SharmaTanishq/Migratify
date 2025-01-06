@@ -33,7 +33,7 @@ export function CustomerFileNode({ data }:{data:any}) {
 
   return (
     <>
-      <Card className="w-[300px] p-2 space-y-2 bg-green-50/30 border border-gray-200 relative">
+      <Card className="w-[300px] p-2 space-y-2 bg-green-50/30 dark:bg-gray-900/50 border border-gray-200 relative">
         <Handle
           type="target"
           style={{
