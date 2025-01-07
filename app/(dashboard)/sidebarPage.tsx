@@ -14,6 +14,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useRef } from "react";
 
 
 
@@ -48,14 +49,14 @@ const items = [
 
 export function AppSidebar() {
   const pathName = usePathname();
-  
+  const ref = useRef<HTMLDivElement>(null);
   
 
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel ><div>Application</div></SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>

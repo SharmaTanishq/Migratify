@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { Background, Panel } from "@xyflow/react";
 
 import { ReactFlow, Controls, MiniMap, useReactFlow } from "@xyflow/react";
@@ -19,7 +19,7 @@ import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 import useStore from "@/components/Store/store";
-import { initialNodes } from "@/components/AddNodes/initialNode";
+
 
 import { Toaster } from "@/components/ui/sonner";
 
@@ -46,7 +46,6 @@ export default function Page() {
     edges,
     onNodesChange,
     onEdgesChange,
-    onConnect,
     setInitialNodes,
     addNode,
     addEdge,

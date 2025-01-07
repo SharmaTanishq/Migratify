@@ -56,13 +56,12 @@ module.exports = {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
-			gradient:{
-				primary: {
-					start: 'hsl(var(--gradient-primary-start))',
-					end: 'hsl(var(--gradient-primary-end))'
-				  },
-			},
-			
+  			gradient: {
+  				primary: {
+  					start: 'hsl(var(--gradient-primary-start))',
+  					end: 'hsl(var(--gradient-primary-end))'
+  				}
+  			},
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',
@@ -74,10 +73,9 @@ module.exports = {
   				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
-		backgroundImage: {
-			'gradient-primary': 'linear-gradient(to right, #FC5C7D, #6A82FB)',
-		  },
-		 
+  		backgroundImage: {
+  			'gradient-primary': 'linear-gradient(to right, #FC5C7D, #6A82FB)'
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -105,9 +103,11 @@ module.exports = {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		},
-		  fontFamily: {
-			poppins: ['var(--font-poppins)'],
-		  },
+  		fontFamily: {
+  			poppins: [
+  				'var(--font-poppins)'
+  			]
+  		}
   	}
   },
   plugins: [require("tailwindcss-animate")],

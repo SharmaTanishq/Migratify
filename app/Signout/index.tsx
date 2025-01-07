@@ -12,7 +12,7 @@ import VtexNodeImage from "@/public/assets/VtexNode.png"
 const Signout = () => {
     return (
     <div className='flex flex-col w-full justify-center items-center px-4 py-5'>
-        <div className='max-w-6xl mt-10  grid grid-cols-2 w-full h-full '>
+        <div className='max-w-7xl p-10 mt-10  grid grid-cols-2 w-full h-full '>
             
             <div className='flex flex-col h-full  justify-center items-start mt-10'>
             <div className="inline-flex items-center mb-6 gap-2 px-4 py-2 rounded-full bg-[#0f1011] border border-white/10 text-sm">
@@ -21,7 +21,7 @@ const Signout = () => {
                 <ArrowRight className="w-4 h-4 text-white/50" />
             </div>  
                 <WordPullUp
-                    className="text-2xl font-semibold mb-10 tracking-[-0.02em] text-left text-black dark:text-white md:text-7xl md:leading-[5rem] leading-normal"
+                    className="text-2xl font-semibold mb-10 tracking-[-0.02em] text-left text-black  bg-gradient-to-r from-black to-gray-500 bg-clip-text text-transparent dark:text-white md:text-8xl md:leading-[5rem] leading-normal"
                     words="Fast Track Your Migration"
                 />
                 <p className='max-w-[50ch] tracking-wide mb-10 text-[#8a8f98] font-light'>
@@ -93,7 +93,7 @@ const Signout = () => {
                 title="Custom Integration Builder"
                 description="Create and customize your own integration workflows with our intuitive drag-and-drop interface and AI-powered suggestions."
                 className="w-full h-[250px]"
-                imageSrc="/assets/VtexNode.png"
+                imageSrc={"/images/VtexNode.png"}
             />
         </div>
         
