@@ -56,7 +56,7 @@ function SignInAndSignUpButtons() {
         <UserButton afterSignOutUrl="#" />
       </Authenticated>
       <Unauthenticated>
-        <SignInButton mode="modal" afterSignInUrl="/build">
+        <SignInButton mode="modal" afterSignInUrl="/">
           <Button variant="ghost">Sign in</Button>
         </SignInButton>
         <SignUpButton mode="modal">
