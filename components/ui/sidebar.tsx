@@ -430,7 +430,7 @@ SidebarGroup.displayName = "SidebarGroup"
 
 const SidebarGroupLabel = React.forwardRef<
   HTMLDivElement,
-  Omit<React.ComponentProps<"div">, 'ref'> & { asChild?: boolean }
+  React.ComponentProps<"div"> & { asChild?: boolean }
 >(({ className, asChild = false, ...props }, ref) => {
   const Comp = asChild ? Slot : "div"
 
@@ -451,7 +451,7 @@ SidebarGroupLabel.displayName = "SidebarGroupLabel"
 
 const SidebarGroupAction = React.forwardRef<
   HTMLButtonElement,
-  Omit<React.ComponentProps<"button">, 'ref'> & { asChild?: boolean }
+  React.ComponentProps<"button"> & { asChild?: boolean }
 >(({ className, asChild = false, ...props }, ref) => {
   const Comp = asChild ? Slot : "button"
 
@@ -535,7 +535,7 @@ const sidebarMenuButtonVariants = cva(
 
 const SidebarMenuButton = React.forwardRef<
   HTMLButtonElement,
-  Omit<React.ComponentProps<"button">, 'ref'> & {
+  React.ComponentProps<"button"> & {
     asChild?: boolean
     isActive?: boolean
     tooltip?: string | React.ComponentProps<typeof TooltipContent>
@@ -594,7 +594,7 @@ SidebarMenuButton.displayName = "SidebarMenuButton"
 
 const SidebarMenuAction = React.forwardRef<
   HTMLButtonElement,
-  Omit<React.ComponentProps<"button">, 'ref'> & {
+  React.ComponentProps<"button"> & {
     asChild?: boolean
     showOnHover?: boolean
   }
@@ -707,7 +707,7 @@ SidebarMenuSubItem.displayName = "SidebarMenuSubItem"
 
 const SidebarMenuSubButton = React.forwardRef<
   HTMLAnchorElement,
-  Omit<React.ComponentProps<"a">, 'ref'> & {
+  React.ComponentProps<"a"> & {
     asChild?: boolean
     size?: "sm" | "md"
     isActive?: boolean

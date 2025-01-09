@@ -14,8 +14,8 @@ const poppins = Poppins({
 //const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "My App Title",
-  description: "My app description",
+  title: "Migration at Light Speed",
+  description: "Automate your e-commerce platform migration with AI-powered assistance",
 };
 
 export default function RootLayout({
