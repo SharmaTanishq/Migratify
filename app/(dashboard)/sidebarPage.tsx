@@ -1,96 +1,121 @@
-"use client";
+"use client"
 
-import { Calendar, ChevronDown, Home, Inbox, Search, Settings } from "lucide-react"
-import { usePathname } from "next/navigation"
+import * as React from "react"
+import {
+  BookOpen,
+  Bot,
+  Command,
+  Frame,
+  LifeBuoy,
+  Map,
+  PieChart,
+  Send,
+  Settings2,
+  SquareTerminal,
+} from "lucide-react"
 
+
+import { NavUser } from "@/components/ui/nav-user"
+import { NavMain } from "@/components/ui/nav-main"
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarFooter,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useRef } from "react";
 
+const data = {
+  user: {
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.jpg",
+  },
+  navMain: [
+    
+    {
+      title: "Settings",
+      url: "#",
+      icon: Settings2,
+      items: [
+        {
+          title: "General",
+          url: "#",
+        },
+        {
+          title: "Team",
+          url: "#",
+        },
+        {
+          title: "Billing",
+          url: "#",
+        },
+        {
+          title: "Limits",
+          url: "#",
+        },
+      ],
+    },
+  ],
+  navSecondary: [
+    {
+      title: "Support",
+      url: "#",
+      icon: LifeBuoy,
+    },
+    {
+      title: "Feedback",
+      url: "#",
+      icon: Send,
+    },
+  ],
+  projects: [
+    {
+      name: "Design Engineering",
+      url: "#",
+      icon: Frame,
+    },
+    {
+      name: "Sales & Marketing",
+      url: "#",
+      icon: PieChart,
+    },
+    {
+      name: "Travel",
+      url: "#",
+      icon: Map,
+    },
+  ],
+}
 
-
-// Menu items.
-const items = [
-  {
-    title: "Projects",
-    url: "/projects",
-    icon: Home,
-  },
-  {
-    title: "Events",
-    url: "/events",
-    icon: Inbox,
-  },
-  {
-    title: "Connections",
-    url: "/connections",
-    icon: Calendar,
-  },
-  {
-    title: "Api Keys",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-]
-
-export function AppSidebar() {
-  const pathName = usePathname();
-  const ref = useRef<HTMLDivElement>(null);
-  
-
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar>
+    <Sidebar variant="inset" {...props} collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem >
+            <SidebarMenuButton variant={"outline"} size="lg" asChild>
+              <a href="#">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <Command className="size-4" />
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">Acme Inc</span>
+                  <span className="truncate text-xs">Enterprise</span>
+                </div>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel ><div>Application</div></SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <SidebarMenuButton>
-                        Select Workspace
-                        <ChevronDown className="ml-auto" />
-                      </SidebarMenuButton>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
-                      <DropdownMenuItem>
-                        <span>Acme Inc</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <span>Acme Corp.</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                    </DropdownMenu>
-              </SidebarMenuItem>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title} >
-                  <SidebarMenuButton asChild isActive={pathName === item.url}>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <NavMain items={data.navMain} />
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser  user={data.user} />
+      </SidebarFooter>
     </Sidebar>
   )
 }
