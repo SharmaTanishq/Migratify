@@ -1,7 +1,7 @@
 "use client"
 
-import { ChevronRight, Folder, Home, SquareTerminal, type LucideIcon } from "lucide-react"
-
+import { ChevronRight, Folder, Home, KeyRound, Scroll, Share2, SquareTerminal, type LucideIcon } from "lucide-react"
+import Link from "next/link"
 import {
   Collapsible,
   CollapsibleContent,
@@ -36,24 +36,46 @@ export function NavMain({
     <SidebarGroup>
       <SidebarGroupLabel className="text-white">Platform</SidebarGroupLabel>
       <SidebarMenu className="space-y-2">
-        <SidebarMenuItem>
-            <SidebarMenuButton variant={"outline"}  tooltip="Playground"> 
+        <SidebarMenuItem >
+            <Link href={"/home"}>
+            <SidebarMenuButton   tooltip="Home"> 
                 
-                <Home />
-                <span>Home</span>
+                <Home size={20}  />
+                Home
             </SidebarMenuButton>
+            </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-            <SidebarMenuButton variant={"outline"}  tooltip="Playground"> 
+            <Link href={"/projects"}>
+            <SidebarMenuButton tooltip="Projects"> 
                 <Folder />
-                <span>Projects</span>
+                Projects
             </SidebarMenuButton>
+            </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-            <SidebarMenuButton variant={"outline"}  tooltip="Playground"> 
-                <SquareTerminal />
-                <span>Events</span>
+            <Link href={"/events"}>
+            <SidebarMenuButton tooltip="Events"> 
+                <Scroll />
+                Events
             </SidebarMenuButton>
+            </Link>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+            <Link href={"/events"}>
+            <SidebarMenuButton tooltip="Events"> 
+                <Share2 />
+                Connections
+            </SidebarMenuButton>
+            </Link>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+            <Link href={"/events"}>
+            <SidebarMenuButton tooltip="Events"> 
+                <KeyRound />
+                Api Keys
+            </SidebarMenuButton>
+            </Link>
         </SidebarMenuItem>
         {items.map((item) => (
           <Collapsible
@@ -64,7 +86,7 @@ export function NavMain({
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton variant={"outline"}  tooltip={item.title}>
+                <SidebarMenuButton tooltip={item.title}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />

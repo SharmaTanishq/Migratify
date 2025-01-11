@@ -19,7 +19,7 @@ import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 import useStore from "@/components/Store/store";
-
+import { useSidebar } from "@/components/ui/sidebar";
 
 import { Toaster } from "@/components/ui/sonner";
 
@@ -39,6 +39,10 @@ const selector = (state: any) => ({
 
 export default function Page() {
   const params = useParams();
+  const { setOpen } = useSidebar();
+  useEffect(() => {
+    setOpen(false);
+  }, []);
   const projectId = params.projectId as string;
 
   const {
@@ -68,7 +72,6 @@ export default function Page() {
   }, [nodesData]);
 
   useEffect(() => {
-    
     if (edgesData) setInitialEdges(edgesData);
   }, [nodes]);
 
@@ -89,7 +92,7 @@ export default function Page() {
   const [type] = useDnD();
 
   const onDragOver = useCallback((event: any) => {
-    console.log("onDragOver",event)
+    console.log("onDragOver", event);
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
@@ -145,13 +148,13 @@ export default function Page() {
     [screenToFlowPosition, type, nodes]
   );
 
-  const onNodeUpdate = useCallback((event:any)=>{
-    console.log("event",event)
-    
-    updateNodesMutation({
-      nodes:event
-    })
-  },[]) 
+  const onNodeUpdate = useCallback((event: any) => {
+    console.log("event", event);
+
+    // updateNodesMutation({
+    //   nodes:event
+    // })
+  }, []);
 
   const onEdgeConnect = useCallback(
     (event: any) => {
@@ -169,41 +172,34 @@ export default function Page() {
   );
 
   return (
-    <div className="w-full h-full p-8 ">
-      <div className="w-full h-full flex flex-col justify-start ">
-        <h1 className="text-4xl font-semibold">Connections</h1>
-        <p className="text-primary">
-          Connections between your product and your users’ accounts on
-          third-party software.
-        </p>
-        <div className="flex w-full h-full justify-center items-center mt-10 rounded-xl border shadow-md">
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onDragEnd={onNodeUpdate}
-            onNodeDragStop={onNodeUpdate}
-            onConnect={onEdgeConnect}
-            nodeTypes={nodeTypes}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            fitView
-            style={{ borderRadius: "10px" }}
-          >
-            <Panel>
-              <div className="z-[999]">
-                <DockDemo />
-              </div>
-            </Panel>
-            <Controls />
+    <div className="w-full h-full">
+      <div className="flex w-full h-full justify-center items-center  rounded-xl">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onDragEnd={onNodeUpdate}
+          onNodeDragStop={onNodeUpdate}
+          onConnect={onEdgeConnect}
+          nodeTypes={nodeTypes}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          fitView
+          style={{ borderRadius: "10px" }}
+        >
+          <Panel>
+            <div className="z-[999]">
+              <DockDemo />
+            </div>
+          </Panel>
+          <Controls />
 
-            <Background color="#ccc" />
-            <MiniMap nodeStrokeWidth={1} style={{ borderRadius: "50px" }} />
+          <Background color="#ccc" />
+          <MiniMap nodeStrokeWidth={1} style={{ borderRadius: "50px" }} />
 
-            <Toaster position="bottom-center" />
-          </ReactFlow>
-        </div>
+          <Toaster position="bottom-center" />
+        </ReactFlow>
       </div>
     </div>
   );

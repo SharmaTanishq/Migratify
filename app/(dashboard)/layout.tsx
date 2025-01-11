@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <SidebarInset >
                        <SidebarTrigger />
                          
-                        <div className="h-full px-4 py-4 m-4">
+                        <div className="h-full ">
                           
                           {children}
                           

@@ -1,58 +1,105 @@
 "use client";
 
-import { useState } from "react";
+
 import DialogComponent from "./dialog";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardTitle,
+  CardHeader,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-
+import {Trash2,Settings } from "lucide-react";
+import InteractiveHoverButton from "@/components/ui/interactive-hover-button";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import DotPattern from "@/components/ui/dot-pattern";
 
 export default function Page() {
-    
-    const data = useQuery(api.projects.listProjects,{})
-    const router = useRouter();
-    
-    
-    return(
-        <div className='w-full h-full p-8 '>
-            <div className='w-full h-full flex flex-col justify-start '>
-                <h1 className="text-4xl font-semibold">Projects</h1>
-                <p className='text-primary'>Connections between your product and your users’ accounts on third-party software.</p>
+  const data = useQuery(api.projects.listProjects, {});
+  const router = useRouter();
+
+  return (
+    <div className="w-full h-full p-5 ">
+        <DotPattern
+        className={cn(
+          "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]",
+        )}
+      />
+      <div className="w-full h-full flex flex-col justify-start ">
+        <h1 className="text-4xl font-semibold">Projects</h1>
+        <p className="mt-2 text-sm text-gray-600">
+          Connections between your product and your users’ accounts on
+          third-party software.
+        </p>
+
+        <div className="flex flex-col w-full h-full justify-start items-start   ">
+          <div className="flex align-start w-full  justify-end items-start">
+            <DialogComponent />
+          </div>
+
+          <div className="grid auto-rows-min gap-4 md:grid-cols-3 sm:grid-cols-2  lg:grid-cols-4 mt-10">
+            {data?.map((project) => (
+              <Card
                 
-                <div className="flex flex-col w-full h-full justify-start items-start border px-4 py-4 mt-10 rounded-xl ">
-                    <div className="flex align-start w-full  justify-end items-start">
+                key={project._id}  
+                
+                className="  aspect-video  max-h-[500px]  transition-shadow duration-300 ease-in-out hover:shadow-lg"
+              >
+                <CardHeader>
 
-                        <DialogComponent/>
-
-                        
-                        
+                  <CardTitle>
+                    <div className="flex items-center justify-between w-full">
+                      <span>{project.projectName}</span>
+                      <div className="flex gap-2">
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (confirm("Are you sure you want to delete this project?")) {
+                              // Handle delete
+                            }
+                          }}
+                          className="p-1.5 rounded-lg bg-red-100 hover:bg-red-200 cursor-pointer"
+                        >
+                          <Trash2 className="h-4 w-4 text-red-500" />       
+                        </button>
+                        <button className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer">
+                          <Settings className="h-4 w-4" />
+                        </button>
+                      </div>
                     </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-10">
-                        {data?.map((project) => (
-                            <Card 
-                                onClick={() => router.push(`/connections/${project._id}`)}
-                                key={project._id} 
-                                className="max-w-xl w-96 h-72 max-h-[500px] p-4 mb-4 transition-shadow duration-300 ease-in-out hover:shadow-lg"
-                            >
-                                <h2 className="text-xl font-bold mb-2">{project.projectName}</h2>
-                                <p className="text-sm text-gray-600 mb-2">{project.projectDescription}</p>
-                                <p className="text-sm text-gray-600 mb-2">E-commerce Platform {project.ecommercePlatform}</p>
-                                
-                                <div className="flex flex-row flex-wrap">
-                                    {project.integration.map((integrationName, index) => (
-                                        <div key={index} className="bg-gray-200 text-gray-800 px-2 py-1 rounded mr-2 mb-2">
-                                            {integrationName.label}
-                                        </div>
-                                    ))}
-                                </div>
-                            </Card>
-                        ))}
-                    </div>
-                </div>
-
-            </div>
-            </div>
-    )
-  }
+                  </CardTitle>
+                  <CardDescription>{project.projectDescription}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                <div className="mt-4 flex flex-wrap gap-2">
+                    {project.integration.map((label) => (
+                      <span
+                        key={label.label}
+                        className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800"
+                      >
+                        {label.label}
+                      </span>
+                    ))}
+                  </div>
+                </CardContent>
+                <Separator/>
+                <CardFooter className="  rounded-bl-lg rounded-br-lg p-2 ">
+                <div className="flex h-full w-full items-center justify-end">
+                    <InteractiveHoverButton  onClick={() => {
+                      router.push(`/connections/${project._id}`);
+                    }} text="Go to flow"  className="w-32 "   />                    
+                  </div>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

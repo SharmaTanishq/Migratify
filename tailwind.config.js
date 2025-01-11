@@ -21,9 +21,11 @@ module.exports = {
   			ring: 'hsl(var(--ring))',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+			dashboard: 'hsl(var(--dashboard-background))',
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
+				
   			},
   			secondary: {
   				DEFAULT: 'hsl(var(--secondary))',
