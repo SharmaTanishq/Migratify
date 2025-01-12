@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Background, Panel } from "@xyflow/react";
 
 import { ReactFlow, Controls, MiniMap, useReactFlow } from "@xyflow/react";
@@ -22,8 +22,10 @@ import useStore from "@/components/Store/store";
 import { useSidebar } from "@/components/ui/sidebar";
 
 import { Toaster } from "@/components/ui/sonner";
-
 import { toast } from "sonner";
+
+import { NodeDrawer } from "@/components/Connections/NodeDrawer"
+
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -59,6 +61,9 @@ export default function Page() {
   const addNodeMutation = useMutation(api.flows.nodes.addNode);
   const addEdgeMutation = useMutation(api.flows.edges.addEdge);
   const updateNodesMutation = useMutation(api.flows.nodes.updateNodes);
+
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const nodesData = useQuery(api.flows.nodes.getNodes, {
     projectId: projectId,
@@ -171,14 +176,22 @@ export default function Page() {
     [edges]
   );
 
+  const handleNodeClick = useCallback((event: any, node: any) => {
+    setSelectedNode(node)
+    setIsDrawerOpen(true)
+  }, [])
+
   return (
     <div className="w-full h-full">
+      
       <div className="flex w-full h-full justify-center items-center  rounded-xl">
         <ReactFlow
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          onNodeClick={handleNodeClick}
+          
           onDragEnd={onNodeUpdate}
           onNodeDragStop={onNodeUpdate}
           onConnect={onEdgeConnect}
@@ -196,8 +209,13 @@ export default function Page() {
           <Controls />
 
           <Background color="#ccc" />
-          <MiniMap nodeStrokeWidth={1} style={{ borderRadius: "50px" }} />
-
+          
+            <NodeDrawer 
+                isOpen={isDrawerOpen}
+                onClose={() => setIsDrawerOpen(false)}
+                nodeData={selectedNode}
+              />
+          
           <Toaster position="bottom-center" />
         </ReactFlow>
       </div>

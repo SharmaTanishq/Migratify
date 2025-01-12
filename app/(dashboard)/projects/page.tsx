@@ -19,11 +19,14 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import DotPattern from "@/components/ui/dot-pattern";
 
+
+
 export default function Page() {
   const data = useQuery(api.projects.listProjects, {});
   const router = useRouter();
 
   return (
+    
     <div className="w-full h-full p-5 ">
         <DotPattern
         className={cn(
