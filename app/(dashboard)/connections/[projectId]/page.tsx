@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Background, Panel } from "@xyflow/react";
+import { Background, Panel, ViewportPortal } from "@xyflow/react";
 
 import { ReactFlow, Controls, MiniMap, useReactFlow } from "@xyflow/react";
 
@@ -25,6 +25,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
 import { NodeDrawer } from "@/components/Connections/NodeDrawer"
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import { AddNodeDrawer } from "@/components/Connections/LeftDrawer";
 
 
 const selector = (state: any) => ({
@@ -64,6 +67,7 @@ export default function Page() {
 
   const [selectedNode, setSelectedNode] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const nodesData = useQuery(api.flows.nodes.getNodes, {
     projectId: projectId,
@@ -208,7 +212,25 @@ export default function Page() {
           </Panel>
           <Controls />
 
+          <Panel className="h-full w-10 justify-center items-center flex ">
+            <div >
+                <Button className="flex items-center -rotate-90" onClick={() => setIsPanelOpen(true)}>
+                  <span className="text-m ">
+                    Add a node</span>
+                  <PlusIcon className="w-4 h-4 " />
+                  
+                </Button>
+            </div>
+            
+            </Panel>
+
+            
+            
+          
+
           <Background color="#ccc" />
+          
+          
           
             <NodeDrawer 
                 isOpen={isDrawerOpen}
@@ -218,6 +240,10 @@ export default function Page() {
           
           <Toaster position="bottom-center" />
         </ReactFlow>
+        <AddNodeDrawer
+                isOpen={isPanelOpen}
+                onClose={() => setIsPanelOpen(false)}
+            />
       </div>
     </div>
   );

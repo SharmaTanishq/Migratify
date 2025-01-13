@@ -37,7 +37,7 @@ export function NodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
           </SheetTitle>
         </SheetHeader>
         <Separator orientation="horizontal" className="w-full bg-gray-300 " />
-        
+         
         
         <div className="w-full h-full py-1">
             <DrawerTabs              
