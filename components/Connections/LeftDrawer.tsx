@@ -22,14 +22,14 @@ export function AddNodeDrawer({isOpen, onClose, nodeData}: NodeDrawerProps) {
   return (
     <Sheet key={"left"} open={isOpen} onOpenChange={onClose}>
       
-      <SheetContent side="left">
+      <SheetContent side="left" className="w-[500px] mt-10 sm:w-[540px] md:p-6 bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100 ">
         <SheetHeader>
           <SheetTitle>Edit profile</SheetTitle>
           <SheetDescription>
             Make changes to your profile here. Click save when you're done.
           </SheetDescription>
         </SheetHeader>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 py-4"> 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
               Name

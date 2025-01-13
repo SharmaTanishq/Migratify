@@ -29,8 +29,9 @@ export default function Page() {
     
     <div className="w-full h-full p-5 ">
         <DotPattern
+        
         className={cn(
-          "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]",
+          "[mask-image:radial-gradient(700px_circle_at_bottom,white,transparent)]",
         )}
       />
       <div className="w-full h-full flex flex-col justify-start ">

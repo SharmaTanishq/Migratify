@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Background, Panel, ViewportPortal } from "@xyflow/react";
+import { Background, Panel } from "@xyflow/react";
 
-import { ReactFlow, Controls, MiniMap, useReactFlow } from "@xyflow/react";
+import { ReactFlow, Controls, useReactFlow } from "@xyflow/react";
 
 import { useDnD } from "@/components/AddNodes/DnDContext";
 import "@xyflow/react/dist/style.css";
-import { DockDemo } from "../../dock";
+
 
 import { VtexCommerceNode } from "@/components/AddNodes/VtexNode";
 import { FileUploadNode } from "@/components/FileUploadNode/UploadFileNode";
@@ -25,9 +25,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
 import { NodeDrawer } from "@/components/Connections/NodeDrawer"
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+
 import { AddNodeDrawer } from "@/components/Connections/LeftDrawer";
+
+import AddNodeFAB from "@/components/Connections/Fab";
 
 
 const selector = (state: any) => ({
@@ -185,6 +186,15 @@ export default function Page() {
     setIsDrawerOpen(true)
   }, [])
 
+  const handleNodeDelete = useCallback((node: any) => {
+    console.log("node", node)
+    setIsDrawerOpen(false)
+  }, [])
+
+  const handleNodeMouseEnter = useCallback((event: any, node: any) => {
+    
+  }, [])
+
   return (
     <div className="w-full h-full">
       
@@ -193,9 +203,10 @@ export default function Page() {
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
+          onNodeMouseEnter={handleNodeMouseEnter}
           onEdgesChange={onEdgesChange}
           onNodeClick={handleNodeClick}
-          
+          onNodesDelete={handleNodeDelete}                    
           onDragEnd={onNodeUpdate}
           onNodeDragStop={onNodeUpdate}
           onConnect={onEdgeConnect}
@@ -205,24 +216,16 @@ export default function Page() {
           fitView
           style={{ borderRadius: "10px" }}
         >
-          <Panel>
+          {/* <Panel>
             <div className="z-[999]">
               <DockDemo />
             </div>
-          </Panel>
+          </Panel> */}
           <Controls />
 
-          <Panel className="h-full w-10 justify-center items-center flex ">
-            <div >
-                <Button className="flex items-center -rotate-90" onClick={() => setIsPanelOpen(true)}>
-                  <span className="text-m ">
-                    Add a node</span>
-                  <PlusIcon className="w-4 h-4 " />
-                  
-                </Button>
-            </div>
-            
-            </Panel>
+          <Panel className="py-5 flex " >
+            <AddNodeFAB onClick={() => setIsPanelOpen(true)} />
+          </Panel>
 
             
             
@@ -243,7 +246,7 @@ export default function Page() {
         <AddNodeDrawer
                 isOpen={isPanelOpen}
                 onClose={() => setIsPanelOpen(false)}
-            />
+          />
       </div>
     </div>
   );
