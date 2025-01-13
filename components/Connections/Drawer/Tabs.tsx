@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
-
+import { ScrollArea } from "@/components/ui/scroll-area"
 interface DrawerTabsProps {
   children?: React.ReactNode
 }
@@ -14,15 +14,17 @@ interface DrawerTabsProps {
 export function DrawerTabs({ children }: DrawerTabsProps) {
   return (
     <Tabs defaultValue="general" className="w-full   ">
-      <TabsList className="grid  grid-cols-2 bg-none rounded-none">
+      <TabsList className="grid  grid-cols-1 bg-none rounded-none">
         <div >
             <TabsTrigger value="general">General</TabsTrigger>
+            <TabsTrigger value="variables">Variables</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
         </div>
       </TabsList>
       <TabsContent value="general">
         <div className="py-4">
-          <div className="space-y-6">
+          <ScrollArea className="h-[calc(100vh-20rem)]">
+            <div className="space-y-6 mt-4">
             {/* Node Status Section */}
             <Card className="bg-gray-50/50">
               <CardContent className="p-4">
@@ -99,11 +101,76 @@ export function DrawerTabs({ children }: DrawerTabsProps) {
                 </div>
               </CardContent>
             </Card>
-          </div>
+            </div>
+          </ScrollArea>
+        </div>
+      </TabsContent>
+      <TabsContent value="variables">
+        <div className="space-y-4 py-6 mt-4">
+          {/* Authentication Settings */}
+          <Card className="bg-gray-50/50">
+            <CardContent className="p-4">
+              <h4 className="mb-4 text-sm font-bold">Authentication</h4>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Authentication Method</label>
+                  <select className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+                    <option value="header">1. Header + 1</option>
+                    <option value="oauth">OAuth 2.0</option>
+                    <option value="basic">Basic Auth</option>
+                    <option value="apikey">API Key</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">X-VTEX-API-AppKey</label>
+                  <Input
+                    type="text"
+                    placeholder="Enter your app key"
+                    className="w-full"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Unique identifier of the application key
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">X-VTEX-API-AppToken</label>
+                  <Input
+                    type="password"
+                    placeholder="Enter your app token"
+                    className="w-full"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Secret token of the application key
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Base URL</label>
+                  <Input
+                    type="url"
+                    placeholder="https://apiexamples.vtexcommercestable.com"
+                    className="w-full"
+                  />
+                </div>
+
+                <div className="flex justify-end space-x-2 pt-4">
+                  <Button variant="outline" size="default">
+                    Test Connection
+                  </Button>
+                  <Button variant="default" size="default">
+                    Save Changes
+                  </Button>
+                </div>
+
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </TabsContent>
       <TabsContent value="settings">
-        <div className="space-y-4 py-4">
+        <div className="space-y-4 py-6 mt-4">
           {/* Sync Settings */}
           <Card className="bg-gray-50/50">
             <CardContent className="p-4">
