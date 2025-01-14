@@ -3,9 +3,9 @@ import { Separator } from "../ui/separator"
 import { cn } from "@/lib/utils"
 import DotPattern from "../ui/dot-pattern"
 import { DrawerTabs } from "./Drawer/Tabs"
-import { Plug } from "lucide-react"
+
 import { Icons } from "@/app/(dashboard)/dock"
-import GridPattern from "../ui/grid-pattern"
+
 
 interface NodeDrawerProps {
   isOpen: boolean
@@ -37,7 +37,9 @@ export function NodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
           </SheetTitle>
         </SheetHeader>
         <Separator orientation="horizontal" className="w-full bg-gray-300 " />
-         
+        
+        
+        
         
         <div className="w-full h-full py-1">
             <DrawerTabs              

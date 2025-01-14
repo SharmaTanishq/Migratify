@@ -29,6 +29,7 @@ import { NodeDrawer } from "@/components/Connections/NodeDrawer"
 import { AddNodeDrawer } from "@/components/Connections/LeftDrawer";
 
 import AddNodeFAB from "@/components/Connections/Fab";
+import { DockDemo } from "../../dock";
 
 
 const selector = (state: any) => ({
@@ -101,8 +102,7 @@ export default function Page() {
 
   const [type] = useDnD();
 
-  const onDragOver = useCallback((event: any) => {
-    console.log("onDragOver", event);
+  const onDragOver = useCallback((event: any) => {    
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
@@ -216,11 +216,11 @@ export default function Page() {
           fitView
           style={{ borderRadius: "10px" }}
         >
-          {/* <Panel>
-            <div className="z-[999]">
-              <DockDemo />
-            </div>
-          </Panel> */}
+            {/* <Panel>
+              <div className="z-[999]">
+                <DockDemo />
+              </div>
+            </Panel> */}
           <Controls />
 
           <Panel className="py-5 flex " >

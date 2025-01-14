@@ -3,6 +3,7 @@ import React from "react";
 import { Dock, DockIcon } from "@/components/ui/dock";
 
 import { useDnD } from '@/components/AddNodes/DnDContext';
+import { NodeCard } from "@/components/Connections/Drawer/NodeCards";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -30,7 +31,7 @@ export function DockDemo() {
           <Icons.googleDrive className="size-6" />
         </DockIcon>
         <DockIcon onDragStart={(event) => onDragStart(event, 'fileUploadNode')} >
-          <Icons.notion className="size-6" />
+          <NodeCard icon={<Icons.gitHub />} title="Inventory File" description="Upload inventory data file" />
         </DockIcon>
         <DockIcon onDragStart={(event) => onDragStart(event, 'vtexNode')} >
           <Icons.whatsapp className="size-6" />
