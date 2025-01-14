@@ -13,6 +13,7 @@ import { Folder } from "lucide-react";
  
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
+    
         <ReactFlowProvider>
           <DnDProvider> 
             <SidebarProvider>

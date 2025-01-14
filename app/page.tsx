@@ -4,14 +4,13 @@ import { Button } from "@/components/ui/button";
 import {
   Authenticated,
   Unauthenticated,
-  useMutation,
-  useQuery,
+  
 } from "convex/react";
-import { api } from "@/convex/_generated/api";
 
-import { SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
+
+import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { StickyHeader } from "@/components/layout/sticky-header";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import Signout from "./Signout";
 import { ModeToggle } from "@/components/helpers/ThemeToggler";
 
@@ -53,10 +52,10 @@ function SignInAndSignUpButtons() {
   return (
     <div className="flex gap-4">
       <Authenticated>
-        <UserButton afterSignOutUrl="#" />
+        <UserButton  />
       </Authenticated>
       <Unauthenticated>
-        <SignInButton mode="modal" afterSignInUrl="/">
+        <SignInButton mode="modal"  >
           <Button variant="ghost">Sign in</Button>
         </SignInButton>
         <SignUpButton mode="modal">
@@ -67,26 +66,3 @@ function SignInAndSignUpButtons() {
   );
 }
 
-function SignedInContent() {
-  const { viewer, numbers } =
-    useQuery(api.myFunctions.listNumbers, {
-      count: 10,
-    }) ?? {};
-  const addNumber = useMutation(api.myFunctions.addNumber);
-
-  if (viewer === undefined || numbers === undefined) {
-    return (
-      <>
-        <Skeleton className="h-5 w-full" />
-        <Skeleton className="h-5 w-full" />
-        <Skeleton className="h-5 w-full" />
-      </>
-    );
-  }
-
-  return (
-    <>
-      
-    </>
-  );
-}

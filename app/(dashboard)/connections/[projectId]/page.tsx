@@ -216,11 +216,7 @@ export default function Page() {
           fitView
           style={{ borderRadius: "10px" }}
         >
-            {/* <Panel>
-              <div className="z-[999]">
-                <DockDemo />
-              </div>
-            </Panel> */}
+            
           <Controls />
 
           <Panel className="py-5 flex " >

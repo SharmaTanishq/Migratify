@@ -15,7 +15,7 @@ export function RulerCard({
   className,
   title,
   description,
-  tag = "Linear Plan",
+  tag = "BridgeFlow",
   showPattern = true,
   imageSrc,
   ...props
