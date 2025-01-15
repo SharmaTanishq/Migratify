@@ -1,22 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-
 import { ScrollArea } from "../ui/scroll-area";
-
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, X } from "lucide-react";
 import { NodeCard } from "./Drawer/NodeCards";
 import { Icons } from "../Icons";
 import { useDnD } from "../AddNodes/DnDContext";
@@ -24,68 +14,90 @@ import { useDnD } from "../AddNodes/DnDContext";
 interface NodeDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  nodeData?: any; // Type this according to your node structure
+  nodeData?: any;
 }
 
 export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
-  
+  if (!isOpen) return null;
+
   return (
-    <Sheet key={"left"} open={isOpen} onOpenChange={onClose}>
-      <SheetContent
-        side="flowLeft"
-        className="w-[500px] sm:w-[540px] md:p-6 bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100"
-      >
-        <SheetHeader>
-          <SheetTitle>Add Node</SheetTitle>
-          <SheetDescription>
+    <div className="fixed left-[80px] top-4 h-[calc(100vh-2rem)] w-[400px] rounded-xl border bg-white/50 backdrop-blur-xl p-6 shadow-2xl transition-all duration-300 ease-in-out">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-semibold">Add Node</h2>
+          <p className="text-sm text-gray-500">
             Select a node from the categories below to add to your workflow
-          </SheetDescription>
-        </SheetHeader>
-
-        <div className="mt-4 space-y-3">
-          <Input
-            type="search"
-            placeholder="Search nodes..."
-            className="w-full"
-          />
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="text-xs">
-              Sort A-Z
-            </Button>
-            <Button variant="outline" size="sm" className="text-xs">
-              Active Only
-            </Button>
-          </div>
+          </p>
         </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="hover:bg-gray-100 rounded-full"
+          onClick={onClose}
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
 
-        <ScrollArea className="h-[calc(100vh-25rem)] mt-10">
-          <div className="space-y-6 pr-4">
-            <Collapsible className="w-[320px] space-y-2">
-              <div className="flex items-center justify-between space-x-4 px-4">
-                <h4 className="text-sm font-semibold">
-                  E-Commerce
-                </h4>
-                <CollapsibleTrigger asChild>
-                  <Button variant="ghost" size="sm">
-                    <ChevronsUpDown className="h-4 w-4" />
-                    <span className="sr-only">Toggle</span>
-                  </Button>
-                </CollapsibleTrigger>
-              </div>
-              
-              <NodeCard  icon={<Icons.VTEX />} title="VTEX" description="Create integration with VTEX e-commerce " />
-              <CollapsibleContent className="space-y-2">
-                <div className="rounded-md border px-4 py-2 font-mono text-sm shadow-sm">
-                  @radix-ui/colors
-                </div>
-                <div className="rounded-md border px-4 py-2 font-mono text-sm shadow-sm">
-                  @stitches/react
-                </div>
+      <div className="mt-4 space-y-3">
+        <Input
+          type="search"
+          placeholder="Search nodes..."
+          className="w-full bg-white/50 backdrop-blur-sm focus:bg-white"
+        />
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-xs hover:bg-white"
+          >
+            Sort A-Z
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-xs hover:bg-white"
+          >
+            Active Only
+          </Button>
+        </div>
+      </div>
+
+      <ScrollArea className="h-[calc(100vh-15rem)] mt-6 pr-4">
+        <div className="space-y-6">
+          <Collapsible className="w-full space-y-2">
+            <div className="flex items-center justify-between space-x-4 px-4">
+              <h4 className="text-sm font-semibold">E-Commerce</h4>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm" className="hover:bg-white/50">
+                  <ChevronsUpDown className="h-4 w-4" />
+                  <span className="sr-only">Toggle</span>
+                </Button>
+              </CollapsibleTrigger>
+            </div>
+
+            <div className="space-y-2 mt-2">
+              <NodeCard
+                icon={<Icons.VTEX />}
+                title="VTEX"
+                description="Create integration with VTEX e-commerce"
+              />
+              <CollapsibleContent className="space-y-2 pl-2">
+                <NodeCard
+                  icon={<Icons.googleDrive />}
+                  title="File Upload"
+                  description="Upload and process files"
+                />
+                <NodeCard
+                  icon={<Icons.notion />}
+                  title="Category File"
+                  description="Process category data"
+                />
               </CollapsibleContent>
-            </Collapsible>
-          </div>
-        </ScrollArea>
-      </SheetContent>
-    </Sheet>
+            </div>
+          </Collapsible>
+        </div>
+      </ScrollArea>
+    </div>
   );
 }
