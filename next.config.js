@@ -7,7 +7,7 @@ const nextConfig = {
         remotePatterns: [
           {
             protocol: 'https',
-            hostname: 'antimetal.com',
+            hostname: 'assets.aceternity.com',
           },
         ],
       },

@@ -15,6 +15,7 @@ import { DnDProvider } from '@/components/AddNodes/DnDContext';
 import { Joinwaitlist } from '@/components/landing/joinwaitlist';
 import { FlipWords } from '@/components/ui/flip-words';
 import { Separator } from '@radix-ui/react-dropdown-menu';
+import { TimelineSection } from '@/components/landing/timeline';
 
 
 const Signout = () => {
@@ -96,7 +97,9 @@ const Signout = () => {
             
         </div>
         
-            
+        <div className='w-full flex flex-col justify-center items-center mt-10 '>
+            <TimelineSection/>
+        </div>
 
         
         
