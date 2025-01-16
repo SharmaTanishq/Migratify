@@ -9,16 +9,14 @@ export const createProject = mutation({
     integration: v.array(v.object({ label: v.string() })),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();    
-    
+    const identity = await ctx.auth.getUserIdentity();
+
     const response = await ctx.db.insert("projects", {
       userId: identity?.tokenIdentifier!,
       projectName: args.projectName,
       projectDescription: args.projectDescription,
-      ecommercePlatform:args.ecommercePlatform,
-      integration: 
-        args.integration
-      ,
+      ecommercePlatform: args.ecommercePlatform,
+      integration: args.integration,
     });
 
     return {
@@ -29,24 +27,31 @@ export const createProject = mutation({
 });
 
 export const listProjects = query({
-    args:{},
-    handler:async(ctx,args)=>{
-        const identity = await ctx.auth.getUserIdentity();
-        const data =  await ctx.db
-        .query("projects")
-        .filter((q) => q.eq(q.field("userId"), identity?.tokenIdentifier))        
-        .collect();
+  args: {},
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    const data = await ctx.db
+      .query("projects")
+      .filter((q) => q.eq(q.field("userId"), identity?.tokenIdentifier))
+      .collect();
 
-        return data ;
-    }
-})
+    return data;
+  },
+});
 
-export const getProjectById = query({ 
-    args:{projectId:v.id("projects")},
-    handler:async(ctx,args)=>{
-        return ctx.db
-        .query("projects")
-        .filter((q) => q.eq(q.field("_id"), args.projectId))
-        .collect();
-    }
-})
+export const getProjectById = query({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, args) => {
+    return ctx.db
+      .query("projects")
+      .filter((q) => q.eq(q.field("_id"), args.projectId))
+      .collect();
+  },
+});
+
+export const deleteProject = mutation({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.projectId);
+  },
+});
