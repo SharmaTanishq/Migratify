@@ -8,7 +8,6 @@ import { ReactFlow, Controls, useReactFlow } from "@xyflow/react";
 import { useDnD } from "@/components/AddNodes/DnDContext";
 import "@xyflow/react/dist/style.css";
 
-
 import { VtexCommerceNode } from "@/components/AddNodes/VtexNode";
 import { FileUploadNode } from "@/components/FileUploadNode/UploadFileNode";
 import { CategoryFileNode } from "@/components/FileUploadNode/CategoryFile";
@@ -24,13 +23,12 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
-import { NodeDrawer } from "@/components/Connections/NodeDrawer"
+import { NodeDrawer } from "@/components/Connections/NodeDrawer";
 
 import { AddNodeDrawer } from "@/components/Connections/LeftDrawer";
 
 import AddNodeFAB from "@/components/Connections/Fab";
 import { DockDemo } from "../../dock";
-
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -102,7 +100,7 @@ export default function Page() {
 
   const [type] = useDnD();
 
-  const onDragOver = useCallback((event: any) => {    
+  const onDragOver = useCallback((event: any) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
@@ -182,22 +180,19 @@ export default function Page() {
   );
 
   const handleNodeClick = useCallback((event: any, node: any) => {
-    setSelectedNode(node)
-    setIsDrawerOpen(true)
-  }, [])
+    setSelectedNode(node);
+    setIsDrawerOpen(true);
+  }, []);
 
   const handleNodeDelete = useCallback((node: any) => {
-    console.log("node", node)
-    setIsDrawerOpen(false)
-  }, [])
+    console.log("node", node);
+    setIsDrawerOpen(false);
+  }, []);
 
-  const handleNodeMouseEnter = useCallback((event: any, node: any) => {
-    
-  }, [])
+  const handleNodeMouseEnter = useCallback((event: any, node: any) => {}, []);
 
   return (
     <div className="w-full h-full">
-      
       <div className="flex w-full h-full justify-center items-center  rounded-xl">
         <ReactFlow
           nodes={nodes}
@@ -206,7 +201,7 @@ export default function Page() {
           onNodeMouseEnter={handleNodeMouseEnter}
           onEdgesChange={onEdgesChange}
           onNodeClick={handleNodeClick}
-          onNodesDelete={handleNodeDelete}                    
+          onNodesDelete={handleNodeDelete}
           onDragEnd={onNodeUpdate}
           onNodeDragStop={onNodeUpdate}
           onConnect={onEdgeConnect}
@@ -216,33 +211,26 @@ export default function Page() {
           fitView
           style={{ borderRadius: "10px" }}
         >
-            
           <Controls />
 
-          <Panel className="py-5 flex " >
+          <Panel className="py-5 flex ">
             <AddNodeFAB onClick={() => setIsPanelOpen(true)} />
           </Panel>
 
-            
-            
-          
-
           <Background color="#ccc" />
-          
-          
-          
-            <NodeDrawer 
-                isOpen={isDrawerOpen}
-                onClose={() => setIsDrawerOpen(false)}
-                nodeData={selectedNode}
-              />
-          
+
+          <NodeDrawer
+            isOpen={isDrawerOpen}
+            onClose={() => setIsDrawerOpen(false)}
+            nodeData={selectedNode}
+          />
+
           <Toaster position="bottom-center" />
         </ReactFlow>
         <AddNodeDrawer
-                isOpen={isPanelOpen}
-                onClose={() => setIsPanelOpen(false)}
-          />
+          isOpen={isPanelOpen}
+          onClose={() => setIsPanelOpen(false)}
+        />
       </div>
     </div>
   );

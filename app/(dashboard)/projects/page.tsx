@@ -73,19 +73,7 @@ export default function Page() {
                       <div className="flex gap-2">
                         <AlertDialog>
                           <AlertDialogTrigger>
-                            <button
-                              onClick={(e) => {
-                                // e.stopPropagation();
-                                // if (
-                                //   confirm(
-                                //     "Are you sure you want to delete this project?"
-                                //   )
-                                // ) {
-                                //   handleDeleteProject(project._id);
-                                // }
-                              }}
-                              className="p-1.5 rounded-lg bg-red-100 hover:bg-red-200 cursor-pointer"
-                            >
+                            <button className="p-1.5 rounded-lg bg-red-100 hover:bg-red-200 cursor-pointer">
                               <Trash2 className="h-4 w-4 text-red-500" />
                             </button>
                           </AlertDialogTrigger>

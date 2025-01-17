@@ -11,6 +11,11 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useShallow } from "zustand/react/shallow";
+import useStore from "@/components/Store/store";
+import { useNodeId } from "@xyflow/react";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 const DEFAULT_HANDLE_STYLE = {
   width: 8,
@@ -20,10 +25,24 @@ const DEFAULT_HANDLE_STYLE = {
   background: "var(--handle-color)",
 };
 
+const selector = (state: any) => ({
+  deleteNode: state.deleteNode,
+});
+
 export function VtexCommerceNode({ data }: { data: any }) {
+  const deleteNodeMutation = useMutation(api.flows.nodes.deleteNodes);
+  const nodeId = useNodeId();
+
   const handleButtonClick = (event: React.MouseEvent) => {
     event.stopPropagation();
     // Button logic
+  };
+
+  const { deleteNode } = useStore(useShallow(selector));
+
+  const handleDeleteNode = (nodeId: string) => {
+    deleteNode(nodeId);
+    deleteNodeMutation({ passedId: nodeId });
   };
 
   return (
@@ -58,7 +77,10 @@ export function VtexCommerceNode({ data }: { data: any }) {
                   <Pencil className="w-4 h-4" />
                   <span>Rename</span>
                 </button>
-                <button className="flex items-center gap-2 w-full px-1 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-md">
+                <button
+                  onClick={() => handleDeleteNode(nodeId as string)}
+                  className="flex items-center gap-2 w-full px-1 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-md"
+                >
                   <Trash2 className="w-4 h-4" />
                   <span>Delete</span>
                 </button>

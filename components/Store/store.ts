@@ -1,24 +1,21 @@
-import { create } from 'zustand';
-import { addEdge, applyNodeChanges, applyEdgeChanges } from '@xyflow/react';
+import { create } from "zustand";
+import { addEdge, applyNodeChanges, applyEdgeChanges } from "@xyflow/react";
 
-import { initialNodes } from '@/components/AddNodes/initialNode';
-import { initialEdges } from '@/components/AddNodes/initialEdges';
-import { AppNode, type AppState } from './types';
- 
+import { initialNodes } from "@/components/AddNodes/initialNode";
+import { initialEdges } from "@/components/AddNodes/initialEdges";
+import { AppNode, type AppState } from "./types";
+
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create<AppState>((set, get) => ({
   nodes: [],
-  edges: [],  
-  
-  onNodesChange: (changes) => {
+  edges: [],
 
-   
+  onNodesChange: (changes) => {
     set({
       nodes: applyNodeChanges(changes, get().nodes),
     });
   },
   onEdgesChange: (changes) => {
-    
     set({
       edges: applyEdgeChanges(changes, get().edges),
     });
@@ -29,16 +26,15 @@ const useStore = create<AppState>((set, get) => ({
     });
   },
   setInitialNodes: (nodes) => {
-    
-    set({nodes});   
+    set({ nodes });
   },
 
-  setInitialEdges:(edges)=>{
-    const edgesWithId = edges.map((edge:any)=>({
+  setInitialEdges: (edges) => {
+    const edgesWithId = edges.map((edge: any) => ({
       ...edge,
-      id:edge._id
-    }))
-    set({edges:edgesWithId})
+      id: edge._id,
+    }));
+    set({ edges: edgesWithId });
   },
 
   addEdge: (edge: any) => {
@@ -49,11 +45,9 @@ const useStore = create<AppState>((set, get) => ({
     set({ edges: [...get().edges, newEdge] });
   },
 
-  addNode:(nodes)=>{
+  addNode: (nodes) => {
     const id = Math.floor(Math.random() * 10000).toString();
-    set({ nodes: [...get().nodes, nodes ] });    
-   
-    
+    set({ nodes: [...get().nodes, nodes] });
   },
   updateNodeColor: (nodeId: string, color: string) => {
     set({
@@ -62,15 +56,23 @@ const useStore = create<AppState>((set, get) => ({
           // it's important to create a new object here, to inform React Flow about the changes
           return { ...node, data: { ...node.data, color } };
         }
-   
+
         return node;
       }),
     });
   },
+  deleteNode: (id: string) => {
+    set({
+      nodes: get().nodes.filter((node) => node.id !== id),
+      edges: get().edges.filter(
+        (edge) => edge.source !== id && edge.target !== id
+      ),
+    });
+  },
   setEdges: (edges) => {
     set({ edges });
-  }, 
-  data:[]
+  },
+  data: [],
 }));
- 
+
 export default useStore;
