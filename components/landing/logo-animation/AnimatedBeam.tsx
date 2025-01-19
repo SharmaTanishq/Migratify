@@ -3,7 +3,11 @@
 import React, { forwardRef, useRef } from "react";
 
 import { cn } from "@/lib/utils";
-import { AnimatedBeam } from "../ui/animated-beam";
+import { AnimatedBeam } from "../../ui/animated-beam";
+import { LogoCarousel } from ".";
+import centerLogos from "./logos-collections/centerIcon";
+import leftcenter from "./logos-collections/left-center";
+import rightcenter from "./logos-collections/right-center";
 
 const Circle = forwardRef<
   HTMLDivElement,
@@ -48,24 +52,24 @@ export function AnimatedBeamDemo() {
           </div>
           <div className="drop-shadow-[0_0_10px_rgba(0,0,0,0.4)] z-10">
           <Circle ref={div5Ref}>
-            <Icons.googleDocs />
+            <Icons.openai />
           </Circle>
           </div>
         </div>
         <div className="flex flex-row items-center justify-between">
           <div className="drop-shadow-[0_0_10px_rgba(0,0,0,0.4)] z-10">
           <Circle ref={div2Ref}>
-            <Icons.Shopify />
+            <LogoCarousel logos={leftcenter} />
           </Circle>
           </div>
-          <div ref={div4Ref} className="drop-shadow-[0_0_10px_rgba(0,0,0,0.4)] z-10">
-          <Circle  className="size-16 ">
-            <Icons.openai />
+          
+          <Circle ref={div4Ref}  className="size-16 ">
+            <LogoCarousel logos={centerLogos} />
           </Circle>
-          </div>
+          
           <div className="drop-shadow-[0_0_10px_rgba(0,0,0,0.4)] z-10">
           <Circle ref={div6Ref}>
-            <Icons.zapier />
+            <LogoCarousel logos={rightcenter} />
           </Circle>
           </div>
         </div>

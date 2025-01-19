@@ -1,20 +1,20 @@
 "use client"
-import { AnimatedBeamDemo } from '@/components/Organisms/AnimatedBeam';
+import { AnimatedBeamDemo } from '@/components/landing/logo-animation/AnimatedBeam';
 
 
 import WordPullUp from "@/components/ui/word-pull-up";
-import { MagicCard } from "@/components/ui/magic-card";
+
 import { ArrowRight } from 'lucide-react';
-import { RulerCard } from "@/components/ui/ruler-card";
+
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+
 import PulsatingButton from '@/components/ui/pulsating-button';
 import Connect from '@/components/landing/flow-based/connect';
 import { ReactFlowProvider } from '@xyflow/react';
 import { DnDProvider } from '@/components/AddNodes/DnDContext';
 import { Joinwaitlist } from '@/components/landing/joinwaitlist';
 import { FlipWords } from '@/components/ui/flip-words';
-import { Separator } from '@radix-ui/react-dropdown-menu';
+
 import { TimelineSection } from '@/components/landing/timeline';
 
 
@@ -35,7 +35,7 @@ const Signout = () => {
                     className=" text-2xl font-semibold mb-10 tracking-[-0.02em] text-left  bg-gradient-to-r from-[#202632] to-gray-500 bg-clip-text text-transparent dark:text-white md:text-7xl md:leading-[5rem] leading-normal"
                     words="Fast Track Your Migration"
                 />
-                <p className='max-w-[50ch] tracking-wide mb-10 text-[#202632]/80 font-light'>
+                <p className='max-w-[50ch] tracking-wide mb-10 text-color-primary-black font-light'>
                 Connect your e-commerce platform to our AI-powered assistant and automate your data migration. Transform weeks of manual work into minutes.
                 </p>
                 <div className='flex w-3/4 justify-between '>
@@ -97,7 +97,7 @@ const Signout = () => {
             
         </div>
         
-        <div className='w-full flex flex-col justify-center items-center mt-10 '>
+        <div id='bridgeflow' className='w-full flex flex-col justify-center items-center mt-10 '>
             <TimelineSection/>
         </div>
 

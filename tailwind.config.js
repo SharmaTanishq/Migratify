@@ -22,6 +22,9 @@ module.exports = {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			dashboard: 'hsl(var(--dashboard-background))',
+			color:{
+				'primary-black': 'hsl(var(--text-primary-black))',
+			},
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
