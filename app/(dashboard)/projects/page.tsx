@@ -18,11 +18,20 @@ import InteractiveHoverButton from "@/components/ui/interactive-hover-button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import DotPattern from "@/components/ui/dot-pattern";
+import {Spinner} from "@heroui/spinner";
+import { useState,useEffect } from "react";
 
 
 
 export default function Page() {
   const data = useQuery(api.projects.listProjects, {});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(()=>{
+    if(data){
+      setIsLoading(false);
+    }
+  },[data])
   const router = useRouter();
 
   return (
@@ -46,6 +55,7 @@ export default function Page() {
             <DialogComponent />
           </div>
 
+          {isLoading?(<div className="flex justify-center items-center w-full h-full"><Spinner /></div>):
           <div className="grid auto-rows-min gap-4 md:grid-cols-3 sm:grid-cols-2  lg:grid-cols-4 mt-10">
             {data?.map((project) => (
               <Card
@@ -102,6 +112,7 @@ export default function Page() {
               </Card>
             ))}
           </div>
+          }
         </div>
       </div>
     </div>
