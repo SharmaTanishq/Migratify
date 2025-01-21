@@ -17,6 +17,7 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
         waitlistUrl="/waitlist"
         
         
+        
       >
         <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
           {children}

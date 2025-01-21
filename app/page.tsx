@@ -55,7 +55,7 @@ function SignInAndSignUpButtons() {
         <UserButton  />
       </Authenticated>
       <Unauthenticated>
-        <SignInButton mode="modal"  >
+        <SignInButton mode="modal"    >
           <Button variant="ghost">Sign in</Button>
         </SignInButton>
         <SignUpButton mode="modal">
