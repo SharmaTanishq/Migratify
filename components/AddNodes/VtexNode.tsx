@@ -1,5 +1,5 @@
-import { useCallback } from "react";
-import { Handle, Position } from "@xyflow/react";
+
+import { Handle, Position,NodeProps, useReactFlow } from "@xyflow/react";
 import { Card } from "../ui/card";
 import { Icons } from "../Icons";
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
@@ -8,9 +8,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+
 import { Button } from "../ui/button";
+import { useNodeDelete } from "../hooks/useNodeDelete";
+import useStore  from "../Store/store";
+import { useEffect } from "react";
+
 
 const DEFAULT_HANDLE_STYLE = {
   width: 8,
@@ -20,13 +23,25 @@ const DEFAULT_HANDLE_STYLE = {
   background: "var(--handle-color)",
 };
 
-export function VtexCommerceNode({ data }: { data: any }) {
+export function VtexCommerceNode(props: NodeProps) {
+  const instance = useReactFlow();
+  
+  
+
+ // const { deleteNode } = useNodeDelete(data.projectId); 
+
+ const handleDelete = (event:React.MouseEvent)=>{
+  event.stopPropagation();
+  instance.deleteElements({ nodes: [{id:props.id}] })
+ }
+
   const handleButtonClick = (event: React.MouseEvent) => {
     event.stopPropagation();
+    
     // Button logic
   };
 
-  return (
+return (
     <>
       <Card className="w-[300px] p-4 space-y-4 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 relative">
         {/* Header Section */}
@@ -58,7 +73,7 @@ export function VtexCommerceNode({ data }: { data: any }) {
                   <Pencil className="w-4 h-4" />
                   <span>Rename</span>
                 </button>
-                <button className="flex items-center gap-2 w-full px-1 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-md">
+                <button className="flex items-center gap-2 w-full px-1 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-md" onClick={handleDelete}>
                   <Trash2 className="w-4 h-4" />
                   <span>Delete</span>
                 </button>

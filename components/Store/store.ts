@@ -23,11 +23,17 @@ const useStore = create<AppState>((set, get) => ({
       edges: applyEdgeChanges(changes, get().edges),
     });
   },
+
   onConnect: (connection) => {
     set({
       edges: addEdge(connection, get().edges),
     });
   },
+  getNode:(nodeId:string)=>{
+    return get().nodes.find((node:any)=>node.id === nodeId)
+
+  },
+
   setInitialNodes: (nodes) => {
     
     set({nodes});   

@@ -29,7 +29,7 @@ import { NodeDrawer } from "@/components/Connections/NodeDrawer"
 import { AddNodeDrawer } from "@/components/Connections/LeftDrawer";
 
 import AddNodeFAB from "@/components/Connections/Fab";
-import { DockDemo } from "../../dock";
+import { useNodeDelete } from "@/components/hooks/useNodeDelete";
 
 
 const selector = (state: any) => ({
@@ -66,6 +66,7 @@ export default function Page() {
   const addNodeMutation = useMutation(api.flows.nodes.addNode);
   const addEdgeMutation = useMutation(api.flows.edges.addEdge);
   const updateNodesMutation = useMutation(api.flows.nodes.updateNodes);
+  const { deleteNode } = useNodeDelete(projectId);
 
   const [selectedNode, setSelectedNode] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -187,7 +188,9 @@ export default function Page() {
   }, [])
 
   const handleNodeDelete = useCallback((node: any) => {
-    console.log("node", node)
+    
+    deleteNode(node[0]._id)
+    
     setIsDrawerOpen(false)
   }, [])
 

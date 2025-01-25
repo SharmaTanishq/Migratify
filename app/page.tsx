@@ -12,7 +12,7 @@ import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { StickyHeader } from "@/components/layout/sticky-header";
 
 import Signout from "./Signout";
-import { ModeToggle } from "@/components/helpers/ThemeToggler";
+
 
 import { NavigationMenuLinks } from "@/components/NavigationMenu";
 
@@ -29,20 +29,17 @@ export default function Home() {
 
          <div className="flex items-center gap-4">
             <NavigationMenuLinks/>
-              <ModeToggle/>
+              
             <SignInAndSignUpButtons />
           </div>
           </div>
         </div>
       </StickyHeader>
       
-        <Authenticated>
+        
           <Signout />
-        </Authenticated>
-        <Unauthenticated>
-           {/* Added mx-4 for margin left and right */}           
-              <Signout/>                     
-        </Unauthenticated>
+        
+        
       
     </>
   );
@@ -55,7 +52,7 @@ function SignInAndSignUpButtons() {
         <UserButton  />
       </Authenticated>
       <Unauthenticated>
-        <SignInButton mode="modal"  >
+        <SignInButton mode="modal"    >
           <Button variant="ghost">Sign in</Button>
         </SignInButton>
         <SignUpButton mode="modal">
