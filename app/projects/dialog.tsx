@@ -16,6 +16,7 @@ import { MultiSelect, } from "./multiSelect"
 import { useState } from "react"
 import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api";
+import { PlusIcon } from "lucide-react"
 
 const integrationList = [
     { value: "product", label: "Product Integration" },
@@ -45,7 +46,7 @@ const integrationList = [
     return (
         <Dialog>
         <DialogTrigger asChild>
-            <Button variant={"secondary"}  >New Project</Button>
+            <Button  variant={"primary"}> <PlusIcon className="w-4 h-4 " /> New</Button>
         </DialogTrigger>
         <DialogContent >
             <DialogHeader>

@@ -12,7 +12,7 @@ import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { StickyHeader } from "@/components/layout/sticky-header";
 
 import Signout from "./Signout";
-import { ModeToggle } from "@/components/helpers/ThemeToggler";
+
 
 import { NavigationMenuLinks } from "@/components/NavigationMenu";
 

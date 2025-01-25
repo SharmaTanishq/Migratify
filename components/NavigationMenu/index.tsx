@@ -14,7 +14,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-import { LockIcon } from "lucide-react"
+
 import { BorderBeam } from "../ui/border-beam"
 
 const components: { title: string; href: string; description: string }[] = [
