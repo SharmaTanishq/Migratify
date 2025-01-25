@@ -14,6 +14,8 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import { LockIcon } from "lucide-react"
+import { BorderBeam } from "../ui/border-beam"
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -65,36 +67,63 @@ export function NavigationMenuLinks() {
             </Link>
           </NavigationMenuItem>
         <NavigationMenuItem>
+          
           <NavigationMenuTrigger>Integrations</NavigationMenuTrigger>
+          
           <NavigationMenuContent>
-            <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-none to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="/"
-                  >
-                    
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      shadcn/ui
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Beautifully designed components built with Radix UI and
-                      Tailwind CSS.
-                    </p>
-                  </a>
-                </NavigationMenuLink>
+            <div>
+              <BorderBeam />
+      
+            <ul className="grid  gap-3 p-4  md:grid-cols-3 lg:w-[600px]">
+              {/* E-Commerce Section */}
+              <li>
+                <p className="p-2 text-sm font-bold">E-Commerce</p>
+                <ListItem title="VTEX" href="/" >
+                  Connect your Amazon store to sync products and orders
+                </ListItem>
+                <ListItem title="Shopify" href="/">
+                  Integrate with Shopify for seamless product management
+                </ListItem>
+                <ListItem title="WooCommerce" href="/">
+                  Sync your WooCommerce store data automatically
+                </ListItem>
+                
               </li>
-              <ListItem href="/docs" title="Introduction">
-                Re-usable components built using Radix UI and Tailwind CSS.
+
+              <li>
+              {/* File Storage Section */}
+              <p className="p-2 text-sm font-bold">PIM</p>
+                <ListItem title="Akeneo" href="/">
+                  Centralize and manage your product information efficiently
+                </ListItem>
+                <ListItem title="Salsify" href="/">
+                  Enterprise-grade PIM for digital commerce
+                </ListItem>
+                <ListItem title="inRiver" href="/">
+                  Connect to Google Drive for file storage
+                </ListItem>
+              </li>
+
+              <li>
+              {/* PIM Section */}
+              <p className="p-2 text-sm font-bold">File Storage</p>
+              <ListItem title="Oracle Cloud WMS" href="/">
+                Enterprise warehouse management integration
               </ListItem>
-              <ListItem href="/docs/installation" title="Installation">
-                How to install dependencies and structure your app.
+              <ListItem title="Blue Yonder" href="/">
+                End-to-end supply chain solutions
               </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc
+
+              {/* Email Section */}
+              <ListItem title="Front" href="/">
+                Collaborative email management platform
               </ListItem>
+              <ListItem title="Zendesk" href="/">
+                Customer service and engagement tools
+              </ListItem>
+              </li>
             </ul>
+            </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
@@ -104,11 +133,13 @@ export function NavigationMenuLinks() {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
-        <NavigationMenuItem >
-          <Link href="/docs" legacyBehavior passHref  >
-            <NavigationMenuLink className={navigationMenuTriggerStyle()} >
+        <NavigationMenuItem className="" >
+          <Link href="/" legacyBehavior passHref  >
+            <NavigationMenuLink className={"cursor-default text-muted-foreground hover:bg-none text-sm p-2"  } >
+              
               Documentation
             </NavigationMenuLink>
+            
           </Link>
         </NavigationMenuItem>
       </NavigationMenuList>
@@ -126,7 +157,7 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "block select-none space-y-1 rounded-md p-2 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
           )}
           {...props}

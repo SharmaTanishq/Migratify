@@ -29,20 +29,17 @@ export default function Home() {
 
          <div className="flex items-center gap-4">
             <NavigationMenuLinks/>
-              <ModeToggle/>
+              
             <SignInAndSignUpButtons />
           </div>
           </div>
         </div>
       </StickyHeader>
       
-        <Authenticated>
+        
           <Signout />
-        </Authenticated>
-        <Unauthenticated>
-           {/* Added mx-4 for margin left and right */}           
-              <Signout/>                     
-        </Unauthenticated>
+        
+        
       
     </>
   );

@@ -1,8 +1,10 @@
 import Image from "next/image";
 import React from "react";
 import { Timeline } from "@/components/ui/timeline";
+import { FlipWords } from "@/components/ui/flip-words";
 
 export function TimelineSection() {
+  const words = ["faster", "cheaper", "visually", "better", "easier" , "smarter"];
   const data = [
     {
       title: "Integrate",
@@ -48,14 +50,11 @@ export function TimelineSection() {
       title: "Migrate",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            I usually run out of copy, but when I see content this big, I try to
-            integrate lorem ipsum.
-          </p>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            Lorem ipsum is for people who are too lazy to write copy. But we are
-            not. Here are some more example of beautiful designs I built.
-          </p>
+          {/* <div className="text-2xl md:text-4xl mx-auto font-normal text-center bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent   p-4">
+                      
+                      Migrate <FlipWords words={words} />
+                      
+              </div> */}
           <div className="grid grid-cols-2 gap-4">
             <Image
               src="https://assets.aceternity.com/pro/hero-sections.png"
