@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import {
   Collapsible,
   CollapsibleContent,
@@ -10,10 +10,10 @@ import { BellIcon, ChevronsUpDown, GitFork, UploadIcon, X } from "lucide-react";
 import { NodeCard } from "./Drawer/NodeCards";
 import { Icons } from "../Icons";
 
-import { GearIcon } from "@radix-ui/react-icons";
+
 import { getNodes } from "../CMS/api";
 import { useEffect, useState } from "react";
-import { Spinner } from "@heroui/spinner";
+
 
 interface NodeDrawerProps {
   isOpen: boolean;
@@ -22,23 +22,51 @@ interface NodeDrawerProps {
 }
 
 import { NodesTypeCMS } from "../CMS/types";
+import { FadeInDiv, Tabs } from "../ui/tabs";
 
 export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
 
   const [availableNodes, setAvailableNodes] = useState<NodesTypeCMS[]>([]);
 
+  const [tabs,setTabs] = useState<any[]>([]);
+
   useEffect(()=>{
-    getNodes().then((data)=>setAvailableNodes(data.data));
-    
+    getNodes().then((data)=>setAvailableNodes(data.data));    
   },[])
+
+  useEffect(()=>{
+    const newTabs = availableNodes.map((node) => ({
+      title: node.Name,
+      value: node.Name,
+      content: (
+        <div className="w-full overflow-hidden relative rounded-2xl p-1 text-black bg-gradient-to-br from-gray-50 to-gray-100">
+            <div className="flex flex-col gap-2">
+              {node.nodes.map((node)=>{
+                return(
+                  <NodeCard
+                    icon={node.Node.node_logo.url}
+                    title={node.Name}
+                    description={node.Node.node_description}
+                    nodeType={node.Node.node_type}
+                    variant={node.Node.active ? "default" : "disabled"}
+                  />
+                )
+              })}
+          </div>
+        </div>
+      ),
+    }));
+    
+    setTabs(newTabs);
+  },[availableNodes])
 
   
   if (!isOpen) return null;
 
   return (
     
-    <div className="fixed left-[80px] top-4 h-[calc(100vh-2rem)] w-[400px] rounded-xl border bg-white/50 backdrop-blur-xl p-6 shadow-2xl transition-all duration-300 ease-in-out">
-      <div className="flex items-center justify-between">
+    <div className="fixed left-[80px] overflow-hidden top-4 h-[calc(100vh-2rem)] w-[400px] rounded-xl border bg-gray-100 p-2 shadow-2xl transition-all duration-300 ease-in-out">
+      <div className="flex items-center justify-between p-4">
         <div>
           <h2 className="text-lg font-semibold">Add Node</h2>
           <p className="text-sm text-gray-500">
@@ -78,8 +106,46 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
           </Button>
         </div>
       </div>
-      <div className="flex flex-col gap-4">
-      <ScrollArea className="h-[calc(100vh-15rem)] mt-6 pr-4">
+      <div className="flex flex-col gap-2">
+          <Tabs 
+            tabs={
+              availableNodes.map((node) => ({
+                title: node.Name,
+                value: node.Name,
+                content: (
+                  <div className="w-full overflow-hidden h-[calc(60vh-2rem)] relative rounded-2xl p-2 text-black bg-gradient-to-b from-gray-100 via-gray-50 to-white/20 ">
+                    
+                      <div className="flex flex-col gap-2">
+                        {node.nodes.length > 0 ? node.nodes.map((node)=>{
+                          return(
+                            <NodeCard
+                              icon={node.Node.node_logo.url}
+                              title={node.Name}
+                              description={node.Node.node_description}
+                              nodeType={node.Node.node_type}
+                              variant={node.Node.active ? "default" : "disabled"}
+                            />
+                          )
+                        }) : <div className="flex items-center justify-center h-full">
+                          <p className="text-sm text-gray-500">No nodes found</p>
+                        </div>
+                    } 
+                    </div>
+                  </div>
+                ),
+              }))
+            } 
+            activeTabClassName="bg-purple-100 text-purple-200 shadow-sm  rounded-md"
+            tabClassName="inline-flex items-center justify-center whitespace-nowrap rounded-md  py-1.5 text-sm font-medium ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-900 data-[state=active]:shadow-sm hover:bg-purple-50" 
+            containerClassName="inline-flex h-full items-center justify-center rounded-lg bg-gray-100 p-1 text-slate-500 w-full overflow-x-auto" 
+            contentClassName="mt-4  ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2"
+          />
+          {/* <FadeInDiv tabs={tabs} active={tabs[0]}></FadeInDiv> */}
+      {/* <ScrollArea className="w-96 h-[calc(100vh-15rem)] whitespace-nowrap rounded-md p-2">
+          <ScrollBar orientation="horizontal" />
+      </ScrollArea> */}
+
+      {/* <ScrollArea className="h-[calc(100vh-15rem)] mt-6 pr-4">
         {availableNodes.map((node)=>{
           return(
             <div className="space-y-6">
@@ -99,7 +165,7 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
                 return(
                   <CollapsibleContent className="space-y-2 ">
                   <NodeCard
-                    icon={<Icons.VTEX />}
+                    icon={node.Node.node_logo.url}
                     title={node.Name}
                     description={node.Node.node_description}
                     nodeType={node.Node.node_type}
@@ -118,8 +184,10 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
         })}
       
       </ScrollArea>
-      
+       */}
       </div>
     </div>
   );
 }
+
+

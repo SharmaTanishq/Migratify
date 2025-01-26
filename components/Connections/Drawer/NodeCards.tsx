@@ -4,11 +4,12 @@ import { useDnD } from "@/components/AddNodes/DnDContext"
 import { useRef } from "react"
 import { motion } from "framer-motion"
 import { cva } from "class-variance-authority"
+import Image from "next/image"
 
 interface NodeCardProps {
   title: string
   description: string
-  icon?: React.ReactNode
+  icon?: string
   variant?: "default" | "primary" | "disabled"
   className?: string
   nodeType?: string
@@ -57,7 +58,7 @@ export function NodeCard({ title, description, icon, className,variant, nodeType
       <div className="flex items-center ">
         {icon && (
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-gray-50/50">
-            {icon}
+            <Image src={icon} alt={title} width={40} height={40} />
           </div>
         )}
         <div className="space-y-1">
