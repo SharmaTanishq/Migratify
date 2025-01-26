@@ -20,5 +20,6 @@ import {
     setEdges: (edges: Edge[]) => void;
     setInitialEdges:(edges: Edge[]) => void;
     addNode:(type:string,x:number,y:number)=>void;
+    
     data:any[];
   };

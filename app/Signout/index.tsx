@@ -62,7 +62,7 @@ const Signout = () => {
             
             <div className="text-4xl md:text-6xl mx-auto font-normal text-center bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent   p-4">
                     Build 
-                    <FlipWords words={words} className=' font-semibold mr-0 pr-0' /> 
+                    <FlipWords words={words} className=' font-semibold ' /> 
                     with Bridgeflow.
             </div>
 
@@ -75,25 +75,7 @@ const Signout = () => {
                     </ReactFlowProvider>
                 </div>
                 
-                {/* <div className='p-3 max-w-[1236px] mb-8 mt-[40px]  shadow-sm  border border-neutral-300   rounded-[22px] md:rounded-[28px]'  >
-                    <div className="p-3 rounded-[12px] md:rounded-[18px]  relative border border-neutral-200" style={{backgroundColor: "rgba(120, 119, 198, 0.1)"}}>
-                        <div className='relative rounded-[4px] md:rounded-[10px] shadow-md'>
-                            
-                                <Image
-                                src={'/images/heropreview.png'}
-                                alt="Dashboard preview"
-                                width={1200}
-                                height={800}
-                                className="bg-neutral-white object-cover object-left aspect-[1100/825] rounded-xl md:rounded-xl"    
-                                />                        
-                            
-                        </div>
-                    </div>
-                    
-                </div> */}
-
-
-
+              
             
             
         </div>

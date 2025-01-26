@@ -35,16 +35,7 @@ export function NavMain({
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-white">Platform</SidebarGroupLabel>
-      <SidebarMenu className="space-y-2">
-        <SidebarMenuItem >
-            <Link href={"/home"}>
-            <SidebarMenuButton   tooltip="Home"> 
-                
-                <Home size={20}  />
-                Home
-            </SidebarMenuButton>
-            </Link>
-        </SidebarMenuItem>
+      <SidebarMenu className="space-y-2">       
         <SidebarMenuItem>
             <Link href={"/projects"}>
             <SidebarMenuButton tooltip="Projects"> 
