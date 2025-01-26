@@ -15,7 +15,15 @@ const poppins = Poppins({
 //const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Migration at Light Speed",
+  title: "Bridgeflow",
+  icons: {
+    icon: [
+      {
+        url: "/icons/Bridgeflow.svg",
+        href: "/icons/Bridgeflow.svg",
+      }
+    ],
+  },
   description: "Automate your e-commerce platform migration with AI-powered assistance",
 };
 
