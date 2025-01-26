@@ -6,10 +6,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronsUpDown, X } from "lucide-react";
+import { BellIcon, ChevronsUpDown, GitFork, UploadIcon, X } from "lucide-react";
 import { NodeCard } from "./Drawer/NodeCards";
 import { Icons } from "../Icons";
-import { useDnD } from "../AddNodes/DnDContext";
+
+import { GearIcon } from "@radix-ui/react-icons";
+import { getNodes } from "../CMS/api";
+import { useEffect, useState } from "react";
+import { Spinner } from "@heroui/spinner";
 
 interface NodeDrawerProps {
   isOpen: boolean;
@@ -17,10 +21,22 @@ interface NodeDrawerProps {
   nodeData?: any;
 }
 
+import { NodesTypeCMS } from "../CMS/types";
+
 export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
+
+  const [availableNodes, setAvailableNodes] = useState<NodesTypeCMS[]>([]);
+
+  useEffect(()=>{
+    getNodes().then((data)=>setAvailableNodes(data.data));
+    
+  },[])
+
+  
   if (!isOpen) return null;
 
   return (
+    
     <div className="fixed left-[80px] top-4 h-[calc(100vh-2rem)] w-[400px] rounded-xl border bg-white/50 backdrop-blur-xl p-6 shadow-2xl transition-all duration-300 ease-in-out">
       <div className="flex items-center justify-between">
         <div>
@@ -62,12 +78,14 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
           </Button>
         </div>
       </div>
-
+      <div className="flex flex-col gap-4">
       <ScrollArea className="h-[calc(100vh-15rem)] mt-6 pr-4">
-        <div className="space-y-6">
+        {availableNodes.map((node)=>{
+          return(
+            <div className="space-y-6">
           <Collapsible className="w-full space-y-2">
             <div className="flex items-center justify-between space-x-4 px-4">
-              <h4 className="text-sm font-semibold">E-Commerce</h4>
+              <h4 className="text-sm font-semibold">{node.Name}</h4>
               <CollapsibleTrigger asChild>
                 <Button variant="ghost" size="sm" className="hover:bg-white/50">
                   <ChevronsUpDown className="h-4 w-4" />
@@ -77,27 +95,31 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
             </div>
 
             <div className="space-y-2 mt-2">
-              <NodeCard
-                icon={<Icons.VTEX />}
-                title="VTEX"
-                description="Create integration with VTEX e-commerce"
-              />
-              <CollapsibleContent className="space-y-2 pl-2">
-                <NodeCard
-                  icon={<Icons.googleDrive />}
-                  title="File Upload"
-                  description="Upload and process files"
-                />
-                <NodeCard
-                  icon={<Icons.notion />}
-                  title="Category File"
-                  description="Process category data"
-                />
-              </CollapsibleContent>
+              {node.nodes.map((node)=>{
+                return(
+                  <CollapsibleContent className="space-y-2 ">
+                  <NodeCard
+                    icon={<Icons.VTEX />}
+                    title={node.Name}
+                    description={node.Node.node_description}
+                    nodeType={node.Node.node_type}
+                    variant={node.Node.active ? "default" : "disabled"}
+                  />
+                </CollapsibleContent>
+                )
+              })}
+             
+             
+             
             </div>
           </Collapsible>
         </div>
+          )
+        })}
+      
       </ScrollArea>
+      
+      </div>
     </div>
   );
 }

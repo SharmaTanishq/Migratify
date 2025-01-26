@@ -85,4 +85,15 @@ export const Icons = {
  
 </svg>
   ),
+  Shopify: (props: IconProps) => (
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M50 0L100 50L50 100L0 50L50 0Z" fill="#000" />
+    </svg>
+  ),
+  CommerceTools: (props: IconProps) => (
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path d="M50 0L100 50L50 100L0 50L50 0Z" fill="#000" />
+    </svg>
+  )
+ 
 };

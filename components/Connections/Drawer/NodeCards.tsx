@@ -1,18 +1,34 @@
-import { GripVertical } from "lucide-react"
+import { GripVertical, LockIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useDnD } from "@/components/AddNodes/DnDContext"
 import { useRef } from "react"
 import { motion } from "framer-motion"
+import { cva } from "class-variance-authority"
 
 interface NodeCardProps {
   title: string
   description: string
   icon?: React.ReactNode
+  variant?: "default" | "primary" | "disabled"
   className?: string
+  nodeType?: string
   
 }
 
-export function NodeCard({ title, description, icon, className }: NodeCardProps) {
+const nodeCardVariants = cva(
+  "flex items-center gap-4 justify-between p-2 rounded-lg border border-gray-200 bg-white/50 hover:bg-white/80 hover:border-gray-300 hover:shadow-sm transition-all duration-200",
+  {
+    variants: {
+      variant: {
+        default: "bg-white/50 hover:bg-white/80 hover:border-gray-300 hover:shadow-sm transition-all duration-200",
+        primary: "bg-gradient-to-r  rounded from-indigo-600 to-violet-600 text-white rounded-lg shadow-lg hover:from-indigo-700 hover:to-violet-700",
+        disabled: "bg-gray-200 text-gray-500 cursor-not-allowed hover:bg-gray-200",
+      },
+    },
+  }
+)
+
+export function NodeCard({ title, description, icon, className,variant, nodeType }: NodeCardProps) {
     const ref = useRef<HTMLDivElement>(null);
     const [_, setType] = useDnD();   
  
@@ -24,17 +40,19 @@ export function NodeCard({ title, description, icon, className }: NodeCardProps)
         setType(nodeType);
         event.dataTransfer.effectAllowed = 'move';
     };
+
+    
     
    
   return (
     <motion.div 
-        onDragStart={(event) => onDragStart(event, 'vtexNode')}
+        onDragStart={(event) => onDragStart(event, nodeType)}
         ref={ref}
         className={cn(
-            "flex items-center justify-evenly p-2 rounded-lg border border-gray-200 bg-white/50 hover:bg-white/80 hover:border-gray-300 hover:shadow-sm transition-all duration-200",
+            nodeCardVariants({variant}),
             className
         )}
-        draggable
+        draggable = {variant !== "disabled" ? true : false}
     >
       <div className="flex items-center ">
         {icon && (
@@ -48,9 +66,9 @@ export function NodeCard({ title, description, icon, className }: NodeCardProps)
         </div>
       </div>
       
-      <div className="flex items-center  hover:text-gray-600 cursor-move" >
-        <GripVertical className="h-6 w-6 text-black" />
+      <div className="flex items-end  hover:text-gray-600 cursor-move" >
+        {variant === "disabled" ? <LockIcon className="h-4 w-4 text-color-primary-black" /> : <GripVertical className="h-6 w-6 text-black" />}
       </div>
-    </motion.div>
+    </motion.div> 
   )
 }
