@@ -51,9 +51,7 @@ const Signout = () => {
                  
                 </div>
             </div>
-            {/* <div>
-                <AnimatedBeamDemo/>
-            </div> */}
+            
             
         </div>
         
@@ -64,7 +62,7 @@ const Signout = () => {
             <div className="text-4xl md:text-6xl mx-auto font-normal text-center bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent   p-4">
                     Build 
                     <FlipWords words={words} className=' font-semibold ' /> 
-                    with Bridgeflow.
+                    
             </div>
 
                 <div className='w-full '>
