@@ -94,7 +94,7 @@ const Connect = () => {
     
                     
 
-      <div className="flex w-full h-[800px]  rounded-[22px] p-2 max-w-screen-xl border border-neutral-300   ">
+      <div className="flex w-full h-[500px] md:h-[800px]  rounded-[22px] p-2 max-w-screen-xl border border-neutral-300   ">
         <div className="w-full p-3 rounded-[12px] md:rounded-[18px] shadow-md  relative border border-neutral-300  " >
           <ReactFlow
             nodes={nodes}
@@ -109,7 +109,7 @@ const Connect = () => {
             <Background   />
             <Panel position="bottom-center">
                 <div className="w-full flex-col flex justify-center items-center ">
-                <h4 className="text-lg text-gray-500 mt-4 bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">Drag and drop nodes from below to try building your flow</h4>
+                <h4 className="text-sm md:text-lg text-gray-500 mt-4 bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">Drag and drop nodes from below to try building your flow</h4>
                     <DockDemo/>
                 </div>
             </Panel>

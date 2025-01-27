@@ -23,19 +23,18 @@ export default function Home() {
     <>
       <StickyHeader className="px-4 py-2">
         <div className="flex justify-center items-center  ">
-        <div className="flex justify-between items-center w-full max-w-7xl "> 
-         <h1 className="text-2xl font-bold ">
-          <Link href="/" className="flex items-center gap-2">
-            <Image src="/icons/Bridgeflow.svg" alt="Bridgeflow" width={30} height={30} className="shadow-lg" />
-            BridgeFlow
+        <div className="flex justify-between items-center w-full max-w-7xl px-2 md:px-0"> 
+         <h1 className="text-xl md:text-2xl font-bold">
+          <Link href="/" className="flex items-center gap-1 md:gap-2">
+            <Image src="/icons/Bridgeflow.svg" alt="Bridgeflow" width={24} height={24} className="shadow-lg md:w-[30px] md:h-[30px]" />
+            <span className="hidden sm:inline">BridgeFlow</span>
           </Link>
           </h1>
 
-        
-
-         <div className="flex items-center gap-4">
-            <NavigationMenuLinks/>
-              
+         <div className="flex items-center gap-2 md:gap-4">
+            <div className="hidden sm:block">
+              <NavigationMenuLinks/>
+            </div>
             <SignInAndSignUpButtons />
           </div>
           </div>
@@ -62,7 +61,7 @@ function SignInAndSignUpButtons() {
           <Button variant="ghost">Sign in</Button>
         </SignInButton>
         <SignUpButton mode="modal">
-          <Button>Sign up</Button>
+          <Button variant="primary">Sign up</Button>
         </SignUpButton>
       </Unauthenticated>
     </div>
