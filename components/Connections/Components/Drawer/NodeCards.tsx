@@ -5,6 +5,8 @@ import { useRef } from "react"
 import { motion } from "framer-motion"
 import { cva } from "class-variance-authority"
 import Image from "next/image"
+import { FlowType, NodeDataType } from "@/components/Types/Flows"
+import useDragStart from "../hooks/use-on-drag-start"
 
 interface NodeCardProps {
   title: string
@@ -13,6 +15,7 @@ interface NodeCardProps {
   variant?: "default" | "primary" | "disabled"
   className?: string
   nodeType?: string
+  data:any
   
 }
 
@@ -29,25 +32,19 @@ const nodeCardVariants = cva(
   }
 )
 
-export function NodeCard({ title, description, icon, className,variant, nodeType }: NodeCardProps) {
+export function NodeCard({ title, description, icon, className,variant, nodeType,data }: NodeCardProps) {
     const ref = useRef<HTMLDivElement>(null);
-    const [_, setType] = useDnD();   
- 
-    const onDragStart = (event:any, nodeType:any) => {
-        event.stopPropagation();
-        event.dataTransfer.setData('application/reactflow', nodeType);
-        if (setType === null) return;
-        
-        setType(nodeType);
-        event.dataTransfer.effectAllowed = 'move';
-    };
+    
+
+    const { onDragStart } = useDragStart(data);
+   
 
     
     
    
   return (
-    <motion.div 
-        onDragStart={(event) => onDragStart(event, nodeType)}
+    <div 
+        onDragStart={onDragStart}
         ref={ref}
         className={cn(
             nodeCardVariants({variant}),
@@ -70,6 +67,6 @@ export function NodeCard({ title, description, icon, className,variant, nodeType
       <div className="flex items-end  hover:text-gray-600 cursor-move" >
         {variant === "disabled" ? <LockIcon className="h-4 w-4 text-color-primary-black" /> : <GripVertical className="h-6 w-6 text-black" />}
       </div>
-    </motion.div> 
+    </div> 
   )
 }

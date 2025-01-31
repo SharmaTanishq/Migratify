@@ -32,7 +32,7 @@ const integrationList = [
     const [projectDescription, setProjectDescription] = useState<string>("");
     const [ecommercePlatform, setEcommercePlatform] = useState("");
     const [integrations, setIntegrations] =  useState<string[]>(["product", "category"]);
-
+    const [open, setOpen] = useState(false);
     const createProject = useMutation(api.projects.createProject);
     
     const handleSubmit = async()=>{
@@ -41,10 +41,14 @@ const integrationList = [
          projectDescription,
          ecommercePlatform,
          integration: integrations.map(integration => ({ label: integration }))
+       }).then(()=>{
+        setOpen(false);
        });
+       
+       
     }
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
             <Button  variant={"primary"}> <PlusIcon className="w-4 h-4 " /> New</Button>
         </DialogTrigger>

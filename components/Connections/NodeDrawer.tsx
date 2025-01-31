@@ -2,7 +2,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Separator } from "../ui/separator"
 import { cn } from "@/lib/utils"
 import DotPattern from "../ui/dot-pattern"
-import { DrawerTabs } from "./Drawer/Tabs"
+import { DrawerTabs } from "./Components/Drawer/Tabs"
 
 import { Icons } from "@/app/(dashboard)/dock"
 

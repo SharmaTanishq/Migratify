@@ -7,7 +7,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { BellIcon, ChevronsUpDown, GitFork, UploadIcon, X } from "lucide-react";
-import { NodeCard } from "./Drawer/NodeCards";
+import { NodeCard } from "./Components/Drawer/NodeCards";
 import { Icons } from "../Icons";
 
 
@@ -28,37 +28,13 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
 
   const [availableNodes, setAvailableNodes] = useState<NodesTypeCMS[]>([]);
 
-  const [tabs,setTabs] = useState<any[]>([]);
+  
 
   useEffect(()=>{
     getNodes().then((data)=>setAvailableNodes(data.data));    
   },[])
 
-  useEffect(()=>{
-    const newTabs = availableNodes.map((node) => ({
-      title: node.Name,
-      value: node.Name,
-      content: (
-        <div className="w-full overflow-hidden relative rounded-2xl p-1 text-black bg-gradient-to-br from-gray-50 to-gray-100">
-            <div className="flex flex-col gap-2">
-              {node.nodes.map((node)=>{
-                return(
-                  <NodeCard
-                    icon={node.Node.node_logo.url}
-                    title={node.Name}
-                    description={node.Node.node_description}
-                    nodeType={node.Node.node_type}
-                    variant={node.Node.active ? "default" : "disabled"}
-                  />
-                )
-              })}
-          </div>
-        </div>
-      ),
-    }));
-    
-    setTabs(newTabs);
-  },[availableNodes])
+
 
   
   if (!isOpen) return null;
@@ -116,14 +92,16 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
                   <div className="w-full overflow-hidden h-[calc(60vh-2rem)] relative rounded-2xl p-2 text-black bg-gradient-to-b from-gray-100 via-gray-50 to-white/20 ">
                     
                       <div className="flex flex-col gap-2">
-                        {node.nodes.length > 0 ? node.nodes.map((node)=>{
+                        {node.nodes.length > 0 ? node.nodes.map((node,index)=>{
                           return(
                             <NodeCard
+                              key={index}
                               icon={node.Node.node_logo.url}
                               title={node.Name}
                               description={node.Node.node_description}
                               nodeType={node.Node.node_type}
                               variant={node.Node.active ? "default" : "disabled"}
+                              data={node.Node}
                             />
                           )
                         }) : <div className="flex items-center justify-center h-full">

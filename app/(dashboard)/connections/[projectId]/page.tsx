@@ -30,6 +30,8 @@ import { AddNodeDrawer } from "@/components/Connections/LeftDrawer";
 
 import AddNodeFAB from "@/components/Connections/Fab";
 import { useNodeDelete } from "@/components/hooks/useNodeDelete";
+import { AllNodeType } from "@/components/Types/Flows";
+import ECommerce from "@/components/CustomNodes/E-Commerce";
 
 
 const selector = (state: any) => ({
@@ -43,6 +45,18 @@ const selector = (state: any) => ({
   addEdge: state.addEdge,
   setInitialEdges: state.setInitialEdges,
 });
+
+const nodeTypes = {
+  ecommerceNode: ECommerce,
+  // bridgeNode: Bridge,
+  // pimNode: PIM,
+  // crmNode: CRM,
+  // erpNode: ERP,
+  // mailNode: Mail,
+  // paymentNode: Payment,
+  // shippingNode: Shipping,
+  // socialNode: Social,
+}
 
 export default function Page() {
   const params = useParams();
@@ -87,17 +101,7 @@ export default function Page() {
     if (edgesData) setInitialEdges(edgesData);
   }, [nodes]);
 
-  //Types of nodes created
-  const nodeTypes = useMemo(
-    () => ({
-      vtexNode: VtexCommerceNode,
-      fileUploadNode: FileUploadNode,
-      categoryFileNode: CategoryFileNode,
-      customerFileNode: CustomerFileNode,
-      inventoryFileNode: InventoryFileNode,
-    }),
-    []
-  );
+
 
   const { screenToFlowPosition } = useReactFlow();
 
@@ -202,7 +206,7 @@ export default function Page() {
     <div className="w-full h-full">
       
       <div className="flex w-full h-full justify-center items-center  rounded-xl">
-        <ReactFlow
+        <ReactFlow<AllNodeType>
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
