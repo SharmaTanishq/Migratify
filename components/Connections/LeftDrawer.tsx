@@ -76,21 +76,24 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
               </CollapsibleTrigger>
             </div>
 
-            <div className="space-y-2 mt-2">
+            <div className="space-y-2 mt-2 ">
               <NodeCard
                 icon={<Icons.VTEX />}
                 title="VTEX"
+                type="vtexNode"
                 description="Create integration with VTEX e-commerce"
               />
               <CollapsibleContent className="space-y-2 pl-2">
                 <NodeCard
                   icon={<Icons.googleDrive />}
                   title="File Upload"
+                  type="fileUploadNode"
                   description="Upload and process files"
                 />
                 <NodeCard
                   icon={<Icons.notion />}
                   title="Category File"
+                  type="categoryFileNode"
                   description="Process category data"
                 />
               </CollapsibleContent>

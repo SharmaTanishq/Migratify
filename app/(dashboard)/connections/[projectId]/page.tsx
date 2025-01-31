@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Background, Panel } from "@xyflow/react";
 
-import { ReactFlow, Controls, useReactFlow } from "@xyflow/react";
+import { ReactFlow, MiniMap, Controls, useReactFlow } from "@xyflow/react";
 
 import { useDnD } from "@/components/AddNodes/DnDContext";
 import "@xyflow/react/dist/style.css";
@@ -40,6 +40,7 @@ const selector = (state: any) => ({
   addNode: state.addNode,
   addEdge: state.addEdge,
   setInitialEdges: state.setInitialEdges,
+  deleteNode: state.deleteNode,
 });
 
 export default function Page() {
@@ -59,12 +60,15 @@ export default function Page() {
     addNode,
     addEdge,
     setInitialEdges,
+    deleteNode,
   } = useStore(useShallow(selector));
+
+  const [onmousedown, setOnMouseDown] = useState(false);
 
   const addNodeMutation = useMutation(api.flows.nodes.addNode);
   const addEdgeMutation = useMutation(api.flows.edges.addEdge);
   const updateNodesMutation = useMutation(api.flows.nodes.updateNodes);
-
+  const deleteNodeMutation = useMutation(api.flows.nodes.deleteNodes);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -167,6 +171,18 @@ export default function Page() {
   const onEdgeConnect = useCallback(
     (event: any) => {
       addEdge(event);
+      console.log("event", event);
+      if (
+        event.sourceHandle === "product" &&
+        event.targetHandle !== "fileUploadNode"
+      ) {
+        window.alert(
+          "This connection is not allowed. Please select a valid connection."
+        );
+        return;
+      } else {
+        // integration logic
+      }
 
       addEdgeMutation({
         projectId: projectId,
@@ -185,7 +201,8 @@ export default function Page() {
   }, []);
 
   const handleNodeDelete = useCallback((node: any) => {
-    console.log("node", node);
+    deleteNode(node[0].id);
+    deleteNodeMutation({ passedId: node[0].id });
     setIsDrawerOpen(false);
   }, []);
 
@@ -208,11 +225,16 @@ export default function Page() {
           nodeTypes={nodeTypes}
           onDrop={onDrop}
           onDragOver={onDragOver}
+          onMouseDown={() => setOnMouseDown(true)}
+          onMouseUp={() => setOnMouseDown(false)}
           fitView
-          style={{ borderRadius: "10px" }}
+          style={{
+            cursor: onmousedown ? "grabbing" : "grab",
+            borderRadius: "10px",
+          }}
         >
           <Controls />
-
+          <MiniMap />
           <Panel className="py-5 flex ">
             <AddNodeFAB onClick={() => setIsPanelOpen(true)} />
           </Panel>
