@@ -9,8 +9,8 @@ const useDragStart = (data: FlowType) => {
 
   const onDragStart = useCallback(
     (event:React.DragEvent<HTMLDivElement>) => {
-        // if (setType === null) return;       
-        // setType("ecommerceNode")
+        if (setType === null) return;       
+        setType("ecommerceNode")
 
     //   let image = <DragCardComponent data={data} />; // Replace with whatever you want here
 

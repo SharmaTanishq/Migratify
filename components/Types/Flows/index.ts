@@ -1,4 +1,6 @@
 import { Edge, Node, ReactFlowJsonObject } from "@xyflow/react";
+import { APIClassType } from "../api";
+import { NodeData } from "@/components/CMS/types";
 
 export type FlowType = {
     name: string;
@@ -9,8 +11,10 @@ export type FlowType = {
     style?: FlowStyleType;
     is_component?: boolean;
     last_tested_version?: string;
-    updated_at?: string;
-    date_created?: string;
+    updatedAt?: string;
+    createdAt?: string;
+    publishedAt?: string;
+    documentId?: string;
     parent?: string;
     folder?: string;
     user_id?: string;
@@ -20,7 +24,7 @@ export type FlowType = {
     icon_bg_color?: string;
     folder_id?: string;
     webhook?: boolean;
-    locked?: boolean | null;
+    locked?: boolean | null;    
   };
 
 export type EdgeType = Edge<EdgeDataType, "default">;
@@ -53,7 +57,9 @@ export type sourceHandleType = {
 export type NodeDataType = {
     showNode?: boolean;
     type: string;
-    node: any;
+    node: APIClassType;
+    UIData:string;
+    selected:boolean,
     id: string;
     output_types?: string[];
     selected_output_type?: string;

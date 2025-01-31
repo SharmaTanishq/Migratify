@@ -1,19 +1,22 @@
 
 import { Handle, Position,NodeProps, useReactFlow } from "@xyflow/react";
 import { Card } from "../../ui/card";
-import { Icons } from "../../Icons";   
+
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Image from "next/image";
 
 import { Button } from "../../ui/button";
 import { useNodeDelete } from "../../hooks/useNodeDelete";
 import useStore  from "../../Store/store";
 import { memo, useEffect } from "react";
 import NodeIcon from "./Components/NodeIcon";
+
+import { NodeData } from "@/components/CMS/types";
 import { NodeDataType } from "@/components/Types/Flows";
 
 const MemoizedNodeIcon = memo(NodeIcon)
@@ -28,16 +31,23 @@ const DEFAULT_HANDLE_STYLE = {
 
 
 
-function ECommerceNode(data:NodeProps) {
+function ECommerceNode({data,selected,id}:{
+      data:NodeDataType,
+      selected?:boolean,
+      id:string,
+    }
+  ):JSX.Element {
   const instance = useReactFlow();
+
+  
+      
+  const UIData:NodeData = JSON.parse(data.UIData);
   
   
-  console.log("data",data)
- 
 
  const handleDelete = (event:React.MouseEvent)=>{
   event.stopPropagation();
-  instance.deleteElements({ nodes: [{id:data.id}] })
+  instance.deleteElements({ nodes: [{id:id}] })
  }
 
   const handleButtonClick = (event: React.MouseEvent) => {
@@ -48,14 +58,14 @@ function ECommerceNode(data:NodeProps) {
 
 return (
     <>
-      <Card className="w-[300px] p-4 space-y-4 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 relative">
+      <Card className="w-[300px] p-4 space-y-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 relative hover:shadow-xl transition-shadow duration-300">
         {/* Header Section */}
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center space-x-2">
-            <Icons.VTEX className="w-8 h-8 text-coral-500" />
+            <Image src={UIData.node_logo.url} alt={UIData.Name} width={40} height={40} />
             <div>
-              <h3 className="font-medium">Vtex</h3>
-              <p className="text-lg font-semibold">Configure Vtex</p>
+              <h3 className="font-medium">{UIData.Name}</h3>
+              <p className="text-lg font-semibold">Configure {UIData.Name}</p>
             </div>
           </div>
 

@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Background, Panel } from "@xyflow/react";
+import { Background, BackgroundVariant, Panel } from "@xyflow/react";
 
 import { ReactFlow, Controls, useReactFlow } from "@xyflow/react";
 
 import { useDnD } from "@/components/AddNodes/DnDContext";
 import "@xyflow/react/dist/style.css";
-
 
 import { VtexCommerceNode } from "@/components/AddNodes/VtexNode";
 import { FileUploadNode } from "@/components/FileUploadNode/UploadFileNode";
@@ -24,7 +23,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
-import { NodeDrawer } from "@/components/Connections/NodeDrawer"
+import { NodeDrawer } from "@/components/Connections/NodeDrawer";
 
 import { AddNodeDrawer } from "@/components/Connections/LeftDrawer";
 
@@ -32,7 +31,6 @@ import AddNodeFAB from "@/components/Connections/Fab";
 import { useNodeDelete } from "@/components/hooks/useNodeDelete";
 import { AllNodeType } from "@/components/Types/Flows";
 import ECommerce from "@/components/CustomNodes/E-Commerce";
-
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -56,7 +54,7 @@ const nodeTypes = {
   // paymentNode: Payment,
   // shippingNode: Shipping,
   // socialNode: Social,
-}
+};
 
 export default function Page() {
   const params = useParams();
@@ -101,13 +99,11 @@ export default function Page() {
     if (edgesData) setInitialEdges(edgesData);
   }, [nodes]);
 
-
-
   const { screenToFlowPosition } = useReactFlow();
 
   const [type] = useDnD();
 
-  const onDragOver = useCallback((event: any) => {    
+  const onDragOver = useCallback((event: any) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
@@ -115,25 +111,29 @@ export default function Page() {
   const onDrop = useCallback(
     (event: any) => {
       event.preventDefault();
+      const data = event.dataTransfer.getData("flow");
 
       // check if the dropped element is valid
       if (!type) {
         return;
       }
 
-      const nodeExists = nodes.some((node: any) => node.type === type);
+      //The commented code is for when we want to check if a node of the same type already exists
+      //This is not needed for now, but it's here for future use
 
-      if (nodeExists) {
-        // You might want to show a toast/alert here
-        toast("A node of this type already exists", {
-          style: {
-            background: "#ef4444",
-            color: "white",
-          },
-          icon: "⚠️",
-        });
-        return;
-      }
+      // const nodeExists = nodes.some((node: any) => node.type === type);
+
+      // if (nodeExists) {
+      //   // You might want to show a toast/alert here
+      //   toast("A node of this type already exists", {
+      //     style: {
+      //       background: "#ef4444",
+      //       color: "white",
+      //     },
+      //     icon: "⚠️",
+      //   });
+      //   return;
+      // }
 
       const position = screenToFlowPosition({
         x: event.clientX,
@@ -144,7 +144,7 @@ export default function Page() {
         id: "node" + Math.floor(Math.random() * 10000).toString(),
         type,
         position,
-        data: { label: `${type}` },
+        data: { UIData: data },
       };
 
       //@ts-ignore
@@ -187,24 +187,20 @@ export default function Page() {
   );
 
   const handleNodeClick = useCallback((event: any, node: any) => {
-    setSelectedNode(node)
-    setIsDrawerOpen(true)
-  }, [])
+    setSelectedNode(node);
+    setIsDrawerOpen(true);
+  }, []);
 
   const handleNodeDelete = useCallback((node: any) => {
-    
-    deleteNode(node[0]._id)
-    
-    setIsDrawerOpen(false)
-  }, [])
+    deleteNode(node[0]._id);
 
-  const handleNodeMouseEnter = useCallback((event: any, node: any) => {
-    
-  }, [])
+    setIsDrawerOpen(false);
+  }, []);
+
+  const handleNodeMouseEnter = useCallback((event: any, node: any) => {}, []);
 
   return (
     <div className="w-full h-full">
-      
       <div className="flex w-full h-full justify-center items-center  rounded-xl">
         <ReactFlow<AllNodeType>
           nodes={nodes}
@@ -213,43 +209,44 @@ export default function Page() {
           onNodeMouseEnter={handleNodeMouseEnter}
           onEdgesChange={onEdgesChange}
           onNodeClick={handleNodeClick}
-          onNodesDelete={handleNodeDelete}                    
+          onNodesDelete={handleNodeDelete}
           onDragEnd={onNodeUpdate}
           onNodeDragStop={onNodeUpdate}
           onConnect={onEdgeConnect}
           nodeTypes={nodeTypes}
           onDrop={onDrop}
           onDragOver={onDragOver}
-          fitView
+          minZoom={0.5}
+          maxZoom={8}
+          fitView={false}
           style={{ borderRadius: "10px" }}
         >
-            
           <Controls />
 
-          <Panel className="py-5 flex " >
+          <Panel className="py-5 flex ">
             <AddNodeFAB onClick={() => setIsPanelOpen(true)} />
           </Panel>
 
-            
-            
-          
+          <Background
+            style={{ background: "#F4F4F5" }}
+            color="#A1A1AA"
+            variant={BackgroundVariant.Dots}
+            gap={10}
+            size={1.5}
+          />
 
-          <Background color="#ccc" />
-          
-          
-          
-            <NodeDrawer 
-                isOpen={isDrawerOpen}
-                onClose={() => setIsDrawerOpen(false)}
-                nodeData={selectedNode}
-              />
-          
+          <NodeDrawer
+            isOpen={isDrawerOpen}
+            onClose={() => setIsDrawerOpen(false)}
+            nodeData={selectedNode}
+          />
+
           <Toaster position="bottom-center" />
         </ReactFlow>
         <AddNodeDrawer
-                isOpen={isPanelOpen}
-                onClose={() => setIsPanelOpen(false)}
-          />
+          isOpen={isPanelOpen}
+          onClose={() => setIsPanelOpen(false)}
+        />
       </div>
     </div>
   );

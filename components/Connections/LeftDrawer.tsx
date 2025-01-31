@@ -101,7 +101,7 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
                               description={node.Node.node_description}
                               nodeType={node.Node.node_type}
                               variant={node.Node.active ? "default" : "disabled"}
-                              data={node.Node}
+                              data={node}
                             />
                           )
                         }) : <div className="flex items-center justify-center h-full">

@@ -34,13 +34,14 @@ export default function RootLayout({
 }) {
   return (
     
-      <ConvexClientProvider >
-        <html lang="en" className={poppins.variable}>
-          <body className="font-poppins">
+    <html lang="en" className={poppins.variable} suppressHydrationWarning>
+        <body className="font-poppins" suppressHydrationWarning>
+          <ConvexClientProvider >
             <ThemeProvider
               attribute="class"
               defaultTheme="light"
               enableSystem
+              
               disableTransitionOnChange>
             
               
@@ -48,9 +49,9 @@ export default function RootLayout({
             
             
             </ThemeProvider>
+    </ConvexClientProvider>
           </body>
         </html>
-    </ConvexClientProvider>
   
   );
 }
