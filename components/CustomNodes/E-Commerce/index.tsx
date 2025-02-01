@@ -71,7 +71,7 @@ function ECommerceNode({data,selected,id}:{
 
 return (
     <>
-      <Card className={cn("w-[300px] space-y-4 bg-gray-50 dark:bg-gray-900  relative hover:shadow-xl transition-shadow duration-300", selected ? "shadow-xl border-[#71717A]" : "")}>
+      <Card className={cn("w-[300px] space-y-4 bg-gray-50 dark:bg-gray-900  relative hover:shadow-xl transition-shadow duration-300", selected ? "border border-borderSelected" : "")}>
         {/* Header Section */}
         <div className="p-4 pb-0">
         <div className="flex items-center justify-between w-full ">
