@@ -16,10 +16,8 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
         publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!} 
         waitlistUrl="/waitlist"
         
-        
-        
       >
-        <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        <ConvexProviderWithClerk client={convex} useAuth={useAuth} >
           {children}
         </ConvexProviderWithClerk>
       </ClerkProvider>

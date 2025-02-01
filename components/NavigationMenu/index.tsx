@@ -15,6 +15,8 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 
+import { Authenticated, Unauthenticated } from "convex/react"
+
 import { BorderBeam } from "../ui/border-beam"
 
 const components: { title: string; href: string; description: string }[] = [
@@ -59,15 +61,25 @@ export function NavigationMenuLinks() {
   return (
     <NavigationMenu>
       <NavigationMenuList>
+        <Unauthenticated>
+            <NavigationMenuItem>
+                <Link href="#bridgeflow" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    What is BridgeFlow?
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+          </Unauthenticated>
+          <Authenticated>
+          <NavigationMenuItem>
+                <Link href="/projects" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Projects
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+          </Authenticated>
         <NavigationMenuItem>
-            <Link href="#bridgeflow" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                What is BridgeFlow?
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        <NavigationMenuItem>
-          
           <NavigationMenuTrigger>Integrations</NavigationMenuTrigger>
           
           <NavigationMenuContent>
