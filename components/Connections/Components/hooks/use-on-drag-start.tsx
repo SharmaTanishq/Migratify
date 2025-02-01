@@ -4,13 +4,14 @@ import { useCallback } from "react";
 import { createRoot } from "react-dom/client";
 
 
-const useDragStart = (data: FlowType) => {
+const useDragStart = (data: any) => {
     const [_, setType] = useDnD();   
 
   const onDragStart = useCallback(
     (event:React.DragEvent<HTMLDivElement>) => {
         if (setType === null) return;       
-        setType("ecommerceNode")
+        console.log("OnDragStart", data);
+        setType(data.node_type)
 
     //   let image = <DragCardComponent data={data} />; // Replace with whatever you want here
 

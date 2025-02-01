@@ -52,8 +52,8 @@ export function NodeCard({ className,variant,data }: NodeCardProps) {
     >
       <div className="flex items-center ">
         {data.Node.node_logo && (
-          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-gray-50/50">
-            <Image src={nodeDataCMS.node_logo.url} alt={data.Name} width={40} height={40} />
+          <div className="flex h-10 w-10 items-center mr-2 justify-center rounded-md bg-gray-50/50">
+            <Image src={nodeDataCMS.node_logo.url} alt={data.Name} width={30} height={30} />
           </div>
         )}
         <div className="space-y-1">

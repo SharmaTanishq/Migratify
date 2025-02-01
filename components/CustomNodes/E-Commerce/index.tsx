@@ -13,11 +13,13 @@ import Image from "next/image";
 import { Button } from "../../ui/button";
 import { useNodeDelete } from "../../hooks/useNodeDelete";
 import useStore  from "../../Store/store";
-import { memo, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 import NodeIcon from "./Components/NodeIcon";
 
 import { NodeData } from "@/components/CMS/types";
 import { NodeDataType } from "@/components/Types/Flows";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 const MemoizedNodeIcon = memo(NodeIcon)
 
@@ -49,6 +51,17 @@ function ECommerceNode({data,selected,id}:{
   event.stopPropagation();
   instance.deleteElements({ nodes: [{id:id}] })
  }
+ const renderNodeIcon = useCallback(() => {
+  return (
+    <MemoizedNodeIcon
+      dataType={UIData.Name}
+      showNode={true}
+      icon={UIData.node_logo.url}
+      isGroup={!!data.node?.flow}
+      hasToolMode={false}
+    />
+  );
+}, [data.type,  data.node?.icon, data.node?.flow]);
 
   const handleButtonClick = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -58,17 +71,14 @@ function ECommerceNode({data,selected,id}:{
 
 return (
     <>
-      <Card className="w-[300px] p-4 space-y-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 relative hover:shadow-xl transition-shadow duration-300">
+      <Card className={cn("w-[300px] space-y-4 bg-gray-50 dark:bg-gray-900  relative hover:shadow-xl transition-shadow duration-300", selected ? "shadow-xl border-[#71717A]" : "")}>
         {/* Header Section */}
-        <div className="flex items-center justify-between w-full">
+        <div className="p-4 pb-0">
+        <div className="flex items-center justify-between w-full ">
           <div className="flex items-center space-x-2">
-            <Image src={UIData.node_logo.url} alt={UIData.Name} width={40} height={40} />
-            <div>
-              <h3 className="font-medium">{UIData.Name}</h3>
-              <p className="text-lg font-semibold">Configure {UIData.Name}</p>
-            </div>
+            {renderNodeIcon()}
+            <h3 className="font-medium">{UIData.Name}</h3>
           </div>
-
           <Popover>
             <PopoverTrigger onClick={handleButtonClick} asChild>
               <button className="text-gray-600 border-none  hover:bg-gray-200 p-1.5 transition-all duration-500 rounded-md group">
@@ -96,9 +106,13 @@ return (
             </PopoverContent>
           </Popover>
         </div>
-
+        <div className="flex flex-col gap-2">
+              <p className=" flex w-full flex-col text-xs text-[#374151] leading-5 word-break-break-word">{UIData.node_description}</p>
+        </div>
+        </div>
+          <Separator/>
         {/* Sections Container */}
-        <div className="space-y-2">
+        <div className="space-y-2 p-4 pt-2">
           {/* Products Section */}
           <div className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200 p-2 rounded-md border border-gray-200 cursor-pointer relative">
             <Handle
@@ -185,9 +199,10 @@ return (
         </div>
 
         {/* Sync Button */}
-        <div className="flex w-full space-x-2">
+        <div className="flex w-full space-x-2 p-4 pt-0">
           <Button
-            className="flex-1 bg-[#FF3367] hover:bg-[#FF3367]/90 text-white"
+            className="flex-1"
+            variant={"primary"}
             onClick={() => {}}
           >
             <span>Sync</span>

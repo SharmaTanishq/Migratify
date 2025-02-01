@@ -67,7 +67,7 @@ export type NodeDataType = {
   };
 
 export type EcommerceNodeType = Node<NodeDataType,"ecommerceNode">;
-export type BridgeNodeType = Node<NodeDataType,"bridgeNode">;
+export type BridgesNodeType = Node<NodeDataType,"bridgeNode">;
 export type PIMNodeType = Node<NodeDataType,"pimNode">;
 export type CRMNodeType = Node<NodeDataType,"crmNode">;
 export type ERPNodeType = Node<NodeDataType,"erpNode">;
@@ -76,7 +76,7 @@ export type PaymentNodeType = Node<NodeDataType,"paymentNode">;
 export type ShippingNodeType = Node<NodeDataType,"shippingNode">;
 export type SocialNodeType = Node<NodeDataType,"socialNode">;
 
-export type AllNodeType = EcommerceNodeType | BridgeNodeType | PIMNodeType | CRMNodeType | ERPNodeType | MailNodeType | PaymentNodeType | ShippingNodeType | SocialNodeType;
+export type AllNodeType = EcommerceNodeType | BridgesNodeType | PIMNodeType | CRMNodeType | ERPNodeType | MailNodeType | PaymentNodeType | ShippingNodeType | SocialNodeType;
 
 
 // FlowStyleType is the type of the style object that is used to style the

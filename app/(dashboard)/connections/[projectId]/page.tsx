@@ -23,7 +23,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
-import { NodeDrawer } from "@/components/Connections/NodeDrawer";
+import NodeDrawer from "@/components/Connections/NodeDrawer";
 
 import { AddNodeDrawer } from "@/components/Connections/LeftDrawer";
 
@@ -31,6 +31,8 @@ import AddNodeFAB from "@/components/Connections/Fab";
 import { useNodeDelete } from "@/components/hooks/useNodeDelete";
 import { AllNodeType } from "@/components/Types/Flows";
 import ECommerce from "@/components/CustomNodes/E-Commerce";
+
+import Bridges from "@/components/CustomNodes/Bridges";
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -46,7 +48,7 @@ const selector = (state: any) => ({
 
 const nodeTypes = {
   ecommerceNode: ECommerce,
-  // bridgeNode: Bridge,
+  bridgeNode: Bridges,
   // pimNode: PIM,
   // crmNode: CRM,
   // erpNode: ERP,
@@ -246,6 +248,7 @@ export default function Page() {
         <AddNodeDrawer
           isOpen={isPanelOpen}
           onClose={() => setIsPanelOpen(false)}
+          nodeData={selectedNode} 
         />
       </div>
     </div>
