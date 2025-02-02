@@ -16,7 +16,7 @@ import { ArrowLeftIcon, Play, ViewIcon } from "lucide-react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
 import { PlayIcon } from "lucide-react";
 import Image from "next/image";
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -26,12 +26,18 @@ import {
 function BridgesNode({
   data,
   selected,
+  onConnect,
 }: {
   data: NodeDataType;
   selected?: boolean;
+  onConnect?: (event: any) => void;
 }): JSX.Element {
   const instance = useReactFlow();
   const UIData: NodeData = JSON.parse(data.UIData);
+  
+  
+    
+  
 
   return (
     <Card
@@ -61,7 +67,7 @@ function BridgesNode({
             className="transition-colors duration-200 w-6 h-6"
           >
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <Play className="w-4 h-4 text-gray-500" />
               </TooltipTrigger>
               <TooltipContent>
@@ -87,13 +93,14 @@ function BridgesNode({
                   type="target"
                   position={Position.Left}
                   isConnectable={true}
+                  id="source"
                   style={{
                     width: 10,
                     height: 10,
                     left: -4,
                     zIndex: 500,
                     borderRadius: "1000px",
-                    background: "#4F46E4",
+                    backgroundColor: "#4F46E4",
                     top: "50%",
                     
                     transform: "translateY(-50%)",
@@ -119,6 +126,7 @@ function BridgesNode({
                 type="source"
                 position={Position.Right}
                 isConnectable={true}
+                id="output"
                 style={{
                   width: 10,
                   height: 10,

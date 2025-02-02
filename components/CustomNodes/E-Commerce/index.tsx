@@ -20,16 +20,16 @@ import { NodeData } from "@/components/CMS/types";
 import { NodeDataType } from "@/components/Types/Flows";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { DEFAULT_HANDLE_STYLE_SOURCE } from "@/components/Constants/HandleStyles";
 
 const MemoizedNodeIcon = memo(NodeIcon)
 
-const DEFAULT_HANDLE_STYLE = {
-  width: 8,
-  height: 12,
-  right: -8,
-  borderRadius: "0px 5px 5px 0px",
-  background: "var(--handle-color)",
-};
+const ECOMMERCE_HANDLE_STYLES={
+  
+    ...DEFAULT_HANDLE_STYLE_SOURCE,
+    right:"0",
+  
+}
 
 
 
@@ -116,13 +116,13 @@ return (
           {/* Products Section */}
           <div className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200 p-2 rounded-md border border-gray-200 cursor-pointer relative">
             <Handle
+              
               type="source"
               style={{
-                ...DEFAULT_HANDLE_STYLE,
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "#9ca3af",
+                ...ECOMMERCE_HANDLE_STYLES,
+                
               }}
+
               position={Position.Right}
               id="product"
               isConnectable={true}
@@ -139,10 +139,10 @@ return (
             <Handle
               type="source"
               style={{
-                ...DEFAULT_HANDLE_STYLE,
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "#9ca3af",
+                ...ECOMMERCE_HANDLE_STYLES,
+                
+                
+                
               }}
               position={Position.Right}
               id="category"
@@ -159,11 +159,9 @@ return (
           <div className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200 p-2 rounded-md border border-gray-200 cursor-pointer relative">
             <Handle
               type="source"
-              style={{
-                ...DEFAULT_HANDLE_STYLE,
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "#9ca3af",
+              style={{    
+                ...ECOMMERCE_HANDLE_STYLES,
+                
               }}
               position={Position.Right}
               id="inventory"
@@ -181,18 +179,16 @@ return (
             <Handle
               type="source"
               style={{
-                ...DEFAULT_HANDLE_STYLE,
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "#9ca3af",
+                ...ECOMMERCE_HANDLE_STYLES,
+                
               }}
               position={Position.Right}
-              id="customers"
+              id="orders"
               isConnectable={true}
             />
             <div className="flex items-center justify-center space-x-2">
               <span className="text-sm text-center text-gray-600">
-                Customers
+                Orders
               </span>
             </div>
           </div>

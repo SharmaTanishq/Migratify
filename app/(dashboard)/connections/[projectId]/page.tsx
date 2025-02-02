@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Background, BackgroundVariant, Panel } from "@xyflow/react";
+import { Background, BackgroundVariant, Edge, Panel } from "@xyflow/react";
 
 import { ReactFlow, Controls, useReactFlow } from "@xyflow/react";
 
@@ -33,6 +33,7 @@ import { AllNodeType } from "@/components/Types/Flows";
 import ECommerce from "@/components/CustomNodes/E-Commerce";
 
 import Bridges from "@/components/CustomNodes/Bridges";
+import { Id } from "@/convex/_generated/dataModel";
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -80,6 +81,9 @@ export default function Page() {
   const addNodeMutation = useMutation(api.flows.nodes.addNode);
   const addEdgeMutation = useMutation(api.flows.edges.addEdge);
   const updateNodesMutation = useMutation(api.flows.nodes.updateNodes);
+  const updateNodePositionMutation = useMutation(api.flows.node.updateNode.updateNodePosition);
+  const deleteEdgeMutation = useMutation(api.flows.edge.onEdgeDelete.deleteEdge);
+
   const { deleteNode } = useNodeDelete(projectId);
 
   const [selectedNode, setSelectedNode] = useState(null);
@@ -165,17 +169,32 @@ export default function Page() {
     [screenToFlowPosition, type, nodes]
   );
 
-  const onNodeUpdate = useCallback((event: any) => {
-    console.log("event", event);
-
+  const onNodeDragStop = useCallback((event: any,nodes:any) => {
+    
+    
+    
+    if (nodes._id) {
+      updateNodePositionMutation({
+        nodeId: nodes._id,
+        position: {
+          x: nodes.position.x,
+          y: nodes.position.y,
+        },
+      });
+    }
     // updateNodesMutation({
     //   nodes:event
     // })
-  }, []);
+  }, [nodes]);
 
   const onEdgeConnect = useCallback(
     (event: any) => {
+
+      console.log("event",event)
+      
       addEdge(event);
+
+      console.log("projectId",projectId)
 
       addEdgeMutation({
         projectId: projectId,
@@ -184,9 +203,18 @@ export default function Page() {
         sourceHandle: event.sourceHandle,
         targetHandle: event.targetHandle,
       });
+
     },
     [edges]
   );
+
+  const onEdgeDelete = useCallback((edges:Edge[])=>{
+    edges.forEach((edge)=>{
+      deleteEdgeMutation({
+        edgeId:edge?.id as Id<'edges'>
+      })
+    })
+  },[])
 
   const handleNodeClick = useCallback((event: any, node: any) => {
     setSelectedNode(node);
@@ -210,11 +238,14 @@ export default function Page() {
           onNodesChange={onNodesChange}
           onNodeMouseEnter={handleNodeMouseEnter}
           onEdgesChange={onEdgesChange}
+          
           onNodeClick={handleNodeClick}
           onNodesDelete={handleNodeDelete}
-          onDragEnd={onNodeUpdate}
-          onNodeDragStop={onNodeUpdate}
+          //onDragEnd={onNodeDragStop}
+          onNodeDragStop={onNodeDragStop}
           onConnect={onEdgeConnect}
+          
+          onEdgesDelete={onEdgeDelete}
           nodeTypes={nodeTypes}
           onDrop={onDrop}
           onDragOver={onDragOver}
