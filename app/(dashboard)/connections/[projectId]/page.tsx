@@ -8,11 +8,7 @@ import { ReactFlow, Controls, useReactFlow } from "@xyflow/react";
 import { useDnD } from "@/components/AddNodes/DnDContext";
 import "@xyflow/react/dist/style.css";
 
-import { VtexCommerceNode } from "@/components/AddNodes/VtexNode";
-import { FileUploadNode } from "@/components/FileUploadNode/UploadFileNode";
-import { CategoryFileNode } from "@/components/FileUploadNode/CategoryFile";
-import { CustomerFileNode } from "@/components/FileUploadNode/CustomerFile";
-import { InventoryFileNode } from "@/components/FileUploadNode/InventoryFile";
+
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
@@ -190,11 +186,6 @@ export default function Page() {
   const onEdgeConnect = useCallback(
     (event: any) => {
 
-      console.log("event",event)
-      
-      addEdge(event);
-
-      console.log("projectId",projectId)
 
       addEdgeMutation({
         projectId: projectId,
@@ -202,6 +193,15 @@ export default function Page() {
         target: event.target,
         sourceHandle: event.sourceHandle,
         targetHandle: event.targetHandle,
+      }).then((res)=>{
+        addEdge({
+          id:res.edgeId,
+          projectId: projectId,
+          source: event.source,
+          target: event.target,
+          sourceHandle: event.sourceHandle,
+          targetHandle: event.targetHandle,
+        })
       });
 
     },
@@ -209,9 +209,12 @@ export default function Page() {
   );
 
   const onEdgeDelete = useCallback((edges:Edge[])=>{
+    
     edges.forEach((edge)=>{
       deleteEdgeMutation({
         edgeId:edge?.id as Id<'edges'>
+      }).then((res)=>{
+        
       })
     })
   },[])

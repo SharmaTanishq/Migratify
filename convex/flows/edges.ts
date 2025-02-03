@@ -12,7 +12,11 @@ export const addEdge = mutation({
     
   },
   handler: async (ctx, { projectId, source, sourceHandle, target, targetHandle }) => {
-    await ctx.db.insert('edges', { projectId, source, sourceHandle, target, targetHandle });
+    const edgeId = await ctx.db.insert('edges', { projectId, source, sourceHandle, target, targetHandle });
+    return {
+      success:true,
+      edgeId: edgeId
+    }
   }
 });
 

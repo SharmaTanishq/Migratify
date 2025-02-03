@@ -34,6 +34,15 @@ export type EdgeDataType = {
     targetHandle: targetHandleType;
   };
 
+export type PlatformType = 'vtex' | 'shopify' | 'woocommerce';
+
+export interface NodeSubProperty {
+  type: 'e-commerce' | 'webhook' | 'database';
+  platform?: PlatformType;
+  events?: string[];
+}
+
+
 // right side
 export type sourceHandleType = {
     baseClasses?: string[];
@@ -58,6 +67,7 @@ export type NodeDataType = {
     showNode?: boolean;
     type: string;
     node: APIClassType;
+    subProperty?:NodeSubProperty;
     UIData:string;
     selected:boolean,
     id: string;

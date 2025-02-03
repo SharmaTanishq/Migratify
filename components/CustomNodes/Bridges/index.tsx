@@ -1,5 +1,5 @@
 import { NodeData } from "@/components/CMS/types";
-import { NodeDataType } from "@/components/Types/Flows";
+import { NodeDataType, PlatformType } from "@/components/Types/Flows";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,30 +13,51 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 import { ArrowLeftIcon, Play, ViewIcon } from "lucide-react";
-import { Handle, Position, useReactFlow } from "@xyflow/react";
+import { Handle, Position, useConnection, useEdges, useNodes, useReactFlow } from "@xyflow/react";
 import { PlayIcon } from "lucide-react";
 import Image from "next/image";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Checkbox } from "@/components/ui/checkbox";
+
+function toggleEvent(events: string[], event: string): string[] {
+    return events.includes(event)
+      ? events.filter(e => e !== event)
+      : [...events, event];
+  }
 
 function BridgesNode({
   data,
   selected,
-  onConnect,
+  id,
+  //onConnect,
 }: {
   data: NodeDataType;
   selected?: boolean;
-  onConnect?: (event: any) => void;
+  id:string;
+  //onConnect?: (event: any) => void;
 }): JSX.Element {
   const instance = useReactFlow();
   const UIData: NodeData = JSON.parse(data.UIData);
   
+  const edges = useEdges();
+  const nodes = useNodes();
+  const [platform, setPlatform] = useState<PlatformType>('vtex');
+  const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
+
+  // Get the source node that's connected to this bridge
+  const sourceNode = edges
+    .filter(edge => edge.target === id)
+    .map(edge => nodes.find(node => node.id === edge.source))[0];
+
+  // Check if source node is an e-commerce node
+  const isEcommerceSource = sourceNode?.type === 'ecommerceNode';   
+
   
-    
   
 
   return (
@@ -82,6 +103,54 @@ function BridgesNode({
         </CardDescription>
       </CardHeader>
       <Separator />
+      <CardContent>
+      {isEcommerceSource && (
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Platform</label>
+            
+
+            {/* Event Selection */}
+            <div className="mt-4">
+              <label className="text-sm font-medium">Events</label>
+              <div className="mt-2 space-y-2">
+                {platform === 'vtex' && (
+                  <>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="products"
+                        checked={selectedEvents.includes('product.created')}
+                        onCheckedChange={() => toggleEvent(selectedEvents, 'product.created')}
+                      />
+                      <label htmlFor="products" className="text-sm">
+                        Product Created
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="orders"
+                        checked={selectedEvents.includes('order.created')}
+                        onCheckedChange={() => toggleEvent(selectedEvents, 'order.created')}
+                      />
+                      <label htmlFor="orders" className="text-sm">
+                        Order Created
+                      </label>
+                    </div>
+                    {/* Add more events as needed */}
+                  </>
+                )}
+                {/* Add conditions for other platforms */}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Show different content if not connected to e-commerce node */}
+        {!isEcommerceSource && (
+          <div className="text-sm text-gray-500">
+            Connect to an e-commerce node to configure platform and events
+          </div>
+        )}
+      </CardContent>
 
       <CardFooter className="p-4 bg-gray-100 rounded-b-xl">
         <div className="w-full flex items-center justify-between">
@@ -146,5 +215,7 @@ function BridgesNode({
     </Card>
   );
 }
+
+
 
 export default memo(BridgesNode);
