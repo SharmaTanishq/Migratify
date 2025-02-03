@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { addEdge, applyNodeChanges, applyEdgeChanges } from '@xyflow/react';
+import { addEdge, applyNodeChanges, applyEdgeChanges, Edge } from '@xyflow/react';
 
 
 import { AppNode, type AppState } from './types';
@@ -46,16 +46,15 @@ const useStore = create<AppState>((set, get) => ({
     set({edges:edgesWithId})
   },
 
-  addEdge: (edge: any) => {
+  addEdge: (edge: Edge) => {
     const newEdge = {
-      ...edge,
-      id: `edge-${Math.random()}`,
+      ...edge,      
     };
     set({ edges: [...get().edges, newEdge] });
   },
 
   addNode:(nodes)=>{
-    const id = Math.floor(Math.random() * 10000).toString();
+    
     set({ nodes: [...get().nodes, nodes ] });    
    
     
