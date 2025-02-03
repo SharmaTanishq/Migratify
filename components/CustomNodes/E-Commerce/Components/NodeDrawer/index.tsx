@@ -1,4 +1,4 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTitle,SheetDescription } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 
@@ -11,24 +11,19 @@ import {  memo, useEffect,  useState } from "react"
 
 
 interface NodeDrawerProps {
-  isOpen: boolean
-  onClose: () => void
-  nodeData?: any // Type this according to your node structure
+  isOpen: boolean | undefined
+  onClose?: () => void
+  nodeData?: NodeData // Type this according to your node structure
 }
 
 function NodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
   
   
-
-  if(!nodeData) return null;
-  const UIData:NodeData = JSON.parse(nodeData?.data?.UIData); 
-
-  
   return (
-    <Sheet  open={isOpen} onOpenChange={onClose}>
+    <Sheet  open={true} modal={false} >
         
       <SheetContent side="flow" className="w-[700px] mt-10 sm:w-[540px]  bg-white ">
-            
+          
         <SheetHeader className="flex justify-center items-start rounded-t-xl mb-5 p-4 pb-0">
           <SheetTitle >
             <div>
@@ -36,20 +31,21 @@ function NodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
               <div className="flex h-9 w-9 items-center rounded gap-2 ">
                 {/* Icon placeholder - you can replace this with actual icon */}
                 
-                  <Image src={UIData?.node_logo.url!} alt={UIData?.Name!} width={30} height={30} />
+                  <Image src={nodeData?.node_logo.url!} alt={nodeData?.Name!} width={30} height={30} />
                 
                 <span className="text-xl font-medium">
-                {UIData?.Name}
+                {nodeData?.Name}
                 </span>
               </div>
               
-              <span className="text-sm font-normal  pl-2">
-                Configure your settings
-              </span>
+              
 
             </div>
             </div>
           </SheetTitle>
+          <SheetDescription>
+            {nodeData?.node_description}
+          </SheetDescription>
         </SheetHeader>
         <Separator orientation="horizontal" className="w-full bg-gray-300 " />
         
@@ -68,4 +64,4 @@ function NodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
   )
 }
 
-export default memo(NodeDrawer);
+export default NodeDrawer;

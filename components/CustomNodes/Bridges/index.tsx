@@ -125,16 +125,9 @@ function BridgesNode({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="w-full h-full p-4 pt-2 transition-all duration-300"
+            className="w-full h-full p-4 pt-0 transition-all duration-300"
           >
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.2 }}
-              className="text-[12px] text-text-primary font-medium"
-            >
-              Available Events :
-            </motion.span>
+            
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}

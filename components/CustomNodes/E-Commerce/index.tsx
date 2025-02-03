@@ -13,7 +13,7 @@ import Image from "next/image";
 import { Button } from "../../ui/button";
 import { useNodeDelete } from "../../hooks/useNodeDelete";
 import useStore  from "../../Store/store";
-import { memo, useCallback, useEffect } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import NodeIcon from "./Components/NodeIcon";
 
 import { NodeData } from "@/components/CMS/types";
@@ -21,8 +21,10 @@ import { NodeDataType } from "@/components/Types/Flows";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { DEFAULT_HANDLE_STYLE_SOURCE } from "@/components/Constants/HandleStyles";
+import NodeDrawer from "./Components/NodeDrawer";
 
 const MemoizedNodeIcon = memo(NodeIcon)
+
 
 const ECOMMERCE_HANDLE_STYLES={
   
@@ -42,13 +44,14 @@ function ECommerceNode({data,selected,id}:{
   const instance = useReactFlow();
 
   
+  
       
   const UIData:NodeData = JSON.parse(data.UIData);
   
-  
+  //const [isDrawerOpen, setIsDrawerOpen] = useState(selected);
 
  const handleDelete = (event:React.MouseEvent)=>{
-  event.stopPropagation();
+  //event.stopPropagation();
   instance.deleteElements({ nodes: [{id:id}] })
  }
  const renderNodeIcon = useCallback(() => {
@@ -63,8 +66,18 @@ function ECommerceNode({data,selected,id}:{
   );
 }, [data.type,  data.node?.icon, data.node?.flow]);
 
+const MemoizedNodeDrawer = useMemo(() => {
+    console.log(selected)
+  return selected && (
+    <NodeDrawer
+      isOpen={true}
+      nodeData={UIData}
+    />
+  )
+},[selected,UIData])
+
   const handleButtonClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
+    //event.stopPropagation();
     
     // Button logic
   };
@@ -205,6 +218,9 @@ return (
           </Button>
         </div>
       </Card>
+      <div className="absolute top-0 left-0 w-full h-full z-50">
+        {MemoizedNodeDrawer}
+        </div>
     </>
   );
 }

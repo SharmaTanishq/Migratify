@@ -8,6 +8,18 @@ interface EventsConfigProps {
   onEventsChange: (events: string[]) => void;
 }
 
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Switch } from "@/components/ui/switch"
+import { useForm } from "react-hook-form";
+
 const PLATFORM_EVENTS = {
   vtex: [
     { category: 'Product', events: [
@@ -36,7 +48,8 @@ const PLATFORM_EVENTS = {
 };
 
 export function EventsConfig({ platform, selectedEvents, onEventsChange,source }: EventsConfigProps) {
-  
+  const form = useForm()
+
   
   // Filter events based on platform and source
   const getFilteredEvents = () => {
@@ -55,35 +68,43 @@ export function EventsConfig({ platform, selectedEvents, onEventsChange,source }
 
   return (
     <div className="space-y-2  w-full p-2">
-      {events.map((category, categoryIndex) => (
-        <div key={category.category} className="mb-6">         
-          {category.events.map((event, eventIndex) => (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut", delay: eventIndex * 0.1 }}
-              key={event.id}
-              className="flex items-center justify-between space-x-2 space-y-2 w-full"
-            >
-              <label htmlFor={event.id} className="text-[10px] text-gray-600">
-                {event.label}
-              </label>
-              <Checkbox
-                id={event.id}
-                checked={selectedEvents.includes(event.id)}
-                className="w-3 h-3 data-[state=checked]:bg-green-500 data-[state=checked]:border-none"
-                onCheckedChange={() => {
-                  onEventsChange(
-                    selectedEvents.includes(event.id)
-                      ? selectedEvents.filter(e => e !== event.id)
-                      : [...selectedEvents, event.id]
-                  );
-                }}
-              />
-            </motion.div>
-          ))}
-        </div>
-      ))}
+      <Form {...form}>
+          <FormField
+            control={form.control}
+            name="events"
+            render={() => (
+              <FormItem>
+                <FormLabel>Available Events</FormLabel>
+                <FormDescription className="text-[12px] text-gray-600">Select the events you want to receive</FormDescription>
+            {events.map((category,categoryIndex)=>(
+              <div key={category.category}>
+                {category.events.map((event,eventIndex)=>(
+                  <FormControl>
+                  <FormField
+                  control={form.control}
+                  name={event.label}
+                  render={() => (
+                    <FormItem className="flex items-center justify-between">
+                      <FormLabel className="text-[10px] text-gray-600">{event.label}</FormLabel>
+                      <FormControl>
+                        <Switch className="data-[state=checked]:bg-green-600" checked={form.getValues(event.label)} onCheckedChange={()=>form.setValue(event.label, !form.getValues(event.label))} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </FormControl>
+                ))}
+                
+                </div>
+                  ))}
+                  
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+      </Form>
+     
     </div>
   );
 }

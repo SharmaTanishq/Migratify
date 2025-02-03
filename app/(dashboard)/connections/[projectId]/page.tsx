@@ -224,13 +224,13 @@ export default function Page() {
 
   const handleNodeClick = useCallback((event: any, node: any) => {
     setSelectedNode(node);
-    setIsDrawerOpen(true);
+    
   }, []);
 
   const handleNodeDelete = useCallback((node: any) => {
     deleteNode(node[0]._id);
 
-    setIsDrawerOpen(false);
+    
   }, []);
 
   const handleNodeMouseEnter = useCallback((event: any, node: any) => {}, []);
