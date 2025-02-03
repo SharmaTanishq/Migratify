@@ -23,5 +23,6 @@ import {
     setInitialEdges:(edges: Edge[]) => void;
     addNode:(type:string,x:number,y:number)=>void;
     deleteEdge:(edgeId: Id<'edges'>) => void; 
+    
     data:any[];
   };

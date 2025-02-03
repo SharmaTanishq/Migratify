@@ -1,20 +1,40 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Tabs} from "@/components/ui/tabs"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent } from "@/components/ui/card"
+import * as React from "react";
+import { Tabs } from "@/components/ui/tabs";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import useStore from "@/components/Store/store";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import { useForm } from "react-hook-form";
+import { Id } from "@/convex/_generated/dataModel";
 
 interface DrawerTabsProps {
-  children?: React.ReactNode
-  nodeId?: string,
-  nodeType?: string,
-  nodeName?: string,
+  children?: React.ReactNode;
+  nodeId: Id<"nodes">;
+  nodeType?: string;
+  nodeName?: string;
 }
-
 
 const tabs = [
   {
@@ -22,61 +42,61 @@ const tabs = [
     value: "general",
     content: (
       <div className="w-full overflow-hidden  h-full rounded-2xl p-2 text-xl md:text-4xl font-bold text-white bg-white ">
-      <div className="space-y-4 flex flex-col  h-full">
-        {/* Authentication Settings */}
-        <Card className="shadow-none border-none">
-          <CardContent className="p-4">
-            <h4 className="mb-4 text-sm font-bold">Authentication</h4>
-            <div className="space-y-4">
-              
+        <div className="space-y-4 flex flex-col  h-full">
+          {/* Authentication Settings */}
+          <Card className="shadow-none border-none">
+            <CardContent className="p-4">
+              <h4 className="mb-4 text-sm font-bold">Authentication</h4>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">
+                    X-VTEX-API-AppKey
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="Enter your app key"
+                    className="w-full"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Unique identifier of the application key
+                  </p>
+                </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">X-VTEX-API-AppKey</label>
-                <Input
-                  type="text"
-                  placeholder="Enter your app key"
-                  className="w-full"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Unique identifier of the application key
-                </p>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">
+                    X-VTEX-API-AppToken
+                  </label>
+                  <Input
+                    type="password"
+                    placeholder="Enter your app token"
+                    className="w-full"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Secret token of the application key
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Base URL</label>
+                  <Input
+                    type="url"
+                    placeholder="https://apiexamples.vtexcommercestable.com"
+                    className="w-full"
+                  />
+                </div>
               </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">X-VTEX-API-AppToken</label>
-                <Input
-                  type="password"
-                  placeholder="Enter your app token"
-                  className="w-full"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Secret token of the application key
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Base URL</label>
-                <Input
-                  type="url"
-                  placeholder="https://apiexamples.vtexcommercestable.com"
-                  className="w-full"
-                />
-              </div>
-
-            </div>
-          </CardContent>
-        </Card>
-        <div className="flex justify-end space-x-2 pt-4">
-                <Button variant="ghost" className="text-black" size="default">
-                  Test Connection
-                </Button>
-                <Button variant="primary" size="default">
-                  Save Changes
-                </Button>
+            </CardContent>
+          </Card>
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button variant="ghost" className="text-black" size="default">
+              Test Connection
+            </Button>
+            <Button variant="primary" size="default">
+              Save Changes
+            </Button>
           </div>
+        </div>
       </div>
-
-    </div>
     ),
   },
   {
@@ -91,7 +111,9 @@ const tabs = [
               <h4 className="mb-4 text-sm font-bold">Authentication</h4>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Authentication Method</label>
+                  <label className="text-sm font-medium">
+                    Authentication Method
+                  </label>
                   <select className="w-full rounded-md border bg-background px-3 py-2 text-sm">
                     <option value="header">1. Header + 1</option>
                     <option value="oauth">OAuth 2.0</option>
@@ -101,7 +123,9 @@ const tabs = [
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">X-VTEX-API-AppKey</label>
+                  <label className="text-sm font-medium">
+                    X-VTEX-API-AppKey
+                  </label>
                   <Input
                     type="text"
                     placeholder="Enter your app key"
@@ -113,7 +137,9 @@ const tabs = [
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">X-VTEX-API-AppToken</label>
+                  <label className="text-sm font-medium">
+                    X-VTEX-API-AppToken
+                  </label>
                   <Input
                     type="password"
                     placeholder="Enter your app token"
@@ -141,12 +167,10 @@ const tabs = [
                     Save Changes
                   </Button>
                 </div>
-
               </div>
             </CardContent>
           </Card>
         </div>
-
       </div>
     ),
   },
@@ -155,7 +179,7 @@ const tabs = [
     value: "settings",
     content: (
       <div className="w-full overflow-hidden h-full rounded-2xl p-2 text-xl md:text-4xl font-bold text-white bg-white ">
-         <div className="space-y-4  mt-4 h-full">
+        <div className="space-y-4  mt-4 h-full">
           {/* Sync Settings */}
           <Card className="bg-gray-50">
             <CardContent className="p-4">
@@ -173,24 +197,25 @@ const tabs = [
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="cron">Custom Cron Expression</Label>    
+                  <Label htmlFor="cron">Custom Cron Expression</Label>
                   <div className="flex gap-2">
-                    <Input
-                      id="cron"
-                      type="text" 
-                      placeholder="*/30 * * * *"
-                    />
+                    <Input id="cron" type="text" placeholder="*/30 * * * *" />
                     <Button variant="outline" size="default">
                       Validate
                     </Button>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Enter a valid cron expression. Example: */30 * * * * (every 30 minutes)
+                    Enter a valid cron expression. Example: */30 * * * * (every
+                    30 minutes)
                   </p>
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <input type="checkbox" id="retry-failed" className="rounded border-gray-300" />
+                  <input
+                    type="checkbox"
+                    id="retry-failed"
+                    className="rounded border-gray-300"
+                  />
                   <label htmlFor="retry-failed" className="text-sm">
                     Automatically retry failed syncs
                   </label>
@@ -206,8 +231,8 @@ const tabs = [
               <div className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Include Fields</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     placeholder="id, name, category, price"
                     className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                   />
@@ -217,8 +242,10 @@ const tabs = [
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Filter Condition</label>
-                  <textarea 
+                  <label className="text-sm font-medium">
+                    Filter Condition
+                  </label>
+                  <textarea
                     placeholder="Example: price > 100 AND category = 'electronics'"
                     className="w-full rounded-md border bg-background px-3 py-2 text-sm min-h-[80px]"
                   />
@@ -234,8 +261,8 @@ const tabs = [
               <div className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Batch Size</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     placeholder="1000"
                     className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                   />
@@ -245,16 +272,22 @@ const tabs = [
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Timeout (seconds)</label>
-                  <input 
-                    type="number" 
+                  <label className="text-sm font-medium">
+                    Timeout (seconds)
+                  </label>
+                  <input
+                    type="number"
                     placeholder="300"
                     className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                   />
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <input type="checkbox" id="debug-mode" className="rounded border-gray-300" />
+                  <input
+                    type="checkbox"
+                    id="debug-mode"
+                    className="rounded border-gray-300"
+                  />
                   <label htmlFor="debug-mode" className="text-sm">
                     Enable debug mode
                   </label>
@@ -273,76 +306,127 @@ const tabs = [
             </button>
           </div>
         </div>
-        
       </div>
     ),
   },
- 
 ];
 
+export function DrawerTabs({ nodeId }: DrawerTabsProps) {
+  const saveNodeConfigurations = useMutation(
+    api.flows.node.data.saveNodeConfigurations
+  );
 
-export function DrawerTabs({ children,nodeId }: DrawerTabsProps) {
+  const form = useForm();
+
+  const onSubmit = (event: any) => {
+    saveNodeConfigurations({
+      nodeId: nodeId,
+      configurations: {
+        appKey: form.getValues("appKey"),
+        apiKey: form.getValues("apiKey"),
+        baseUrl: form.getValues("baseUrl"),
+      },
+    });
+  };
+
   return (
-    <div className=" md:h-[40rem] [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full  items-start justify-start "
-    >
+    <div className=" md:h-[40rem] [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full  items-start justify-start ">
       <div className="w-full overflow-hidden  h-full rounded-2xl p-2 text-xl md:text-4xl font-bold text-white bg-white ">
-      <div className="space-y-4 flex flex-col  h-full">
-        {/* Authentication Settings */}
-        <Card className="shadow-none border-none">
-          <CardContent className="p-4">
-            <h4 className="mb-4 text-sm font-bold">Authentication</h4>
-            <div className="space-y-4">
-              
+        <div className="space-y-4 flex flex-col  h-full">
+          {/* Authentication Settings */}
+          <Card className="shadow-none border-none">
+            <CardHeader className="p-2">
+              <CardTitle className="text-lg font-bold">
+                Authentication Settings
+              </CardTitle>
+            <CardDescription className="text-sm text-gray-500 font-normal">
+              Enter your VTEX API credentials to authenticate with the VTEX API.
+            </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4 mt-5"
+                >
+                  <FormField
+                    control={form.control}
+                    name="appKey"
+                    defaultValue={""}
+                    render={({ field }) => (
+                      <FormItem className="space-y-0">
+                        <FormLabel>X-VTEX-API-AppKey</FormLabel>
+                        <FormDescription className="text-[13px] p-0 m-0 text-gray-500 font-normal">
+                          Unique identifier of the application key
+                        </FormDescription>
+                        <FormControl>
+                          <Input
+                            placeholder="vtexappkey-example-YSWQFZ"
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="apiKey"
+                    defaultValue={""}
+                    render={({ field }) => (
+                      <FormItem className="space-y-0">
+                        <FormLabel>X-VTEX-API-AppToken</FormLabel>
+                        <FormDescription className="text-[13px] p-0 m-0 text-gray-500 font-normal">
+                          Secret token of the application key
+                        </FormDescription>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your app token"
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">X-VTEX-API-AppKey</label>
-                <Input
-                  type="text"
-                  placeholder="Enter your app key"
-                  className="w-full"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Unique identifier of the application key
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">X-VTEX-API-AppToken</label>
-                <Input
-                  type="password"
-                  placeholder="Enter your app token"
-                  className="w-full"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Secret token of the application key
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Base URL</label>
-                <Input
-                  type="url"
-                  placeholder="https://apiexamples.vtexcommercestable.com"
-                  className="w-full"
-                />
-              </div>
-
-            </div>
-          </CardContent>
-        </Card>
-        <div className="flex justify-end space-x-2 pt-4">
-                <Button variant="ghost" className="text-black" size="default">
-                  Test Connection
-                </Button>
-                <Button variant="primary" size="default">
-                  Save Changes
-                </Button>
-          </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="baseUrl"
+                    defaultValue={""}
+                    render={({ field }) => (
+                      <FormItem className="space-y-0 mb-4">
+                        <FormLabel>Base URL</FormLabel>
+                        <FormDescription className="text-[13px] p-0 m-0 text-gray-500 font-normal">
+                          Base URL of the VTEX API
+                        </FormDescription>
+                        <FormControl>
+                          <Input
+                            placeholder="https://apiexamples.vtexcommercestable.com.br"
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex justify-end space-x-2 pt-4">
+                    <Button variant="primary" type="submit">
+                      Save
+                    </Button>
+                    <Button variant="ghost" type="submit">
+                      Cancel
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-
     </div>
-    </div>
-    
-  )
+  );
 }
-

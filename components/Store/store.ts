@@ -81,6 +81,7 @@ const flowStore = create<AppState>()(devtools((set, get) => ({
   setEdges: (edges) => {
     set({ edges });
   }, 
+  
   data:[]
 })));
  

@@ -45,7 +45,7 @@ function ECommerceNode({data,selected,id}:{
 
   
   
-      
+  
   const UIData:NodeData = JSON.parse(data.UIData);
   
   //const [isDrawerOpen, setIsDrawerOpen] = useState(selected);
@@ -54,6 +54,8 @@ function ECommerceNode({data,selected,id}:{
   //event.stopPropagation();
   instance.deleteElements({ nodes: [{id:id}] })
  }
+ 
+
  const renderNodeIcon = useCallback(() => {
   return (
     <MemoizedNodeIcon
@@ -67,14 +69,15 @@ function ECommerceNode({data,selected,id}:{
 }, [data.type,  data.node?.icon, data.node?.flow]);
 
 const MemoizedNodeDrawer = useMemo(() => {
-    console.log(selected)
+   
   return selected && (
     <NodeDrawer
-      isOpen={true}
+      isOpen={true}      
       nodeData={UIData}
+      nodeId={id}
     />
   )
-},[selected,UIData])
+},[selected,id])
 
   const handleButtonClick = (event: React.MouseEvent) => {
     //event.stopPropagation();
@@ -84,7 +87,7 @@ const MemoizedNodeDrawer = useMemo(() => {
 
 return (
     <>
-      <Card className={cn("w-[300px] space-y-4 bg-gray-50 dark:bg-gray-900  relative hover:shadow-xl transition-shadow duration-300", selected ? "border border-borderSelected" : "")}>
+      <Card className={cn("w-[300px] space-y-4 bg-gray-50 dark:bg-gray-900  relative hover:shadow-xl transition-shadow duration-300", selected ? "border border-borderSelected" : "")} >
         {/* Header Section */}
         <div className="p-4 pb-0">
         <div className="flex items-center justify-between w-full ">
@@ -218,9 +221,9 @@ return (
           </Button>
         </div>
       </Card>
-      <div className="absolute top-0 left-0 w-full h-full z-50">
+      
         {MemoizedNodeDrawer}
-        </div>
+      
     </>
   );
 }

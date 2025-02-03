@@ -73,19 +73,19 @@ export function EventsConfig({ platform, selectedEvents, onEventsChange,source }
             control={form.control}
             name="events"
             render={() => (
-              <FormItem>
-                <FormLabel>Available Events</FormLabel>
+              <FormItem>                
                 <FormDescription className="text-[12px] text-gray-600">Select the events you want to receive</FormDescription>
             {events.map((category,categoryIndex)=>(
               <div key={category.category}>
                 {category.events.map((event,eventIndex)=>(
-                  <FormControl>
+                  <FormControl key={event.id}>
                   <FormField
                   control={form.control}
                   name={event.label}
+                  key={event.id}
                   render={() => (
-                    <FormItem className="flex items-center justify-between">
-                      <FormLabel className="text-[10px] text-gray-600">{event.label}</FormLabel>
+                    <FormItem className="flex items-center justify-between p-1  ">
+                      <FormLabel className="text-[10px] text-gray-500 font-normal">{event.label}</FormLabel>
                       <FormControl>
                         <Switch className="data-[state=checked]:bg-green-600" checked={form.getValues(event.label)} onCheckedChange={()=>form.setValue(event.label, !form.getValues(event.label))} />
                       </FormControl>
