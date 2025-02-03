@@ -13,9 +13,7 @@ export default defineSchema(
         subFieldOne: v.array(v.number()),
       }),
     }),
-
    
-
     projects:defineTable({
       
       userId:v.string(),
@@ -39,6 +37,11 @@ export default defineSchema(
       position:v.object({x:v.number(),y:v.number()}),
       type:v.string(),
     }).index("by_project",["projectId"]),
+
+    nodeConfigurations:defineTable({
+      nodeId:v.id('nodes'),
+      configurations:v.any()
+    }).index("by_node",["nodeId"]),
 
     edges:defineTable({
       projectId:v.string(),

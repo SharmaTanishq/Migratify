@@ -13,7 +13,7 @@ import Image from "next/image";
 import { Button } from "../../ui/button";
 import { useNodeDelete } from "../../hooks/useNodeDelete";
 import useStore  from "../../Store/store";
-import { memo, useCallback, useEffect } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import NodeIcon from "./Components/NodeIcon";
 
 import { NodeData } from "@/components/CMS/types";
@@ -21,8 +21,10 @@ import { NodeDataType } from "@/components/Types/Flows";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { DEFAULT_HANDLE_STYLE_SOURCE } from "@/components/Constants/HandleStyles";
+import NodeDrawer from "./Components/NodeDrawer";
 
 const MemoizedNodeIcon = memo(NodeIcon)
+
 
 const ECOMMERCE_HANDLE_STYLES={
   
@@ -42,15 +44,18 @@ function ECommerceNode({data,selected,id}:{
   const instance = useReactFlow();
 
   
-      
+  
+  
   const UIData:NodeData = JSON.parse(data.UIData);
   
-  
+  //const [isDrawerOpen, setIsDrawerOpen] = useState(selected);
 
  const handleDelete = (event:React.MouseEvent)=>{
-  event.stopPropagation();
+  //event.stopPropagation();
   instance.deleteElements({ nodes: [{id:id}] })
  }
+ 
+
  const renderNodeIcon = useCallback(() => {
   return (
     <MemoizedNodeIcon
@@ -63,15 +68,26 @@ function ECommerceNode({data,selected,id}:{
   );
 }, [data.type,  data.node?.icon, data.node?.flow]);
 
+const MemoizedNodeDrawer = useMemo(() => {
+   
+  return selected && (
+    <NodeDrawer
+      isOpen={true}      
+      nodeData={UIData}
+      nodeId={id}
+    />
+  )
+},[selected,id])
+
   const handleButtonClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
+    //event.stopPropagation();
     
     // Button logic
   };
 
 return (
     <>
-      <Card className={cn("w-[300px] space-y-4 bg-gray-50 dark:bg-gray-900  relative hover:shadow-xl transition-shadow duration-300", selected ? "border border-borderSelected" : "")}>
+      <Card className={cn("w-[300px] space-y-4 bg-gray-50 dark:bg-gray-900  relative hover:shadow-xl transition-shadow duration-300", selected ? "border border-borderSelected" : "")} >
         {/* Header Section */}
         <div className="p-4 pb-0">
         <div className="flex items-center justify-between w-full ">
@@ -205,6 +221,9 @@ return (
           </Button>
         </div>
       </Card>
+      
+        {MemoizedNodeDrawer}
+      
     </>
   );
 }

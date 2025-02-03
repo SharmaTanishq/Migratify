@@ -6,7 +6,9 @@ import {
     type OnConnect,
     
   } from '@xyflow/react';
-   
+
+  import { Id } from '@/convex/_generated/dataModel';
+  
   export type AppNode = Node;
    
   export type AppState = {
@@ -20,6 +22,7 @@ import {
     setEdges: (edges: Edge[]) => void;
     setInitialEdges:(edges: Edge[]) => void;
     addNode:(type:string,x:number,y:number)=>void;
+    deleteEdge:(edgeId: Id<'edges'>) => void; 
     
     data:any[];
   };

@@ -13,7 +13,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
-import useStore from "@/components/Store/store";
+import flowStore from "@/components/Store/store";
 import { useSidebar } from "@/components/ui/sidebar";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -30,6 +30,8 @@ import ECommerce from "@/components/CustomNodes/E-Commerce";
 
 import Bridges from "@/components/CustomNodes/Bridges";
 import { Id } from "@/convex/_generated/dataModel";
+import { useEdgeDelete } from "@/components/hooks/useEdgeDelete";
+import CustomEdge from "@/components/CustomEdge";
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -55,6 +57,10 @@ const nodeTypes = {
   // socialNode: Social,
 };
 
+// const edgeType = {
+//   customEdge:CustomEdge
+// }
+
 export default function Page() {
   const params = useParams();
   const { setOpen } = useSidebar();
@@ -72,13 +78,13 @@ export default function Page() {
     addNode,
     addEdge,
     setInitialEdges,
-  } = useStore(useShallow(selector));
+  } = flowStore(useShallow(selector));
 
   const addNodeMutation = useMutation(api.flows.nodes.addNode);
   const addEdgeMutation = useMutation(api.flows.edges.addEdge);
   const updateNodesMutation = useMutation(api.flows.nodes.updateNodes);
   const updateNodePositionMutation = useMutation(api.flows.node.updateNode.updateNodePosition);
-  const deleteEdgeMutation = useMutation(api.flows.edge.onEdgeDelete.deleteEdge);
+  const {deleteEdge} = useEdgeDelete(projectId);
 
   const { deleteNode } = useNodeDelete(projectId);
 
@@ -209,25 +215,22 @@ export default function Page() {
   );
 
   const onEdgeDelete = useCallback((edges:Edge[])=>{
-    
-    edges.forEach((edge)=>{
-      deleteEdgeMutation({
-        edgeId:edge?.id as Id<'edges'>
-      }).then((res)=>{
-        
-      })
-    })
-  },[])
+    console.log(edges); 
+     edges.forEach((edge)=>{
+      deleteEdge(edge.id);
+     })
+   
+  },[edges])
 
   const handleNodeClick = useCallback((event: any, node: any) => {
     setSelectedNode(node);
-    setIsDrawerOpen(true);
+    
   }, []);
 
   const handleNodeDelete = useCallback((node: any) => {
     deleteNode(node[0]._id);
 
-    setIsDrawerOpen(false);
+    
   }, []);
 
   const handleNodeMouseEnter = useCallback((event: any, node: any) => {}, []);
@@ -250,6 +253,7 @@ export default function Page() {
           
           onEdgesDelete={onEdgeDelete}
           nodeTypes={nodeTypes}
+          //edgeTypes={edgeType}
           onDrop={onDrop}
           onDragOver={onDragOver}
           minZoom={0.5}
@@ -271,11 +275,11 @@ export default function Page() {
             size={1.5}
           />
 
-          <NodeDrawer
+          {/* <NodeDrawer
             isOpen={isDrawerOpen}
             onClose={() => setIsDrawerOpen(false)}
             nodeData={selectedNode}
-          />
+          /> */}
 
           <Toaster position="bottom-center" />
         </ReactFlow>

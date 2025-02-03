@@ -1,11 +1,13 @@
 import { create } from 'zustand';
+import {devtools} from 'zustand/middleware'
 import { addEdge, applyNodeChanges, applyEdgeChanges, Edge } from '@xyflow/react';
 
 
 import { AppNode, type AppState } from './types';
+import { Id } from '@/convex/_generated/dataModel';
  
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
-const useStore = create<AppState>((set, get) => ({
+const flowStore = create<AppState>()(devtools((set, get) => ({
   nodes: [],
   edges: [],  
   
@@ -53,6 +55,11 @@ const useStore = create<AppState>((set, get) => ({
     set({ edges: [...get().edges, newEdge] });
   },
 
+  deleteEdge: (edgeId: Id<'edges'>) => {
+    set({ edges: get().edges.filter((edge: Edge) => edge.id !== edgeId) });
+    
+  },
+
   addNode:(nodes)=>{
     
     set({ nodes: [...get().nodes, nodes ] });    
@@ -74,7 +81,8 @@ const useStore = create<AppState>((set, get) => ({
   setEdges: (edges) => {
     set({ edges });
   }, 
+  
   data:[]
-}));
+})));
  
-export default useStore;
+export default flowStore;
