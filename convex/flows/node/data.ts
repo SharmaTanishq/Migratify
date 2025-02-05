@@ -1,5 +1,5 @@
 
-import { mutation } from "../../_generated/server";
+import { mutation, query } from "../../_generated/server";
 import { Id } from "../../_generated/dataModel";
 import { v } from "convex/values";
 
@@ -35,5 +35,15 @@ export const saveNodeConfigurations = mutation({
             success:true,
             message:"Node configurations saved successfully"
         }
+    }
+})
+
+export const getNodeConfigurations = query({
+    args:{
+        nodeId:v.id('nodes')
+    },
+    handler:async(ctx, {nodeId}:{nodeId:Id<'nodes'>})=>{
+        const configurations = await ctx.db.query('nodeConfigurations').withIndex('by_node', (q)=>q.eq('nodeId', nodeId)).first();
+        return configurations;
     }
 })

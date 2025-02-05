@@ -20,6 +20,7 @@ import {
   useEdges,
   useNodes,
   useReactFlow,
+  
 } from "@xyflow/react";
 import { motion } from "framer-motion";
 import { PlayIcon } from "lucide-react";
@@ -30,8 +31,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import useStore from "@/components/Store/store";
 
 import { EventsConfig } from "@/components/helpers/EventsConfig";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { ScriptCopyBtn } from "@/components/ui/script-copy-btn";
 
 function BridgesNode({
   data,
@@ -51,14 +56,32 @@ function BridgesNode({
   const nodes = useNodes();
   const [platform, setPlatform] = useState<PlatformType>("vtex");
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
+  const node= useStore((state)=>state.getNode(id));
+
+  const createWebhook = useMutation(api.webhooks.index.createWebhook)
+  const getWebhookUrl = useQuery(api.webhooks.index.getWebhookUrl,{
+    nodeId: node._id
+  });
+  useEffect(()=>{
+    
+    if(getWebhookUrl === null){
+      
+      createWebhook({
+        nodeId: node._id,
+        events: selectedEvents,
+        projectId: node.projectId
+      })
+    }
+  },[getWebhookUrl])
+
 
   
-
-
   // Get the source node that's connected to this bridge
   const sourceNode = edges
     .filter((edge) => edge.target === id)
     .map((edge) => nodes.find((node) => node.id === edge.source))[0];
+
+
 
   useEffect(()=>{
     if(sourceNode !== undefined){
@@ -84,6 +107,7 @@ function BridgesNode({
       )}
     >
       <CardHeader className="p-4 pt-2">
+
         <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
           <div className="flex items-center justify-start gap-2">
             <Image
@@ -101,7 +125,7 @@ function BridgesNode({
           <Button
             variant="ghost"
             size="icon"
-            className="transition-colors duration-200 w-6 h-6"
+            className="transition-colors duration-200 w-6 h-6 scale-[0.9]"
           >
             <Tooltip>
               <TooltipTrigger asChild>
@@ -119,13 +143,27 @@ function BridgesNode({
         </CardDescription>
       </CardHeader>
       <Separator />
-      <CardContent className="flex p-0 w-full justify-center items-center h-full">
+      <CardContent className="flex flex-col p-0 w-full justify-center items-center h-full">
+
+        {/* TODO: Check if the user has configured the hook in the platform or not */}
+        {/* {!isHookConfigured && (
+          <div className="w-full h-full flex items-center justify-center p-4">
+            <Card className="text-gray-500 text-center">
+              <CardHeader>Is your {platform} hook configured?</CardHeader>
+              <CardFooter className="flex items-center justify-center gap-2">
+                <Button variant={"outline"} onClick={()=>setIsHookConfigured(true)}>Yes</Button>
+                <Button onClick={()=>setIsHookConfigured(false)}>No</Button>
+              </CardFooter>
+            </Card>
+          </div>
+        )} */}
         {isEcommerceSource && (
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="w-full h-full p-4 pt-0 transition-all duration-300"
+            className="w-full h-full p-2 pb-0 pt-0 transition-all duration-300"
           >
             
             <motion.div
@@ -140,6 +178,9 @@ function BridgesNode({
                 source={edgeSource?.sourceHandle!}
               />
             </motion.div>
+            
+            
+          
           </motion.div>
         )}
         {!isEcommerceSource && (
@@ -154,6 +195,22 @@ function BridgesNode({
             </p>
           </motion.div>
         )}
+        <Separator className="my-2 mb-0"/>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className = "pb-4">
+        <ScriptCopyBtn
+                codeLanguage="javascript"
+                showMultiplePackageOptions={false}
+                className="w-full max-w-[200px]"
+                commandMap={{
+                  "curl":`${getWebhookUrl?.url}`
+                }}
+              />
+        </motion.div>
+       
       </CardContent>
 
       <CardFooter className="p-4 bg-gray-100 rounded-b-xl">

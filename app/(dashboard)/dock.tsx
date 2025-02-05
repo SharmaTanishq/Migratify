@@ -21,17 +21,17 @@ export function DockDemo() {
   return (
     <div className="relative">
       <Dock direction="middle" >
-      <DockIcon onDragStart={(event) => onDragStart(event, 'inventoryFileNode')} >
+      <DockIcon onDragStart={(event) => onDragStart(event, 'eCommerceNode')} >
           <Icons.gitHub className="size-6" />
         </DockIcon>
-        <DockIcon onDragStart={(event) => onDragStart(event, 'customerFileNode')} >
+        <DockIcon onDragStart={(event) => onDragStart(event, 'bridgeNode')} >
           <Icons.gitHub className="size-6" />
         </DockIcon>
-        <DockIcon onDragStart={(event) => onDragStart(event, 'categoryFileNode')} >
+        <DockIcon onDragStart={(event) => onDragStart(event, 'inventoryFileNode')} >
           <Icons.googleDrive className="size-6" />
         </DockIcon>
        
-        <DockIcon onDragStart={(event) => onDragStart(event, 'vtexNode')} >
+        <DockIcon onDragStart={(event) => onDragStart(event, 'eCommerceNode')} >
           <Icons.whatsapp className="size-6" />
         </DockIcon>
       </Dock>
