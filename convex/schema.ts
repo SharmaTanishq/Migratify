@@ -64,7 +64,10 @@ export default defineSchema(
         nodeId: v.string(),
         secret: v.string(),
         url: v.string(),
-        events: v.array(v.string()),
+        events: v.array(v.object({
+            event:v.string(),
+            isActive:v.boolean()
+        })),
         isActive: v.boolean(),
         lastCalled: v.optional(v.number()), // Unix timestamp
       }),

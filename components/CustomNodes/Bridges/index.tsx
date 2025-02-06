@@ -38,6 +38,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ScriptCopyBtn } from "@/components/ui/script-copy-btn";
 
+
 function BridgesNode({
   data,
   selected,
@@ -59,29 +60,34 @@ function BridgesNode({
   const node= useStore((state)=>state.getNode(id));
 
   const createWebhook = useMutation(api.webhooks.index.createWebhook)
+
   const getWebhookUrl = useQuery(api.webhooks.index.getWebhookUrl,{
     nodeId: node._id
   });
+
   useEffect(()=>{
     
     if(getWebhookUrl === null){
       
       createWebhook({
         nodeId: node._id,
-        events: selectedEvents,
+        events: selectedEvents.map((event)=>({
+          event:event,
+          isActive:true
+        })),
         projectId: node.projectId
       })
     }
   },[getWebhookUrl])
 
-
+  //console.log(selectedEvents)
   
   // Get the source node that's connected to this bridge
   const sourceNode = edges
     .filter((edge) => edge.target === id)
     .map((edge) => nodes.find((node) => node.id === edge.source))[0];
 
-
+  
 
   useEffect(()=>{
     if(sourceNode !== undefined){
@@ -94,7 +100,6 @@ function BridgesNode({
   // Get the edge that connects to this bridge
   const edgeSource = edges.find((edge) => edge.target === id);
 
-  
 
   
   const isEcommerceSource = sourceNode?.type === "ecommerceNode";
@@ -122,20 +127,25 @@ function BridgesNode({
             </span>
           </div>
 
+            <Tooltip>
+              <TooltipTrigger >
+
           <Button
             variant="ghost"
             size="icon"
-            className="transition-colors duration-200 w-6 h-6 scale-[0.9]"
+            onClick={()=>{
+             console.log("Run Component");
+            }}
+            asChild
+            className="transition-colors duration-200 w-6 h-6 "
           >
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Play className="w-4 h-4 text-gray-500" />
+                <Image src={"https://res.cloudinary.com/dzi0wmfo3/image/upload/v1738843377/Play_6216faf3bb.svg"} alt="Play" width={8} height={8} className="w-4 h-4 text-gray-500 scale-[0.7] " />
+          </Button>
               </TooltipTrigger>
               <TooltipContent>
                 <p>Run Component</p>
               </TooltipContent>
             </Tooltip>
-          </Button>
         </CardTitle>
 
         <CardDescription className="text-xs text-gray-600 ">
@@ -175,7 +185,9 @@ function BridgesNode({
                 platform={platform as PlatformType}
                 selectedEvents={selectedEvents}
                 onEventsChange={setSelectedEvents}
+                webhookId = {getWebhookUrl?._id}
                 source={edgeSource?.sourceHandle!}
+                nodeId={id}
               />
             </motion.div>
             

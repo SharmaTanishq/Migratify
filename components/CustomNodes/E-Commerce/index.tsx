@@ -115,7 +115,7 @@ return (
                   <span>Rename</span>
                 </button>
                 <button className="flex items-center gap-2 w-full px-1 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-md" onClick={handleDelete}>
-                  <Trash2 className="w-4 h-4" />
+                  <Image src={"https://res.cloudinary.com/dzi0wmfo3/image/upload/v1738843377/Trash_2_92934cce1a.svg"} alt="Delete" width={16} height={16} className="w-4 h-4 " />
                   <span>Delete</span>
                 </button>
               </div>

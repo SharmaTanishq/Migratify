@@ -9,7 +9,10 @@ export const createWebhook = mutation({
   args: {
     projectId: v.string(),
     nodeId: v.string(),
-    events: v.array(v.string()),
+    events: v.array(v.object({
+      event:v.string(),
+      isActive:v.boolean()
+    })),
   },
   handler: async (ctx, args) => {
     
@@ -34,7 +37,10 @@ export const createWebhook = mutation({
 export const updateWebhookEvents = mutation({
     args:{
         webhookId:v.id("webhooks"),
-        events:v.array(v.string())
+        events:v.array(v.object({
+            event:v.string(),
+            isActive:v.boolean()
+        }))
     },
     handler:async(ctx,args)=>{
         await ctx.db.patch(args.webhookId,{

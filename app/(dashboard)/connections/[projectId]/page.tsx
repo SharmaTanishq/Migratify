@@ -32,6 +32,7 @@ import Bridges from "@/components/CustomNodes/Bridges";
 import { Id } from "@/convex/_generated/dataModel";
 import { useEdgeDelete } from "@/components/hooks/useEdgeDelete";
 import CustomEdge from "@/components/CustomEdge";
+import Output from "@/components/CustomNodes/Output";
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -48,6 +49,7 @@ const selector = (state: any) => ({
 const nodeTypes = {
   ecommerceNode: ECommerce,
   bridgeNode: Bridges,
+  outputNode: Output,
   // pimNode: PIM,
   // crmNode: CRM,
   // erpNode: ERP,
