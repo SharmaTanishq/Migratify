@@ -68,6 +68,7 @@ export type NodeDataType = {
     type: string;
     node: APIClassType;
     subProperty?:NodeSubProperty;
+    _id:string;
     UIData:string;
     selected:boolean,
     id: string;

@@ -15,10 +15,14 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useEdges, useNodes } from "@xyflow/react";
+import useStore from "@/components/Store/store";
+import { useQuery } from "convex/react";
 import Image from "next/image";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 
 function OutputNode({
   data,
@@ -30,13 +34,23 @@ function OutputNode({
   selected?: boolean;
 }) {
   const UIData = JSON.parse(data.UIData);
+  const edges = useEdges();
+  const nodes = useNodes();
 
-  //   const code = `{
-  //     "author": "User 123",
-  //     "body": "Hello world"
-  // }`;
+  //Migrate this to useStore.
+  const sourceNode = edges
+  .filter((edge) => edge.target === id)
+  .map((edge) => nodes.find((node) => node.id === edge.source))[0];
 
-  const code = null;
+  const parentNode = useStore((state) => state.getNode(sourceNode?.id as string));
+
+  
+  const getWebhookEvents = useQuery(api.webhooks.events.getWebhookEvents,{
+    nodeId:parentNode?._id as Id<"nodes">
+  })
+  
+  const code = JSON.stringify(getWebhookEvents?.payload,null, 2);
+  
 
   return (
     <Card

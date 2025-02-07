@@ -1,18 +1,15 @@
-import { Checkbox } from "@/components/ui/checkbox";
 import { PlatformType } from "@/components/Types/Flows";
-import { motion } from "framer-motion";
 
 import {
   Form,
   FormControl,
   FormDescription,
-  FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
-import { useForm,useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import webhooksStore from "../Store/webhooks";
 import { useEffect } from "react";
 import { useMutation } from "convex/react";
@@ -25,7 +22,7 @@ interface EventsConfigProps {
   source?: string;
   onEventsChange: (events: string[]) => void;
   webhookId?: string;
-  webhook?:any;
+  webhook?: any;
   nodeId: string;
 }
 
@@ -63,8 +60,6 @@ const PLATFORM_EVENTS = {
   ],
 };
 
-
-
 export function EventsConfig({
   platform,
   selectedEvents,
@@ -74,17 +69,13 @@ export function EventsConfig({
   webhookId,
   nodeId,
 }: EventsConfigProps) {
-
-
-    
   const form = useForm();
-  const watch = useWatch({control:form.control})
+  const watch = useWatch({ control: form.control });
 
   const { setEvents } = webhooksStore();
   const getEvents = webhooksStore((state) => state.getEvents);
-  
-  const updateEvents = useMutation(api.webhooks.index.updateWebhookEvents);
 
+  const updateEvents = useMutation(api.webhooks.index.updateWebhookEvents);
 
   useEffect(() => {
     const defaultEvents = events.flatMap((category) =>
@@ -93,38 +84,33 @@ export function EventsConfig({
         isActive: false,
       }))
     );
-    
-    setEvents(nodeId, defaultEvents);    
+
+    setEvents(nodeId, defaultEvents);
   }, []);
 
-  useEffect(()=>{
-    
-    if(webhook?.events){      
-      webhook.events.forEach((event:any)=>{
-        form.setValue(event.event,event.isActive)
-      })
+  useEffect(() => {
+    if (webhook?.events) {
+      webhook.events.forEach((event: any) => {
+        form.setValue(event.event, event.isActive);
+      });
     }
-  },[webhook])
+  }, [webhook]);
 
-  
-  useEffect(()=>{
-
-    
+  useEffect(() => {
     if (Object.keys(watch).length > 0 && webhookId) {
-            
-      const mappedEvents = Object.entries(watch).map(([parentEvent,childEvent])=>(
-        Object.entries(childEvent).map(([event,isActive])=>({
-          event: `${parentEvent}.${event}`,
-          isActive: isActive?true:false
-        }))
-      ))
+      const mappedEvents = Object.entries(watch).map(
+        ([parentEvent, childEvent]) =>
+          Object.entries(childEvent).map(([event, isActive]) => ({
+            event: `${parentEvent}.${event}`,
+            isActive: isActive ? true : false,
+          }))
+      );
       updateEvents({
         webhookId: webhookId as Id<"webhooks">,
-        events:mappedEvents.flat()
-      })
-
+        events: mappedEvents.flat(),
+      });
     }
-  },[watch])
+  }, [watch]);
 
   // Filter events based on platform and source
   const getFilteredEvents = () => {
@@ -132,7 +118,6 @@ export function EventsConfig({
 
     if (!source) return platformEvents;
 
-    
     const normalizedSource = source?.toLowerCase().trim();
 
     return platformEvents.filter(
@@ -141,16 +126,15 @@ export function EventsConfig({
   };
 
   const events = getFilteredEvents();
-  
 
   return (
     <div className="space-y-2  w-full p-2">
-      <Form {...form} >
-          <FormDescription className="text-[12px] text-gray-600">
-            Select the events you want to receive
-          </FormDescription>
+      <Form {...form}>
+        <FormDescription className="text-[12px] text-gray-600">
+          Select the events you want to receive
+        </FormDescription>
         <FormItem>
-        {events.map((category) => (
+          {events.map((category) => (
             <div key={category.category}>
               {category.events.map((event) => (
                 <FormControl key={event.id}>
@@ -162,7 +146,7 @@ export function EventsConfig({
                       <Switch
                         className="data-[state=checked]:bg-green-600"
                         checked={form.getValues(event.id) || false}
-                        onCheckedChange={(checked) => 
+                        onCheckedChange={(checked) =>
                           form.setValue(event.id, checked)
                         }
                       />

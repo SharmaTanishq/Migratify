@@ -72,9 +72,11 @@ export default defineSchema(
         lastCalled: v.optional(v.number()), // Unix timestamp
       }),
     webhookEvents: defineTable({
-        webhookId: v.id("webhooks"),
+        
+        nodeId:v.id("nodes"),
         payload: v.any(),
         processedAt: v.number(),
+        
       }),
   },
   

@@ -75,22 +75,30 @@ export const getWebhookUrl = query({
 });
 
 
+//Let's Think on this. The Event is coming from third party.
+//We have the nodeId. this is mapped with the webhookURL - 
+//then I just need the nodeId and the payload.
 
-export const processWebhookEvent = internalMutation({
+export const processWebhookEvent = mutation({
   args: {
-    webhookId: v.id("webhooks"),
+    nodeId: v.id("nodes"),    
     payload: v.any(),
   },
   handler: async (ctx, args) => {
+    
+    //const webhook = await ctx.db.get(args.webhookId)
+
+    //const nodeId = webhook?.nodeId as Id<"nodes">
     // Store the webhook event
     await ctx.db.insert("webhookEvents", {
-      webhookId: args.webhookId,
+      nodeId: args.nodeId ,      
       payload: args.payload,
-      processedAt: Date.now(),
+      processedAt: Date.now(),      
     });
 
+    const getWebhookByNodeId = await ctx.db.query("webhooks").filter((q)=>q.eq(q.field("nodeId"),args.nodeId)).first()
     // Update last called timestamp
-    await ctx.db.patch(args.webhookId, {
+    await ctx.db.patch(getWebhookByNodeId?._id as Id<"webhooks">, {
       lastCalled: Date.now(),
     });
 
