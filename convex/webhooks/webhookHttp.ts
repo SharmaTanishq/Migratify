@@ -8,9 +8,16 @@ import { Id } from "../_generated/dataModel";
 
 
 export const webhookAction = httpAction(async (ctx, request) => {
-    console.log("request",await request.json())
+
+    //const data = await request.json()
+    console.log("params",request.body)
 //   const { author, body } = await request.json();
 //   console.log("author",author)  
+
+    // await ctx.runMutation(internal.webhooks.index.processWebhookEvent, {
+    //     webhookId:"webhookId" as Id<"webhooks">,
+    //     payload : data
+    // })
 //   await ctx.runMutation(internal.webhooks.index.processWebhookEvent, {
 //    payload : {
 //     author,

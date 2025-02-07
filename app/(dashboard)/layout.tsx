@@ -7,6 +7,7 @@ import { BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from "@/components/ui/
 import { Breadcrumb,  BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { Folder } from "lucide-react";
+import { Toaster } from "@/components/ui/toaster";
 
 
 
@@ -44,6 +45,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <div className="h-full ">
                           
                     {children}
+                    <Toaster/>
                           
                   </div>
                       

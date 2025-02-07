@@ -25,6 +25,7 @@ interface EventsConfigProps {
   source?: string;
   onEventsChange: (events: string[]) => void;
   webhookId?: string;
+  webhook?:any;
   nodeId: string;
 }
 
@@ -69,12 +70,13 @@ export function EventsConfig({
   selectedEvents,
   onEventsChange,
   source,
+  webhook,
   webhookId,
   nodeId,
 }: EventsConfigProps) {
 
 
-  
+    
   const form = useForm();
   const watch = useWatch({control:form.control})
 
@@ -83,6 +85,7 @@ export function EventsConfig({
   
   const updateEvents = useMutation(api.webhooks.index.updateWebhookEvents);
 
+
   useEffect(() => {
     const defaultEvents = events.flatMap((category) =>
       category.events.map((event) => ({
@@ -90,16 +93,22 @@ export function EventsConfig({
         isActive: false,
       }))
     );
-
-    // Log both the nodeId and events to debug
-
-    // Call setEvents and verify the state was updated
+    
     setEvents(nodeId, defaultEvents);    
   }, []);
 
+  useEffect(()=>{
+    
+    if(webhook?.events){      
+      webhook.events.forEach((event:any)=>{
+        form.setValue(event.event,event.isActive)
+      })
+    }
+  },[webhook])
 
   
   useEffect(()=>{
+
     
     if (Object.keys(watch).length > 0 && webhookId) {
             
@@ -123,7 +132,7 @@ export function EventsConfig({
 
     if (!source) return platformEvents;
 
-    // Convert source to lowercase and remove any trailing/leading spaces
+    
     const normalizedSource = source?.toLowerCase().trim();
 
     return platformEvents.filter(
@@ -132,44 +141,33 @@ export function EventsConfig({
   };
 
   const events = getFilteredEvents();
+  
 
   return (
     <div className="space-y-2  w-full p-2">
       <Form {...form} >
-        <FormItem>
           <FormDescription className="text-[12px] text-gray-600">
             Select the events you want to receive
           </FormDescription>
-          {events.map((category, categoryIndex) => (
+        <FormItem>
+        {events.map((category) => (
             <div key={category.category}>
-              {category.events.map((event, eventIndex) => (
+              {category.events.map((event) => (
                 <FormControl key={event.id}>
-                  <FormField
-                    control={form.control}
-                    defaultValue={form.getValues(event.id)?true:false}
-                    name={event.id}
-                    key={event.label}
-                    render={() => (
-                      <FormItem className="flex items-center justify-between p-1  ">
-                        <FormLabel className="text-[10px] text-gray-500 font-normal">
-                          {event.label}
-                        </FormLabel>
-                        <FormControl >
-                          <Switch
-                            className="data-[state=checked]:bg-green-600"
-                            checked={form.getValues(event.id)}                            
-                            defaultChecked={form.getValues(event.id)?true:false}
-                            onCheckedChange={() =>
-                              form.setValue(
-                                event.id,
-                                !form.getValues(event.id)
-                              )
-                            }
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
+                  <FormItem className="flex items-center justify-between p-1">
+                    <FormLabel className="text-[10px] text-gray-500 font-normal">
+                      {event.id}
+                    </FormLabel>
+                    <FormControl>
+                      <Switch
+                        className="data-[state=checked]:bg-green-600"
+                        checked={form.getValues(event.id) || false}
+                        onCheckedChange={(checked) => 
+                          form.setValue(event.id, checked)
+                        }
+                      />
+                    </FormControl>
+                  </FormItem>
                 </FormControl>
               ))}
             </div>
