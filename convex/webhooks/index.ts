@@ -75,9 +75,6 @@ export const getWebhookUrl = query({
 });
 
 
-//Let's Think on this. The Event is coming from third party.
-//We have the nodeId. this is mapped with the webhookURL - 
-//then I just need the nodeId and the payload.
 
 export const processWebhookEvent = mutation({
   args: {
