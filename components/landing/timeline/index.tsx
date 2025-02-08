@@ -11,16 +11,14 @@ export function TimelineSection() {
       title: "Integrate",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            Pick & choose from a wide range of platforms
-          </p>
-          <div className="grid grid-cols-2 gap-4">
+          
+          <div >
             <Image
-              src="https://assets.aceternity.com/templates/startup-1.webp"
+              src={"/images/integrate.png"}
               alt="startup template"
-              width={500}
-              height={500}
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
+              width={1000}
+              height={1000}
+              className="rounded-lg object-contain h-full w-full "
             />
             
           </div>
@@ -31,16 +29,14 @@ export function TimelineSection() {
       title: "Migrate",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            Migrate with ease by taking advantage of our bridges.
-          </p>
-          <div className="grid grid-cols-2 gap-4">
+         
+          <div >
             <Image
-              src="https://assets.aceternity.com/pro/hero-sections.png"
+              src={"/images/withBridges.png"}
               alt="hero template"
-              width={500}
-              height={500}
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
+              width={2000}
+              height={2000}
+              className="rounded-lg object-cover h-full w-full "
             />
            
           </div>
@@ -48,14 +44,14 @@ export function TimelineSection() {
       ),
     },
     {
-      title: "Test",
+      title: "Extend",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-4">
-            Test your integrations by Viewing your logs and data real-time.
+          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-2xl font-normal mb-4">
+            Extend your capabilities by using our bridges such Join, Cron, Webhook, etc.
           </p>
          
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4">
             <Image
               src="https://assets.aceternity.com/pro/hero-sections.png"
               alt="hero template"
@@ -64,7 +60,7 @@ export function TimelineSection() {
               className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
             />
            
-          </div>
+          </div> */}
         </div>
       ),
     },

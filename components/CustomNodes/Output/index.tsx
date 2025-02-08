@@ -49,17 +49,17 @@ function OutputNode({
     state.getNode(sourceNode?.id as string)
   );
 
-  useEffect(()=>{
-    if(parentNode){
-      setCode(JSON.stringify({ event: "Waiting for an event" }, null, 2))
-    }
-  },[parentNode])
 
   const webhookEvents = useQuery(
     api.webhooks.events.getWebhookEvents,
     parentNode?._id ? { nodeId: parentNode._id } : "skip"
   );
 
+  useEffect(()=>{
+    if(parentNode && (webhookEvents === null || webhookEvents === undefined)){
+      setCode(JSON.stringify({ event: "Waiting for an event" }, null, 2))
+    }
+  },[parentNode,webhookEvents])
   useEffect(() => {
     
     if (webhookEvents !== null && webhookEvents !== undefined) {
