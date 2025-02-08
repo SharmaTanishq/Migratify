@@ -31,13 +31,13 @@ import {
 } from "@/components/ui/tooltip";
 import useStore from "@/components/Store/store";
 
-
 import { toast } from "sonner";
 
 import { EventsConfig } from "@/components/helpers/EventsConfig";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ScriptCopyBtn } from "@/components/ui/script-copy-btn";
+import { Spinner } from "@heroui/spinner";
 
 function BridgesNode({
   data,
@@ -57,14 +57,15 @@ function BridgesNode({
   const nodes = useNodes();
   const [platform, setPlatform] = useState<PlatformType>("vtex");
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
-  
+
   const node = useStore((state) => state.getNode(id));
 
   const createWebhook = useMutation(api.webhooks.index.createWebhook);
 
-  const getWebhookUrl = useQuery(api.webhooks.index.getWebhookUrl, {
-    nodeId: node._id,
-  });
+  const getWebhookUrl = useQuery(
+    api.webhooks.index.getWebhookUrl,
+    node?._id ? { nodeId: node._id } : "skip"
+  );
 
   useEffect(() => {
     if (getWebhookUrl === null) {
@@ -78,8 +79,6 @@ function BridgesNode({
       });
     }
   }, [getWebhookUrl]);
-
-  
 
   // Get the source node that's connected to this bridge
   const sourceNode = edges
@@ -130,14 +129,14 @@ function BridgesNode({
                 size="icon"
                 onClick={() => {
                   console.log("clicked"),
-                  toast.info("Component is Running",{
-                    description:"Waiting for an Event to be received",
-                    //duration: Infinity,
-                    action:{
-                      label:"View",
-                      onClick:()=>{}
-                    }
-                  })
+                    toast.info("Component is Running", {
+                      description: "Waiting for an Event to be received",
+                      //duration: Infinity,
+                      action: {
+                        label: "View",
+                        onClick: () => {},
+                      },
+                    });
                 }}
                 asChild
                 className="transition-colors duration-200 w-6 h-6 "
@@ -218,16 +217,26 @@ function BridgesNode({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="pb-4"
+          className="p-2 w-full pt-0"
         >
-          <ScriptCopyBtn
-            codeLanguage="javascript"
-            showMultiplePackageOptions={false}
-            className="w-full max-w-[200px]"
-            commandMap={{
-              curl: `${getWebhookUrl?.url}`,
-            }}
-          />
+          {getWebhookUrl?.url ? (
+            
+            <ScriptCopyBtn
+              codeLanguage="http"
+              showMultiplePackageOptions={false}
+              className="w-full max-w-[200px]"
+              lightTheme="nord"
+              darkTheme="vitesse-dark"
+              commandMap={{
+                curl: `${getWebhookUrl?.url}`,
+              }}
+            />
+            
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Spinner size="sm" />
+            </div>
+          )}
         </motion.div>
       </CardContent>
 

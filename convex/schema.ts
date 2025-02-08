@@ -70,14 +70,14 @@ export default defineSchema(
         })),
         isActive: v.boolean(),
         lastCalled: v.optional(v.number()), // Unix timestamp
-      }),
+      }).index('by_node', ['nodeId']),
     webhookEvents: defineTable({
         
         nodeId:v.id("nodes"),
         payload: v.any(),
         processedAt: v.number(),
         
-      }),
+      }).index('by_node', ['nodeId']),
   },
   
   // If you ever get an error about schema mismatch

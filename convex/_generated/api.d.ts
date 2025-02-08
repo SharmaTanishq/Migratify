@@ -25,7 +25,6 @@ import type * as myFunctions from "../myFunctions.js";
 import type * as projects from "../projects.js";
 import type * as webhooks_events from "../webhooks/events.js";
 import type * as webhooks_index from "../webhooks/index.js";
-import type * as webhooks_webhookHttp from "../webhooks/webhookHttp.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -48,7 +47,6 @@ declare const fullApi: ApiFromModules<{
   projects: typeof projects;
   "webhooks/events": typeof webhooks_events;
   "webhooks/index": typeof webhooks_index;
-  "webhooks/webhookHttp": typeof webhooks_webhookHttp;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

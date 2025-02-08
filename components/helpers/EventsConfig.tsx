@@ -140,7 +140,7 @@ export function EventsConfig({
                 <FormControl key={event.id}>
                   <FormItem className="flex items-center justify-between p-1">
                     <FormLabel className="text-[10px] text-gray-500 font-normal">
-                      {event.id}
+                      {event.label}
                     </FormLabel>
                     <FormControl>
                       <Switch

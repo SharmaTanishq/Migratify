@@ -70,6 +70,7 @@ export const getWebhookUrl = query({
     nodeId: v.id("nodes"),
   },
   handler: async (ctx, args) => {
+    
     return ctx.db.query("webhooks").filter((q) => q.eq(q.field("nodeId"), args.nodeId)).first();
   },
 });

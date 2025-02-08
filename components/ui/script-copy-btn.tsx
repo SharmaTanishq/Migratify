@@ -6,13 +6,12 @@ import { Check, Copy } from "lucide-react";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
 import { HTMLAttributes, useEffect, useState } from "react";
-import { codeToHtml } from "shiki";
 
 interface ScriptCopyBtnProps extends HTMLAttributes<HTMLDivElement> {
   showMultiplePackageOptions?: boolean;
   codeLanguage: string;
-  lightTheme?: string;
-  darkTheme?: string;
+  lightTheme: string;
+  darkTheme: string;
   commandMap: Record<string, string>;
   className?: string;
 }
@@ -35,13 +34,14 @@ export function ScriptCopyBtn({
   useEffect(() => {
     async function loadHighlightedCode() {
       try {
+        const { codeToHtml } = await import("shiki");
         const highlighted = await codeToHtml(command, {
           lang: codeLanguage,
           themes: {
             light: lightTheme,
             dark: darkTheme,
           },
-          defaultColor: "#000000",
+          defaultColor: theme === "dark" ? "dark" : "light",
         });
         setHighlightedCode(highlighted);
       } catch (error) {
@@ -62,12 +62,12 @@ export function ScriptCopyBtn({
   return (
     <div
       className={cn(
-        "mx-auto flex max-w-md items-center justify-center",
+        " flex max-w-md items-center justify-start",
         className,
       )}
     >
-      <div className="w-full space-y-1 mt-0">
-        <div className="mb-2 flex items-center justify-between">
+      <div className="w-full ">
+        <div className=" flex items-start justify-between mt-0">
           {showMultiplePackageOptions && (
             <div className="relative">
               <div className="inline-flex overflow-hidden rounded-md border border-border text-xs">
@@ -106,39 +106,40 @@ export function ScriptCopyBtn({
             </div>
           )}
         </div>
-        <span className="text-[10px] text-muted-foreground p-0">Webhook URL : </span>
-        <div className="relative flex items-center bg-gray-50 border border-border rounded-md p-1">
-          
-          <div className="min-w-[150px] grow font-mono text-[9px]">
+            <span className="text-[8px] text-gray-500 p-0 mt-0 pl-2">Webhook URL:</span>
+        <div className="relative flex items-center">
+          <div className="min-w-[200px] grow font-mono px-2 pr-0">
             {highlightedCode ? (
               <div
-                className={`overflow-hidden [&>pre]:rounded-md text-gray-600   [&>pre]:font-mono ${
-                  theme === "dark" ? "dark" : "light"
+                className={`[&>pre]:overflow-x-auto [&>pre]:text-ellipsis [&>pre]:rounded-md text-[8px] [&>pre]:p-2 [&>pre]:px-2 [&>pre]:font-mono ${
+                  theme === "light"
                 }`}
                 dangerouslySetInnerHTML={{ __html: highlightedCode }}
               />
             ) : (
-              <pre className="rounded-md border border-border bg-white p-2 px-4  font-mono dark:bg-black">
+              <pre className="rounded-md  border border-border text-white bg-white p-2 px-2 font-mono dark:bg-black">                
                 {command}
               </pre>
+              
             )}
+            
           </div>
           <Button
             variant="ghost"
             size="icon"
-            className="relative ml-2 rounded-md w-6 h-6"
+            className="relative  w-8 h-6 px-1 rounded-sm"
             onClick={copyToClipboard}
             aria-label={copied ? "Copied" : "Copy to clipboard"}
           >
             <span className="sr-only">{copied ? "Copied" : "Copy"}</span>
             <Copy
-              className={`h-2 w-2 transition-all duration-300 ${
-                copied ? "scale-[0]" : "scale-[0.6]"
+              className={`h-4 w-4 transition-all duration-300 ${
+                copied ? "scale-0" : "scale-[0.8]"
               }`}
             />
             <Check
-              className={`absolute inset-0 m-auto h-2 w-2 transition-all duration-300 ${
-                copied ? "scale-[0.6]" : "scale-[0]"
+              className={`absolute inset-0 m-auto h-4 w-4 transition-all duration-300 ${
+                copied ? "scale-[0.8]" : "scale-0"
               }`}
             />
           </Button>

@@ -22,7 +22,7 @@ import { Handle, Position, useEdges, useNodes } from "@xyflow/react";
 import useStore from "@/components/Store/store";
 import { useQuery } from "convex/react";
 import Image from "next/image";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 
 function OutputNode({
   data,
@@ -36,21 +36,38 @@ function OutputNode({
   const UIData = JSON.parse(data.UIData);
   const edges = useEdges();
   const nodes = useNodes();
-
+  const [code, setCode] = useState(
+    JSON.stringify({ getStartedBy: "Connecting to a source" }, null, 2)
+  );
   //Migrate this to useStore.
   const sourceNode = edges
-  .filter((edge) => edge.target === id)
-  .map((edge) => nodes.find((node) => node.id === edge.source))[0];
-
-  const parentNode = useStore((state) => state.getNode(sourceNode?.id as string));
+    .filter((edge) => edge.target === id)
+    .map((edge) => nodes.find((node) => node.id === edge.source))[0];
 
   
-  const getWebhookEvents = useQuery(api.webhooks.events.getWebhookEvents,{
-    nodeId:parentNode?._id as Id<"nodes">
-  })
-  
-  const code = JSON.stringify(getWebhookEvents?.payload,null, 2);
-  
+  const parentNode = useStore((state) =>
+    state.getNode(sourceNode?.id as string)
+  );
+
+  useEffect(()=>{
+    if(parentNode){
+      setCode(JSON.stringify({ event: "Waiting for an event" }, null, 2))
+    }
+  },[parentNode])
+
+  const webhookEvents = useQuery(
+    api.webhooks.events.getWebhookEvents,
+    parentNode?._id ? { nodeId: parentNode._id } : "skip"
+  );
+
+  useEffect(() => {
+    
+    if (webhookEvents !== null && webhookEvents !== undefined) {
+      setCode(JSON.stringify(webhookEvents?.payload, null, 2));
+    }
+  }, [webhookEvents]);
+
+
 
   return (
     <Card
@@ -80,7 +97,7 @@ function OutputNode({
                 variant="ghost"
                 size="icon"
                 onClick={() => {
-                  console.log("Run Component");
+                  console.log("Wil be adding notifications here");
                 }}
                 asChild
                 className="transition-colors duration-200 w-6 h-6 "
@@ -107,16 +124,20 @@ function OutputNode({
       </CardHeader>
       <Separator />
       <CardContent className="flex flex-col  w-full justify-center items-center h-full p-2">
-        {code ? (
+        
           <CodeBlock
             language="json"
             filename=""
             highlightLines={[9, 13, 14, 18]}
             code={code}
           />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center p-4">
-            <p className="text-gray-500 text-center max-w-[30ch]">Trigger an event to see data</p>
+       
+        {webhookEvents && (
+          <div className="w-full h-full flex items-center justify-start p-1">
+            <p className="text-gray-500 text-center  text-[10px]">
+              Event received at:{" "}
+              {new Date(webhookEvents.processedAt).toLocaleString()}
+            </p>
           </div>
         )}
       </CardContent>
@@ -125,7 +146,7 @@ function OutputNode({
           <Handle
             type="target"
             id="input"
-        position={Position.Left}
+            position={Position.Left}
             style={DEFAULT_HANDLE_STYLE_SOURCE}
           />
         </TooltipTrigger>

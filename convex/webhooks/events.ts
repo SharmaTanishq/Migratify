@@ -6,6 +6,7 @@ export const getWebhookEvents = query({
         nodeId:v.id("nodes")
     },
     handler:async(ctx,args)=>{
+        if(args.nodeId === null || undefined) return null;
         return ctx.db.query("webhookEvents")
             .filter((q) => q.eq(q.field("nodeId"), args.nodeId))
             .order("desc")

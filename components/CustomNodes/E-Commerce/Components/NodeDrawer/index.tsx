@@ -24,7 +24,7 @@ function NodeDrawer({ isOpen, onClose, nodeData,nodeId }: NodeDrawerProps) {
   const node = useStore((state)=>state.getNode(nodeId));
   const [id,setId] = useState("");
   useEffect(()=>{
-    setId(node._id)
+    setId(node?._id)
   },[node])
 
   return (
