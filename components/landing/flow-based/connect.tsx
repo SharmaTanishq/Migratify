@@ -21,6 +21,7 @@ import { CustomerFileNode } from "@/components/FileUploadNode/CustomerFile";
 import "@xyflow/react/dist/style.css";
 import { useDnD } from "@/components/AddNodes/DnDContext";
 import { DockDemo } from "@/app/(dashboard)/dock";
+import Bridges from "@/components/CustomNodes/Bridges";
 
 const initialNodes = [
   { id: "1", type: "vtexNode", position: { x: 0, y: 0 }, data: { label: "Vtex " } },
@@ -44,11 +45,12 @@ const Connect = () => {
 
   const nodeTypes = useMemo(
     () => ({
-      vtexNode: VtexCommerceNode,
+      vtexNode: VtexCommerceNode, 
       fileUploadNode: FileUploadNode,
       categoryFileNode: CategoryFileNode,
       customerFileNode: CustomerFileNode,
       inventoryFileNode: InventoryFileNode,
+      bridgeNode: Bridges,
     }),
     []
   );

@@ -59,7 +59,27 @@ export default defineSchema(
       edges: v.array(v.any()),
     })
       .index('by_project', ['projectId']),
+    webhooks: defineTable({
+        projectId: v.string(),
+        nodeId: v.string(),
+        secret: v.string(),
+        url: v.string(),
+        events: v.array(v.object({
+            event:v.string(),
+            isActive:v.boolean()
+        })),
+        isActive: v.boolean(),
+        lastCalled: v.optional(v.number()), // Unix timestamp
+      }).index('by_node', ['nodeId']),
+    webhookEvents: defineTable({
+        
+        nodeId:v.id("nodes"),
+        payload: v.any(),
+        processedAt: v.number(),
+        
+      }).index('by_node', ['nodeId']),
   },
+  
   // If you ever get an error about schema mismatch
   // between your data and your schema, and you cannot
   // change the schema to match the current data in your database,

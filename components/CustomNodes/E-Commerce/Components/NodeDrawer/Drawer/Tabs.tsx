@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import useStore from "@/components/Store/store";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
 import {
@@ -25,13 +25,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "sonner";
 
 import { useForm } from "react-hook-form";
 import { Id } from "@/convex/_generated/dataModel";
 
 interface DrawerTabsProps {
   children?: React.ReactNode;
-  nodeId: Id<"nodes">;
+  nodeId?: Id<"nodes">;
   nodeType?: string;
   nodeName?: string;
 }
@@ -315,17 +316,33 @@ export function DrawerTabs({ nodeId }: DrawerTabsProps) {
   const saveNodeConfigurations = useMutation(
     api.flows.node.data.saveNodeConfigurations
   );
+  const getNodeConfigurations = useQuery(
+    api.flows.node.data.getNodeConfigurations,
+    {
+      nodeId: nodeId!,
+    }
+  );
 
+  React.useEffect(()=>{
+    
+      form.setValue("appKey", getNodeConfigurations?.configurations?.appKey);
+      form.setValue("apiKey", getNodeConfigurations?.configurations?.apiKey);
+      form.setValue("baseUrl", getNodeConfigurations?.configurations?.baseUrl);
+    
+  },[getNodeConfigurations]);
   const form = useForm();
 
   const onSubmit = (event: any) => {
     saveNodeConfigurations({
-      nodeId: nodeId,
+      nodeId: nodeId!,
       configurations: {
         appKey: form.getValues("appKey"),
         apiKey: form.getValues("apiKey"),
         baseUrl: form.getValues("baseUrl"),
       },
+    }).then(()=>{
+      toast.success("Node configurations saved successfully");
+
     });
   };
 
