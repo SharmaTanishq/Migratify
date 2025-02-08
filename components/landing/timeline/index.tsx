@@ -14,7 +14,7 @@ export function TimelineSection() {
           
           <div >
             <Image
-              src={"/images/integrate.png"}
+              src={"https://res.cloudinary.com/dzi0wmfo3/image/upload/v1739049116/Integrate_b8d157c6f2.png"}
               alt="startup template"
               width={1000}
               height={1000}
@@ -32,7 +32,7 @@ export function TimelineSection() {
          
           <div >
             <Image
-              src={"/images/withBridges.png"}
+              src={"https://res.cloudinary.com/dzi0wmfo3/image/upload/v1739049117/with_Bridges_ce55a1bc97.png"}
               alt="hero template"
               width={2000}
               height={2000}
@@ -40,6 +40,7 @@ export function TimelineSection() {
             />
            
           </div>
+          <p className="text-xs md:text-sm font-normal mb-8 mt-4">Integrations are in development*</p>
         </div>
       ),
     },
