@@ -25,8 +25,9 @@ module.exports = {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			dashboard: 'hsl(var(--dashboard-background))',
+  			primaryGray:"var(--text-gray)",
   			text: {
-  				'primary': 'hsl(var(--text-primary))'
+  				'primary': 'hsl(var(--text-primary))',
   			},
   			color: {
   				'primary-black': 'hsl(var(--text-primary-black))'
