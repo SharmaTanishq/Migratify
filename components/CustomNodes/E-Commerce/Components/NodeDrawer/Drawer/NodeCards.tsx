@@ -6,9 +6,9 @@ import { motion } from "framer-motion"
 import { cva } from "class-variance-authority"
 import Image from "next/image"
 import { FlowType, NodeDataType } from "@/components/Types/Flows"
-import useDragStart from "../hooks/use-on-drag-start"
+import useDragStart from "@/components/Connections/Components/hooks/use-on-drag-start"
 
-import {  NodeData } from "../../../CMS/types";
+import { NodeData } from "@/components/CMS/types"
 
 interface NodeCardProps {
   title: string

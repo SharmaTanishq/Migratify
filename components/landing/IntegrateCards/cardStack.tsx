@@ -39,11 +39,11 @@ export default function Bridges(){
         <div className="flex  items-end h-[200px]">
             {cards.length > 0 && (
             <CardStack
-                
+                // @ts-ignore
                 items={cards}
-            >
+            />
                 
-            </CardStack>
+            
             )}
         </div>
         </>
