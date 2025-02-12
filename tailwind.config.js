@@ -19,15 +19,15 @@ module.exports = {
   	extend: {
   		colors: {
   			border: 'hsl(var(--border))',
-			borderSelected: 'hsl(var(--flow-border-color-selected))',
+  			borderSelected: 'hsl(var(--flow-border-color-selected))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			dashboard: 'hsl(var(--dashboard-background))',
-  			primaryGray:"var(--text-gray)",
+  			primaryGray: 'var(--text-gray)',
   			text: {
-  				'primary': 'hsl(var(--text-primary))',
+  				primary: 'hsl(var(--text-primary))'
   			},
   			color: {
   				'primary-black': 'hsl(var(--text-primary-black))'
@@ -221,10 +221,19 @@ module.exports = {
   					bottom: '50%',
   					right: '25%'
   				}
+  			},
+  			orbit: {
+  				'0%': {
+  					transform: 'rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg))'
+  				},
+  				'100%': {
+  					transform: 'rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg))'
+  				}
   			}
   		},
   		animation: {
-  			gradient: 'animatedgradient 6s ease infinite alternate'
+  			gradient: 'animatedgradient 6s ease infinite alternate',
+  			orbit: 'orbit calc(var(--duration)*1s) linear infinite'
   		},
   		backgroundSize: {
   			'300%': '300%'

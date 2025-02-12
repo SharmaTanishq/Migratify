@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 
 import { useRouter } from "next/navigation";
@@ -7,16 +8,29 @@ import Connect from "@/components/landing/flow-based/connect";
 import { ReactFlowProvider } from "@xyflow/react";
 import { DnDProvider } from "@/components/AddNodes/DnDContext";
 import { Joinwaitlist } from "@/components/landing/joinwaitlist";
-import { FlipWords } from "@/components/ui/flip-words";
+
 
 import { TimelineSection } from "@/components/landing/timeline";
 
-import { SparklesText } from "@/components/ui/sparkles-text";
-import GridPattern from "@/components/ui/grid-pattern";
+
 import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Image from "next/image";
+import { OrbitingCirclesDemo } from "@/components/landing/IntegrateCards/iconCircle";
+import { OrdersList } from "@/components/landing/MigrateSection/orders-list";
+import Bridges from "@/components/landing/IntegrateCards/cardStack";
 
-const Signout = () => {
+
+const Signout = ({bridgesData}:any) => {
+    
   const router = useRouter();
   const words = [
     "faster",
@@ -27,19 +41,18 @@ const Signout = () => {
     "smarter",
   ];
   return (
-    <div className="flex flex-col w-full max-w-6xl mx-auto justify-center items-center py-10 border-l border-r border-background">
-      <section className="w-full">
-        <div className="relative max-w-6xl p-4 pl-10 md:py-20 gap-8 flex flex-col w-full h-full bg-white rounded-2xl border border-gray-300 overflow-hidden">
-        <InteractiveGridPattern
-              className={cn(
-                "[mask-image:radial-gradient(700px_circle_at_right,white,transparent)]",
-                "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 right-5 "
-              )}
-              width={80}
-              height={80}
-            />
+    <div className="container-grid ">
+      <section className="w-full mt-10">
+        <div className="relative max-w-7xl mx-auto p-4 pl-10 md:py-20 gap-8 flex flex-col w-full h-full bg-white rounded-2xl border border-gray-300 overflow-hidden">
+          <InteractiveGridPattern
+            className={cn(
+              "[mask-image:radial-gradient(700px_circle_at_right,white,transparent)]",
+              "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 right-5 "
+            )}
+            width={80}
+            height={80}
+          />
           <div className="flex flex-col h-full  justify-start items-start  ">
-            
             <div className="inline-flex items-center mb-6 gap-2 px-4 py-2 rounded-full bg-background border shadow-sm border-white/10 text-sm">
               <span>Effortless Migration, Instant Integration</span>
               <ArrowRight className="w-4 h-4" />
@@ -65,36 +78,156 @@ const Signout = () => {
           </div>
         </div>
       </section>
-
+      {/* Section two Integrate*/}
+      <section>
+        <div className="w-full rounded-2xl p-4 md:py-20 overflow-hidden ">
+          <div className="flex flex-col justify-center items-center gap-5">
+            <div className="flex flex-col justify-center items-center gap-8 ">
+              <Badge className="bg-white rounded-full border border-white/10 text-sm text-black">
+                <span className="text-black font-normal">Integrate</span>
+              </Badge>
+              <h1 className="text-4xl md:text-5xl font-mono">
+                With Us, Integrations are easier
+              </h1>
+              <p className="text-sm md:text-base text-primaryGray">
+                Effortless Orchestration for developers & business owners{" "}
+              </p>
+            </div>
+            <div className="grid md:grid-cols-3 grid-cols-1 w-full p-4 gap-4">
+              <Card className="overflow-hidden border border-gray-300 ">
+                <CardHeader>
+                  
+                  <CardTitle>Select your platform</CardTitle>
+                  <CardDescription>
+                    Pick a platform that you want to extend.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-sm md:text-base text-primaryGray max-h-[300px]">
+                    <OrbitingCirclesDemo />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Use our pre-built bridges</CardTitle>
+                  <CardDescription>
+                    Want to use an event that triggers your workflow or run a
+                    batch job? we got you!
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex items-center justify-center h-full  max-h-[300px]" >
+                        <Bridges />
+                    </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Choose what to do</CardTitle>
+                  <CardDescription>
+                    Trigger an email or send your data to an ERP
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* Section Three Migrate*/}
+      <section>
+        <div className="w-full rounded-2xl p-4 md:py-20 overflow-hidden ">
+          <div className="flex flex-col justify-center items-center gap-10">
+            <div className="flex flex-col justify-center items-center gap-8">
+              <Badge className="bg-white rounded-full border border-white/10 text-sm text-black">
+                <span className="text-black font-normal">Migrate</span>
+              </Badge>
+              <h1 className="text-4xl md:text-5xl font-mono">
+                Take control of your business
+              </h1>
+              <p className="text-sm md:text-base text-primaryGray">
+                E-commerce migrations don’t have to take months. Do it faster
+                with Bridgeflow.{" "}
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 grid-cols-1 w-full p-4 gap-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Migrate Products</CardTitle>
+                  <CardDescription>
+                    Migrate your products from one platform to another.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Migrate Orders</CardTitle>
+                  <CardDescription>
+                    Migrate your orders from one platform to another.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="max-h-[310px] overflow-hidden ">
+                    <OrdersList />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Migrate Customers</CardTitle>
+                  <CardDescription>
+                    Migrate your customers from one platform to another.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Migrate Inventory</CardTitle>
+                  <CardDescription>
+                    Migrate your inventory from one platform to another.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
+            <span className="text-4xl font-mono text-black">
+              .... and so much more
+            </span>
+          </div>
+        </div>
+      </section>
       {/* Section Two Bento Grid*/}
-      <div className="flex flex-col justify-center items-center w-full  mt-10 ">
-        <div className="text-4xl md:text-6xl mx-auto font-normal text-center bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent   p-4">
-          Build
-          <FlipWords words={words} className=" font-semibold " />
+      <section>
+        <div className="flex flex-col justify-center items-center w-full  mt-10 gap-10 ">
+          <div className="flex flex-col justify-center items-center gap-8">
+            <Badge className="bg-white rounded-full border border-white/10 text-sm text-black">
+              <span className="text-black font-normal">Try it out</span>
+            </Badge>
+            <h1 className="text-4xl md:text-5xl font-mono">Try it here</h1>
+          </div>
+
+          <div className="w-full bg-white rounded-2xl   overflow-hidden ">
+            <ReactFlowProvider>
+              <DnDProvider>
+                <Connect />
+              </DnDProvider>
+            </ReactFlowProvider>
+          </div>
         </div>
+      </section>
 
-        <div className="w-full ">
-          <ReactFlowProvider>
-            <DnDProvider>
-              <Connect />
-            </DnDProvider>
-          </ReactFlowProvider>
+      <section>
+        <div
+          id="bridgeflow"
+          className="w-full flex flex-col justify-center items-center md:mt-10 bg-white rounded-2xl p-4  overflow-hidden "
+        >
+          <TimelineSection />
         </div>
-      </div>
-
-      <div
-        id="bridgeflow"
-        className="w-full flex flex-col justify-center items-center md:mt-10 "
-      >
-        <TimelineSection />
-      </div>
-
+      </section>
       {/* Section four Request demo */}
-      <Joinwaitlist />
-
+      <section>
+        <Joinwaitlist />
+      </section>
       {/* Footer */}
 
-      <footer className="w-full mt-10 py-2 border-t">
+      <footer className="w-full mt-10 py-2 ">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <p className="text-sm text-gray-500">
             &copy; 2024 BridgeFlow. All rights reserved.
