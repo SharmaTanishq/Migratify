@@ -17,17 +17,21 @@ import Signout from "./Signout";
 import { NavigationMenuLinks } from "@/components/NavigationMenu";
 import Link from "next/link";
 import Image from "next/image";
+import { getBridges } from "@/components/CMS/api";
+
+
 
 export default function Home() {
+  //const bridgesData = await getBridges();
   return (
     <>
       <StickyHeader className="px-4 py-2">
         <div className="flex justify-center items-center   ">
-        <div className="flex justify-between items-center w-full max-w-6xl px-2 md:px-0"> 
+        <div className="flex justify-between items-center w-full max-w-7xl px-4 md:px-4 md:py-3 bg-white rounded-2xl border border-background shadow-sm"> 
          <h1 className="text-xl md:text-2xl font-bold">
           <Link href="/" className="flex items-center gap-1 md:gap-2">
             <Image src="/icons/Bridgeflow.svg" alt="Bridgeflow" width={24} height={24} className="shadow-lg md:w-[30px] md:h-[30px]" />
-            <span className="hidden sm:inline">BridgeFlow</span>
+            <span className="hidden sm:inline font-mono">Bridgeflow</span>
           </Link>
           </h1>
 
@@ -40,9 +44,8 @@ export default function Home() {
           </div>
         </div>
       </StickyHeader>
-      
-        
-          <Signout />
+              
+        <Signout  />
         
         
       
@@ -67,4 +70,5 @@ function SignInAndSignUpButtons() {
     </div>
   );
 }
+
 
