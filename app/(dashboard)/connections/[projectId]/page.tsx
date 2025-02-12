@@ -8,7 +8,6 @@ import { ReactFlow, Controls, useReactFlow } from "@xyflow/react";
 import { useDnD } from "@/components/AddNodes/DnDContext";
 import "@xyflow/react/dist/style.css";
 
-
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
@@ -33,6 +32,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useEdgeDelete } from "@/components/hooks/useEdgeDelete";
 import CustomEdge from "@/components/CustomEdge";
 import Output from "@/components/CustomNodes/Output";
+import Mail from "@/components/CustomNodes/Mail";
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -53,7 +53,7 @@ const nodeTypes = {
   // pimNode: PIM,
   // crmNode: CRM,
   // erpNode: ERP,
-  // mailNode: Mail,
+  mailNode: Mail,
   // paymentNode: Payment,
   // shippingNode: Shipping,
   // socialNode: Social,
@@ -85,8 +85,10 @@ export default function Page() {
   const addNodeMutation = useMutation(api.flows.nodes.addNode);
   const addEdgeMutation = useMutation(api.flows.edges.addEdge);
   const updateNodesMutation = useMutation(api.flows.nodes.updateNodes);
-  const updateNodePositionMutation = useMutation(api.flows.node.updateNode.updateNodePosition);
-  const {deleteEdge} = useEdgeDelete(projectId);
+  const updateNodePositionMutation = useMutation(
+    api.flows.node.updateNode.updateNodePosition
+  );
+  const { deleteEdge } = useEdgeDelete(projectId);
 
   const { deleteNode } = useNodeDelete(projectId);
 
@@ -173,66 +175,62 @@ export default function Page() {
     [screenToFlowPosition, type, nodes]
   );
 
-  const onNodeDragStop = useCallback((event: any,nodes:any) => {
-    
-    
-    
-    if (nodes._id) {
-      updateNodePositionMutation({
-        nodeId: nodes._id,
-        position: {
-          x: nodes.position.x,
-          y: nodes.position.y,
-        },
-      });
-    }
-    // updateNodesMutation({
-    //   nodes:event
-    // })
-  }, [nodes]);
+  const onNodeDragStop = useCallback(
+    (event: any, nodes: any) => {
+      if (nodes._id) {
+        updateNodePositionMutation({
+          nodeId: nodes._id,
+          position: {
+            x: nodes.position.x,
+            y: nodes.position.y,
+          },
+        });
+      }
+      // updateNodesMutation({
+      //   nodes:event
+      // })
+    },
+    [nodes]
+  );
 
   const onEdgeConnect = useCallback(
     (event: any) => {
-
-
       addEdgeMutation({
         projectId: projectId,
         source: event.source,
         target: event.target,
         sourceHandle: event.sourceHandle,
         targetHandle: event.targetHandle,
-      }).then((res)=>{
+      }).then((res) => {
         addEdge({
-          id:res.edgeId,
+          id: res.edgeId,
           projectId: projectId,
           source: event.source,
           target: event.target,
           sourceHandle: event.sourceHandle,
           targetHandle: event.targetHandle,
-        })
+        });
       });
-
     },
     [edges]
   );
 
-  const onEdgeDelete = useCallback((edges:Edge[])=>{
-    console.log(edges); 
-     edges.forEach((edge)=>{
-      deleteEdge(edge.id);
-     })
-   
-  },[edges])
+  const onEdgeDelete = useCallback(
+    (edges: Edge[]) => {
+      console.log(edges);
+      edges.forEach((edge) => {
+        deleteEdge(edge.id);
+      });
+    },
+    [edges]
+  );
 
   const handleNodeClick = useCallback((event: any, node: any) => {
     setSelectedNode(node);
-    
   }, []);
 
   const handleNodeDelete = useCallback((node: any) => {
     deleteNode(node[0]._id);
-
-    
   }, []);
 
   const handleNodeMouseEnter = useCallback((event: any, node: any) => {}, []);
@@ -246,13 +244,11 @@ export default function Page() {
           onNodesChange={onNodesChange}
           onNodeMouseEnter={handleNodeMouseEnter}
           onEdgesChange={onEdgesChange}
-          
           onNodeClick={handleNodeClick}
           onNodesDelete={handleNodeDelete}
           //onDragEnd={onNodeDragStop}
           onNodeDragStop={onNodeDragStop}
           onConnect={onEdgeConnect}
-          
           onEdgesDelete={onEdgeDelete}
           nodeTypes={nodeTypes}
           //edgeTypes={edgeType}
@@ -288,7 +284,7 @@ export default function Page() {
         <AddNodeDrawer
           isOpen={isPanelOpen}
           onClose={() => setIsPanelOpen(false)}
-          nodeData={selectedNode} 
+          nodeData={selectedNode}
         />
       </div>
     </div>
