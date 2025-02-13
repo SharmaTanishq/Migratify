@@ -31,7 +31,7 @@ export async function strapiAPI(
     const queryString = qs.stringify(urlParamsObject);
     
     const requestUrl = `${getFullUrl(path)}${queryString ? `?${queryString}` : ''}`;
-
+    
     // Trigger API call
     const response = await fetch(requestUrl, mergedOptions);
     const data = await response.json();

@@ -27,6 +27,8 @@ import Image from "next/image";
 import { OrbitingCirclesDemo } from "@/components/landing/IntegrateCards/iconCircle";
 import { OrdersList } from "@/components/landing/MigrateSection/orders-list";
 import Bridges from "@/components/landing/IntegrateCards/cardStack";
+import IntegrationCards from "@/components/landing/IntegrateCards/integrationCards";
+import ProductCard from "@/components/landing/MigrateSection/product-cards";
 
 
 const Signout = ({bridgesData}:any) => {
@@ -116,10 +118,10 @@ const Signout = ({bridgesData}:any) => {
                     batch job? we got you!
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <div className="flex items-center justify-center h-full  max-h-[300px]" >
+                <CardContent className="flex items-center h-[350px] md:h-full ">
+                    
                         <Bridges />
-                    </div>
+                    
                 </CardContent>
               </Card>
               <Card>
@@ -129,6 +131,11 @@ const Signout = ({bridgesData}:any) => {
                     Trigger an email or send your data to an ERP
                   </CardDescription>
                 </CardHeader>
+                <CardContent className="h-[350px] md:h-full  overflow-hidden">
+                    
+                        <IntegrationCards />
+                    
+                </CardContent>
               </Card>
             </div>
           </div>
@@ -157,6 +164,9 @@ const Signout = ({bridgesData}:any) => {
                   <CardDescription>
                     Migrate your products from one platform to another.
                   </CardDescription>
+                  <CardContent className="  ">
+                    <ProductCard />
+                  </CardContent>
                 </CardHeader>
               </Card>
               <Card>
@@ -213,14 +223,14 @@ const Signout = ({bridgesData}:any) => {
         </div>
       </section>
 
-      <section>
+      {/* <section>
         <div
           id="bridgeflow"
           className="w-full flex flex-col justify-center items-center md:mt-10 bg-white rounded-2xl p-4  overflow-hidden "
         >
           <TimelineSection />
         </div>
-      </section>
+      </section> */}
       {/* Section four Request demo */}
       <section>
         <Joinwaitlist />

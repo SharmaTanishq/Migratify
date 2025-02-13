@@ -18,6 +18,37 @@ export async function getNodes(params = {}) {
       return data;
 }
 
+export async function getIntegrations(params = {}){
+    const data = await strapiAPI('allnodes', {
+        populate: {
+            nodes: {
+                populate: {
+                    Node: {
+                        populate: ['node_logo']
+                    }
+                }
+            }
+        },
+        filters: {
+            $or: [
+                {
+                    Name: {
+                        $eq: 'ERPs'
+                    }
+                },
+                {
+                    Name: {
+                        $eq: 'E-Mail'  
+                    }
+                }
+            ]
+        },
+        ...params,
+    });
+    
+    return data;
+}
+
 export async function getBridges(params = {}){
     const data = await strapiAPI('allnodes', {
         populate: {
