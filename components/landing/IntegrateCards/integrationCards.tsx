@@ -1,4 +1,4 @@
-
+"use client"
 import {  getIntegrations } from "@/components/CMS/api";
 
 

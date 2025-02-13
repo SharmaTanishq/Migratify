@@ -5,6 +5,7 @@ import { ConvexClientProvider } from "./ConvexClientProvider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Poppins } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -43,7 +44,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <TooltipProvider>
             {children}
+            </TooltipProvider>
           </ThemeProvider>
         </ConvexClientProvider>
       </body>

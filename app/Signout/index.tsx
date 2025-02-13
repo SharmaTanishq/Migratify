@@ -1,5 +1,5 @@
 
-import { ArrowRight, Dna, Flame, FlameIcon } from "lucide-react";
+import { ArrowRight, Dna,  FlameIcon } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 
@@ -8,9 +8,6 @@ import Connect from "@/components/landing/flow-based/connect";
 import { ReactFlowProvider } from "@xyflow/react";
 import { DnDProvider } from "@/components/AddNodes/DnDContext";
 import { Joinwaitlist } from "@/components/landing/joinwaitlist";
-
-
-import { TimelineSection } from "@/components/landing/timeline";
 
 
 import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
@@ -23,7 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
+
 import { OrbitingCirclesDemo } from "@/components/landing/IntegrateCards/iconCircle";
 import { OrdersList } from "@/components/landing/MigrateSection/orders-list";
 import Bridges from "@/components/landing/IntegrateCards/cardStack";
@@ -82,7 +79,7 @@ const Signout = ({bridgesData}:any) => {
       </section>
       {/* Section two Integrate*/}
       <section>
-        <div className="w-full rounded-2xl md:p-4 p-2 md:py-20 overflow-hidden ">
+        <div className="w-full rounded-2xl md:py-20 overflow-hidden ">
           <div className="flex flex-col justify-center items-center gap-5">
             <div className="flex flex-col justify-center items-center gap-8 ">
               <Badge className="bg-white rounded-full border border-white/10 text-sm text-black gap-2">
@@ -96,7 +93,7 @@ const Signout = ({bridgesData}:any) => {
                 Effortless Orchestration for developers & business owners{" "}
               </p>
             </div>
-            <div className="grid md:grid-cols-3 grid-cols-1 w-full md:p-4 p-1 gap-4">
+            <div className="grid md:grid-cols-3 grid-cols-1 w-full   gap-4">
               <Card className="overflow-hidden border border-gray-300 ">
                 <CardHeader>
                   
@@ -144,7 +141,7 @@ const Signout = ({bridgesData}:any) => {
       </section>
       {/* Section Three Migrate*/}
       <section>
-        <div className="w-full rounded-2xl md:p-4 p-2 md:py-20 overflow-hidden ">
+        <div className="w-full rounded-2xl   md:py-20 overflow-hidden ">
           <div className="flex flex-col justify-center items-center gap-10">
             <div className="flex flex-col justify-center items-center gap-8">
               <Badge className="bg-white rounded-full border border-white/10 text-sm text-black gap-2">
@@ -160,7 +157,7 @@ const Signout = ({bridgesData}:any) => {
                 with Bridgeflow.{" "}
               </p>
             </div>
-            <div className="grid md:grid-cols-2 grid-cols-1 w-full md:p-4 gap-4">
+            <div className="grid md:grid-cols-2 grid-cols-1 w-full  gap-4">
               <Card>
                 <CardHeader>
                   <CardTitle>Migrate Products</CardTitle>
@@ -207,7 +204,7 @@ const Signout = ({bridgesData}:any) => {
         </div>
       </section>
       {/* Section Two Bento Grid*/}
-      <section>
+      {/* <section>
         <div className="flex flex-col justify-center items-center w-full  mt-10 gap-10 ">
           <div className="flex flex-col justify-center items-center gap-8">
             <Badge className="bg-white rounded-full border border-white/10 text-sm text-black">
@@ -216,7 +213,7 @@ const Signout = ({bridgesData}:any) => {
             <h1 className="text-4xl md:text-5xl font-mono">Try it here</h1>
           </div>
 
-          <div className="w-full bg-white rounded-2xl   overflow-hidden ">
+          <div className="w-full  rounded-2xl   overflow-hidden ">
             <ReactFlowProvider>
               <DnDProvider>
                 <Connect />
@@ -224,7 +221,7 @@ const Signout = ({bridgesData}:any) => {
             </ReactFlowProvider>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* <section>
         <div

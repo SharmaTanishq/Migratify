@@ -1,3 +1,4 @@
+"use client"
 import { getBridges } from "@/components/CMS/api";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardStack } from "@/components/ui/card-stack";
