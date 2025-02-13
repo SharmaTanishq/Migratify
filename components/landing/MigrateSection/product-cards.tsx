@@ -16,7 +16,7 @@ export default function ProductCard() {
     const toRef = useRef(null)
 
   return (
-    <div className="flex ">
+    <div className="flex pb-4 md:pb-0">
         <AnimatedBeamDemo />
     </div>
   )

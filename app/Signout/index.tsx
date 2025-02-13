@@ -1,5 +1,5 @@
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Dna, Flame, FlameIcon } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 
@@ -82,20 +82,21 @@ const Signout = ({bridgesData}:any) => {
       </section>
       {/* Section two Integrate*/}
       <section>
-        <div className="w-full rounded-2xl p-4 md:py-20 overflow-hidden ">
+        <div className="w-full rounded-2xl md:p-4 p-2 md:py-20 overflow-hidden ">
           <div className="flex flex-col justify-center items-center gap-5">
             <div className="flex flex-col justify-center items-center gap-8 ">
-              <Badge className="bg-white rounded-full border border-white/10 text-sm text-black">
+              <Badge className="bg-white rounded-full border border-white/10 text-sm text-black gap-2">
+                <Dna className="w-4 h-4" />
                 <span className="text-black font-normal">Integrate</span>
               </Badge>
-              <h1 className="text-4xl md:text-5xl font-mono">
+              <h1 className="text-4xl md:text-5xl font-mono text-center">
                 With Us, Integrations are easier
               </h1>
-              <p className="text-sm md:text-base text-primaryGray">
+              <p className="text-sm md:text-base text-primaryGray text-center">
                 Effortless Orchestration for developers & business owners{" "}
               </p>
             </div>
-            <div className="grid md:grid-cols-3 grid-cols-1 w-full p-4 gap-4">
+            <div className="grid md:grid-cols-3 grid-cols-1 w-full md:p-4 p-1 gap-4">
               <Card className="overflow-hidden border border-gray-300 ">
                 <CardHeader>
                   
@@ -143,28 +144,30 @@ const Signout = ({bridgesData}:any) => {
       </section>
       {/* Section Three Migrate*/}
       <section>
-        <div className="w-full rounded-2xl p-4 md:py-20 overflow-hidden ">
+        <div className="w-full rounded-2xl md:p-4 p-2 md:py-20 overflow-hidden ">
           <div className="flex flex-col justify-center items-center gap-10">
             <div className="flex flex-col justify-center items-center gap-8">
-              <Badge className="bg-white rounded-full border border-white/10 text-sm text-black">
+              <Badge className="bg-white rounded-full border border-white/10 text-sm text-black gap-2">
+                <FlameIcon className="w-4 h-4" />
+                
                 <span className="text-black font-normal">Migrate</span>
               </Badge>
-              <h1 className="text-4xl md:text-5xl font-mono">
+              <h1 className="text-4xl md:text-5xl font-mono text-center ">
                 Take control of your business
               </h1>
-              <p className="text-sm md:text-base text-primaryGray">
+              <p className="text-sm md:text-base text-primaryGray text-center">
                 E-commerce migrations don’t have to take months. Do it faster
                 with Bridgeflow.{" "}
               </p>
             </div>
-            <div className="grid md:grid-cols-2 grid-cols-1 w-full p-4 gap-4">
+            <div className="grid md:grid-cols-2 grid-cols-1 w-full md:p-4 gap-4">
               <Card>
                 <CardHeader>
                   <CardTitle>Migrate Products</CardTitle>
                   <CardDescription>
                     Migrate your products from one platform to another.
                   </CardDescription>
-                  <CardContent className="  ">
+                  <CardContent className="md:p-6 p-2 ">
                     <ProductCard />
                   </CardContent>
                 </CardHeader>
@@ -197,7 +200,7 @@ const Signout = ({bridgesData}:any) => {
                 </CardHeader>
               </Card>
             </div>
-            <span className="text-4xl font-mono text-black">
+            <span className="text-4xl font-mono text-black text-center">
               .... and so much more
             </span>
           </div>
