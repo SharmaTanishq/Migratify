@@ -32,7 +32,7 @@ export default defineSchema(
     nodes:defineTable({
       projectId:v.string(),
       data:v.any(),
-      id:v.string(),
+      id:v.union(v.id("nodes"),v.null()),
       measured:v.object({height:v.number(),width:v.number()}),
       position:v.object({x:v.number(),y:v.number()}),
       type:v.string(),

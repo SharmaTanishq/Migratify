@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { AnimatedList } from "@/components/magicui/animated-list";
 import { Badge } from "@/components/ui/badge";
+import { Package2Icon } from "lucide-react";
 
 interface Item {
   name: string;
@@ -29,10 +30,10 @@ let notifications = [
   {
     name: "Order: #8392741",
     status:"Fulfilled",
-    badegeColor: "bg-green-400",
+    badegeColor: "bg-green-700",
     time: "10m ago",
     icon: "💬",
-    color: "#FFB800", 
+    color: "#FF3D71", 
     amount: "$89",
     date: "2025-02-12",
   },
@@ -76,12 +77,10 @@ const Notification = ({ name, status, badegeColor, icon, color, time, amount, da
       <div className="flex flex-row items-center justify-between gap-3">
         <div className="flex flex-row items-center gap-3">
         <div
-          className="flex size-10 items-center justify-center rounded-2xl"
-          style={{
-            backgroundColor: color,
-          }}
+          className="flex size-10 items-center justify-center rounded-full bg-gray-200"
+          
         >
-          <span className="text-lg">{icon}</span>
+          <Package2Icon className="w-6 h-6  " />
         </div>
         <div className="flex flex-col overflow-hidden">
           <figcaption className="flex flex-row items-center whitespace-pre text-lg font-medium dark:text-white ">

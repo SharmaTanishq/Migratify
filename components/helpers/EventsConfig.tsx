@@ -73,7 +73,7 @@ export function EventsConfig({
   const watch = useWatch({ control: form.control });
 
   const { setEvents } = webhooksStore();
-  const getEvents = webhooksStore((state) => state.getEvents);
+  
 
   const updateEvents = useMutation(api.webhooks.index.updateWebhookEvents);
 
@@ -93,6 +93,7 @@ export function EventsConfig({
       webhook.events.forEach((event: any) => {
         form.setValue(event.event, event.isActive);
       });
+      setEvents(nodeId,webhook.events)
     }
   }, [webhook]);
 

@@ -69,7 +69,9 @@ export type NodeDataType = {
     node: APIClassType;
     subProperty?:NodeSubProperty;
     _id:string;
-    UIData:string;
+    ui:NodeData;
+    configurations:any;
+    secrets:any;
     selected:boolean,
     id: string;
     output_types?: string[];

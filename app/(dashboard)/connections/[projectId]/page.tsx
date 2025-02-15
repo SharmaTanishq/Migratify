@@ -124,7 +124,7 @@ export default function Page() {
     (event: any) => {
       event.preventDefault();
       const data = event.dataTransfer.getData("flow");
-
+      
       // check if the dropped element is valid
       if (!type) {
         return;
@@ -152,25 +152,32 @@ export default function Page() {
         y: event.clientY,
       });
 
-      const newNode = {
-        id: "node" + Math.floor(Math.random() * 10000).toString(),
-        type,
-        position,
-        data: { UIData: data },
-      };
-
-      //@ts-ignore
-      addNode(newNode);
-
       addNodeMutation({
         projectId: projectId,
-        data: newNode.data,
-        id: newNode.id,
-        measured: { height: newNode.position.y, width: newNode.position.x },
-        position: newNode.position,
+        data: { ui: JSON.parse(data), secrets: {}, configurations: {} },
+
+        measured: { height: position.y, width: position.x },
+        position: position,
         //@ts-ignore
         type: type,
+      }).then((res) => {
+        addNode({
+          id: res,
+          type,
+          position,
+          data: { ui: JSON.parse(data), secrets: {}, configurations: {} },
+        });
       });
+
+      // const newNode = {
+      //   id: "node" + Math.floor(Math.random() * 10000).toString(),
+      //   type,
+      //   position,
+      //   data: { UIData: data },
+      // };
+
+      // //@ts-ignore
+      // addNode(newNode);
     },
     [screenToFlowPosition, type, nodes]
   );

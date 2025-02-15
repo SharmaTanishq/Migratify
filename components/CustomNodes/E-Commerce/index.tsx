@@ -43,7 +43,9 @@ function ECommerceNode({
 }): JSX.Element {
   const instance = useReactFlow();
 
-  const UIData: NodeData = JSON.parse(data.UIData);
+  const [componentData,setComponentData] = useState<NodeData>(data.ui || {});
+  
+  
 
   //const [isDrawerOpen, setIsDrawerOpen] = useState(selected);
 
@@ -55,19 +57,19 @@ function ECommerceNode({
   const renderNodeIcon = useCallback(() => {
     return (
       <MemoizedNodeIcon
-        dataType={UIData.Name}
+        dataType={componentData?.Name}
         showNode={true}
-        icon={UIData.node_logo.url}
-        isGroup={!!data.node?.flow}
+        icon={componentData?.node_logo?.url || ""}
+        isGroup={!!data?.node?.flow}
         hasToolMode={false}
       />
     );
-  }, [data.type, data.node?.icon, data.node?.flow]);
+  }, [data?.type, data?.node?.icon, data?.node?.flow]);
 
   const renderNodeName = useCallback(() => {
     return (
       <MemoizedNodeName
-        display_name={UIData.Name}
+        display_name={componentData?.Name || ""}
         selected={selected}
         nodeId={id}
         showNode={true}
@@ -78,12 +80,12 @@ function ECommerceNode({
         setHasChangedNodeDescription={() => {}}
       />
     );
-  }, [data.type, data.node?.icon, data.node?.flow]);
+  }, [data?.type, data?.node?.icon, data?.node?.flow]);
 
   const renderNodeDescription = useCallback(() => {
     return (
       <MemoizedNodeDescription
-        description={UIData.node_description}
+        description={componentData?.node_description || ""}
         selected={selected}
         nodeId={id}
         emptyPlaceholder={""}
@@ -94,11 +96,11 @@ function ECommerceNode({
         editNameDescription={false}
       />
     );
-  }, [data.type, data.node?.icon, data.node?.flow]);
+  }, [data?.type, data?.node?.icon, data?.node?.flow]);
 
   const MemoizedNodeDrawer = useMemo(() => {
     return (
-      selected && <NodeDrawer isOpen={true} nodeData={UIData} nodeId={id} />
+      selected && <NodeDrawer isOpen={true} nodeData={componentData} nodeId={id} />
     );
   }, [selected, id]);
 

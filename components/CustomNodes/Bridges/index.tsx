@@ -51,7 +51,8 @@ function BridgesNode({
   //onConnect?: (event: any) => void;
 }): JSX.Element {
   const instance = useReactFlow();
-  const UIData: NodeData = JSON.parse(data.UIData);
+  const [componentData,setComponentData] = useState<NodeData>(data.ui || {});
+  
 
   const edges = useEdges();
   const nodes = useNodes();
@@ -87,9 +88,7 @@ function BridgesNode({
 
   useEffect(() => {
     if (sourceNode !== undefined) {
-      const sourceNodeData: NodeData = JSON.parse(
-        sourceNode?.data?.UIData as string
-      );
+      const sourceNodeData: NodeData = sourceNode?.data?.ui as NodeData;
       setPlatform(sourceNodeData.Name.toLowerCase() as PlatformType);
     }
   }, [sourceNode]);
@@ -111,14 +110,14 @@ function BridgesNode({
         <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
           <div className="flex items-center justify-start gap-2">
             <Image
-              src={UIData.node_logo.url}
-              alt={UIData.Name}
+              src={componentData?.node_logo?.url || ""}  
+              alt={componentData?.Name || ""}
               width={20}
               height={20}
               className="rounded-sm bg-gray-100 p-1"
             />
             <span className="text-sm font-regular text-gray-600">
-              {UIData.Name}
+              {componentData?.Name || ""}
             </span>
           </div>
 
@@ -159,7 +158,7 @@ function BridgesNode({
         </CardTitle>
 
         <CardDescription className="text-xs text-gray-600 ">
-          {UIData.node_description}
+          {componentData?.node_description || ""}
         </CardDescription>
       </CardHeader>
       <Separator />

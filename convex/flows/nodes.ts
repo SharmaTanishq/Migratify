@@ -22,13 +22,15 @@ export const addNode = mutation({
   args: {
     projectId: v.string(),
     data:v.any(),
-    id:v.string(),
+    
     measured:v.object({height:v.number(),width:v.number()}),
     position:v.object({x:v.number(),y:v.number()}),
     type:v.string() || v.any(),
   },
-  handler: async (ctx, { projectId, data, id, measured, position, type }) => {
-    await ctx.db.insert('nodes', { projectId, data, id, measured, position, type });
+  handler: async (ctx, { projectId, data,  measured, position, type }) => {
+    const response = await  ctx.db.insert('nodes', { projectId, data, id:null, measured, position, type });
+    await ctx.db.patch(response,{id:response});
+    return response;
   }
 })
 
@@ -98,12 +100,12 @@ export const updateNodes = mutation({
     }))
   },
   handler: async (ctx, args) => {
-    // Update each node in parallel
+    // Update each node in parallel 
     await Promise.all(
       args.nodes.map(async (node) => {
         await ctx.db.patch(node._id, {
           data: node.data,
-          id: node.id,
+          //id: node.id,
           measured: node.measured,
           position: node.position,
           type: node.type

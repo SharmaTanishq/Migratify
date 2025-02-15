@@ -39,7 +39,7 @@ function NodeDrawer({ isOpen, onClose, nodeData,nodeId }: NodeDrawerProps) {
               <div className="flex h-9 w-9 items-center rounded gap-2 ">
                 {/* Icon placeholder - you can replace this with actual icon */}
                 
-                  <Image src={nodeData?.node_logo.url!} alt={nodeData?.Name!} width={30} height={30} />
+                  <Image src={nodeData?.node_logo?.url!} alt={nodeData?.Name!} width={30} height={30} />
                 
                 <span className="text-xl font-medium">
                 {nodeData?.Name}

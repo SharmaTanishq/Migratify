@@ -1,5 +1,12 @@
-
-import { ArrowRight, Dna,  FlameIcon } from "lucide-react";
+import {
+  ArrowRight,
+  Box,
+  Dna,
+  FlameIcon,
+  PackageIcon,
+  ShoppingCartIcon,
+  UsersIcon,
+} from "lucide-react";
 
 import { useRouter } from "next/navigation";
 
@@ -8,7 +15,6 @@ import Connect from "@/components/landing/flow-based/connect";
 import { ReactFlowProvider } from "@xyflow/react";
 import { DnDProvider } from "@/components/AddNodes/DnDContext";
 import { Joinwaitlist } from "@/components/landing/joinwaitlist";
-
 
 import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
 import { cn } from "@/lib/utils";
@@ -26,10 +32,9 @@ import { OrdersList } from "@/components/landing/MigrateSection/orders-list";
 import Bridges from "@/components/landing/IntegrateCards/cardStack";
 import IntegrationCards from "@/components/landing/IntegrateCards/integrationCards";
 import ProductCard from "@/components/landing/MigrateSection/product-cards";
+import { Ripple } from "@/components/magicui/ripple";
 
-
-const Signout = ({bridgesData}:any) => {
-    
+const Signout = ({ bridgesData }: any) => {
   const router = useRouter();
   const words = [
     "faster",
@@ -96,15 +101,15 @@ const Signout = ({bridgesData}:any) => {
             <div className="grid md:grid-cols-3 grid-cols-1 w-full   gap-4">
               <Card className="overflow-hidden border border-gray-300 ">
                 <CardHeader>
-                  
                   <CardTitle>Select your platform</CardTitle>
                   <CardDescription>
                     Pick a platform that you want to extend.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-sm md:text-base text-primaryGray max-h-[300px]">
+                  <div className=" text-sm md:text-base text-primaryGray max-h-[300px]">
                     <OrbitingCirclesDemo />
+                   
                   </div>
                 </CardContent>
               </Card>
@@ -117,9 +122,7 @@ const Signout = ({bridgesData}:any) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex items-center h-[350px] md:h-full ">
-                    
-                        <Bridges />
-                    
+                  <Bridges />
                 </CardContent>
               </Card>
               <Card>
@@ -130,9 +133,7 @@ const Signout = ({bridgesData}:any) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="h-[350px] md:h-full  overflow-hidden">
-                    
-                        <IntegrationCards />
-                    
+                  <IntegrationCards />
                 </CardContent>
               </Card>
             </div>
@@ -146,7 +147,7 @@ const Signout = ({bridgesData}:any) => {
             <div className="flex flex-col justify-center items-center gap-8">
               <Badge className="bg-white rounded-full border border-white/10 text-sm text-black gap-2">
                 <FlameIcon className="w-4 h-4" />
-                
+
                 <span className="text-black font-normal">Migrate</span>
               </Badge>
               <h1 className="text-4xl md:text-5xl font-mono text-center ">
@@ -160,7 +161,10 @@ const Signout = ({bridgesData}:any) => {
             <div className="grid md:grid-cols-2 grid-cols-1 w-full  gap-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Migrate Products</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <PackageIcon className="w-6 h-6 text-blue-600 mr-2" />
+                    <h2 className="text-xl font-semibold">Migrate Products</h2>
+                  </CardTitle>
                   <CardDescription>
                     Migrate your products from one platform to another.
                   </CardDescription>
@@ -171,26 +175,43 @@ const Signout = ({bridgesData}:any) => {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Migrate Orders</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <ShoppingCartIcon className="w-6 h-6 text-blue-600 mr-2" />
+                    <h2 className="text-xl font-semibold">Migrate Orders</h2>
+                  </CardTitle>
                   <CardDescription>
                     Migrate your orders from one platform to another.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="max-h-[310px] overflow-hidden ">
-                    <OrdersList />
+                  <OrdersList />
                 </CardContent>
               </Card>
               <Card>
-                <CardHeader>
-                  <CardTitle>Migrate Customers</CardTitle>
+                <CardHeader className="">
+                  <CardTitle className="flex items-center gap-2">
+                    <UsersIcon className="w-6 h-6 text-blue-600 mr-2" />
+                    <h2 className="text-xl font-semibold">Migrate Customers</h2>
+                  </CardTitle>
                   <CardDescription>
                     Migrate your customers from one platform to another.
                   </CardDescription>
                 </CardHeader>
+                {/* <CardContent className="relative flex h-[310px] w-full flex-col items-center justify-end overflow-hidden rounded-lg">
+                  
+                    
+                      <UsersIcon className="z-10 w-32 top-20 h-32 mr-2 bg-[#6366F2] text-white rounded-full p-4" />
+                    
+                    <Ripple mainCircleSize={150} mainCircleOpacity={0.24} numCircles={6} className="absolute inset-0 " />
+                  
+                </CardContent> */}
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Migrate Inventory</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <Box className="w-6 h-6 text-blue-600 mr-2" />
+                    <h2 className="text-xl font-semibold">Migrate Inventory</h2>
+                  </CardTitle>
                   <CardDescription>
                     Migrate your inventory from one platform to another.
                   </CardDescription>
@@ -204,7 +225,7 @@ const Signout = ({bridgesData}:any) => {
         </div>
       </section>
       {/* Section Two Bento Grid*/}
-      {/* <section>
+      <section>
         <div className="flex flex-col justify-center items-center w-full  mt-10 gap-10 ">
           <div className="flex flex-col justify-center items-center gap-8">
             <Badge className="bg-white rounded-full border border-white/10 text-sm text-black">
@@ -221,7 +242,7 @@ const Signout = ({bridgesData}:any) => {
             </ReactFlowProvider>
           </div>
         </div>
-      </section> */}
+      </section>
 
       {/* <section>
         <div
