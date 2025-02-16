@@ -24,6 +24,9 @@ import { useQuery, useAction } from "convex/react";
 import Image from "next/image";
 import { memo, useEffect, useState } from "react";
 import { NodeData } from "@/components/CMS/types";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import webhooksStore from "@/components/Store/webhooks";
 
 function mailNode({
   data,
@@ -34,8 +37,8 @@ function mailNode({
   id: string;
   selected?: boolean;
 }) {
-  const [componentData,setComponentData] = useState<NodeData>(data.ui || {});
-  
+  const [componentData, setComponentData] = useState<NodeData>(data.ui || {});
+
   const edges = useEdges();
   const nodes = useNodes();
   const [code, setCode] = useState(
@@ -50,11 +53,7 @@ function mailNode({
     state.getNode(sourceNode?.id as string)
   );
 
-  useEffect(() => {
-    if (parentNode) {
-      setCode(JSON.stringify({ event: "Waiting for an event" }, null, 2));
-    }
-  }, [parentNode]);
+  const parentEvents = webhooksStore().getEvents(parentNode?._id as string);
 
   const webhookEvents = useQuery(
     api.webhooks.events.getWebhookEvents,
@@ -144,21 +143,24 @@ function mailNode({
       </CardHeader>
       <Separator />
       <CardContent className="flex flex-col  w-full justify-center items-center h-full p-2">
-        <CodeBlock
-          language="json"
-          filename=""
-          highlightLines={[9, 13, 14, 18]}
-          code={code}
-        />
+        
+        <div className="flex flex-col w-full p-2 gap-2">
+          <Label>API Key</Label>
+          <Input placeholder="API Key" />
+        </div>
 
-        {webhookEvents && (
-          <div className="w-full h-full flex items-center justify-start p-1">
-            <p className="text-gray-500 text-center  text-[10px]">
-              Event received at:{" "}
-              {new Date(webhookEvents.processedAt).toLocaleString()}
-            </p>
-          </div>
-        )}
+        {parentEvents &&
+          parentEvents.map((event) => {
+            if (event.isActive) {
+              return (
+                <div className="flex flex-col w-full p-2">
+                  <Label>{event.event}</Label>
+                  <Input placeholder="API Key" />
+                </div>
+              );
+            }
+          })}
+
         <div className="flex w-full space-x-2 p-4 pt-2">
           <Button
             className="flex-1"

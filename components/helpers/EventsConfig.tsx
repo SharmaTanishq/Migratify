@@ -77,16 +77,7 @@ export function EventsConfig({
 
   const updateEvents = useMutation(api.webhooks.index.updateWebhookEvents);
 
-  useEffect(() => {
-    const defaultEvents = events.flatMap((category) =>
-      category.events.map((event) => ({
-        event: event.id,
-        isActive: false,
-      }))
-    );
-
-    setEvents(nodeId, defaultEvents);
-  }, []);
+  
 
   useEffect(() => {
     if (webhook?.events) {

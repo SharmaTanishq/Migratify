@@ -1,15 +1,18 @@
 import { create, createStore } from "zustand";
 import { Webhook, WebhooksState } from "./types";
+import { devtools } from "zustand/middleware";
 
-const webhooksStore = create<WebhooksState>((set,get)=>({
+const webhooksStore = create<WebhooksState>()(devtools((set,get)=>({
    webhooks:[],
+   events:[],
    setWebhooks:(webhooks:Webhook[])=>{
     set({webhooks:webhooks});
    },
-   events:[],
    setEvents:(nodeId:string,events:Array<{event:string,isActive:boolean}>)=>{
     // If events array is empty, add the first event
+
     
+      console.log(nodeId,events);
       set({ events: [{ nodeId, events }] });
       return;
 
@@ -34,6 +37,6 @@ const webhooksStore = create<WebhooksState>((set,get)=>({
    setDefaultWebhookEvents:(nodeId:string,events:Array<{event:string,isActive:boolean}>)=>{
     set({webhooks:get().webhooks.map((webhook)=>webhook.nodeId === nodeId ? {...webhook,events:events.map((event)=>({...event,isActive:true}))} : webhook)});
    }
-}))     
+})))     
 
 export default webhooksStore;
