@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CodeBlock } from "@/components/ui/code-block";
+
 import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
@@ -16,17 +16,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+
 import { cn } from "@/lib/utils";
 import { Handle, Position, useEdges, useNodes } from "@xyflow/react";
 import useStore from "@/components/Store/store";
-import { useQuery, useAction } from "convex/react";
+import { useQuery, useAction, useMutation } from "convex/react";
 import Image from "next/image";
 import { memo, useEffect, useState } from "react";
 import { NodeData } from "@/components/CMS/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import webhooksStore from "@/components/Store/webhooks";
+import { Id } from "@/convex/_generated/dataModel";
 
 function mailNode({
   data,
@@ -44,6 +45,8 @@ function mailNode({
   const [code, setCode] = useState(
     JSON.stringify({ getStartedTo: "See the response here" }, null, 2)
   );
+
+  const setNodeConfigurations = useMutation(api.flows.node.data.saveNodeConfigurations)
   //Migrate this to useStore.
   const sourceNode = edges
     .filter((edge) => edge.target === id)
@@ -60,33 +63,65 @@ function mailNode({
     parentNode?._id ? { nodeId: parentNode._id } : "skip"
   );
 
-  const sendMailQuery = useAction(api.mail.index.sendMailAction);
+  const [secrets, setSecrets] = useState<{
+    apiKey: string;
+  }>({
+    apiKey: "",
+  });
+
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSecrets({
+      apiKey: event.target.value,
+    });
+  };
+
+  useEffect(() => {
+    if(secrets.apiKey !== ""){
+    const timeoutId = setTimeout(
+      () =>
+        setNodeConfigurations({
+          nodeId: id as Id<"nodes">,
+          configurations: {
+            apiKey: secrets.apiKey,
+          },
+        }),
+      1000
+      );
+      return () => clearTimeout(timeoutId);
+    }
+  }, [secrets]);
+
+  //const sendMailQuery = useAction(api.mail.index.sendMailAction);
 
   useEffect(() => {
     if (webhookEvents !== null && webhookEvents !== undefined) {
-      const response = sendMailQuery({
-        //This to will come from order details..
-        to: "k.rakshit2001@gmail.com",
-        //This text should be customizable from the node UI.
-        text: "Test Mail",
-      });
-      setCode(JSON.stringify(response, null, 2));
+      //ON EVENT RECIEVE DO SOMETHING.
+
+      console.log(webhookEvents, "here is webhook events");
+
+      // const response = sendMailQuery({
+      //   //This to will come from order details..
+      //   to: "k.rakshit2001@gmail.com",
+      //   //This text should be customizable from the node UI.
+      //   text: "Test Mail",
+      // });
+      // setCode(JSON.stringify(response, null, 2));
     }
   }, [webhookEvents]);
 
-  const sendMail = async () => {
-    const response = await sendMailQuery({
-      to: "k.rakshit2001@gmail.com",
-      text: "Test Mail",
-    });
-    if (!response.success) {
-      setCode(JSON.stringify({ Status: "Error" }, null, 2));
-      return;
-    } else {
-      setCode(JSON.stringify({ Status: "Mail sent" }, null, 2));
-      console.log(response, "here is response");
-    }
-  };
+  // const sendMail = async () => {
+  //   const response = await sendMailQuery({
+  //     to: "k.rakshit2001@gmail.com",
+  //     text: "Test Mail",
+  //   });
+  //   if (!response.success) {
+  //     setCode(JSON.stringify({ Status: "Error" }, null, 2));
+  //     return;
+  //   } else {
+  //     setCode(JSON.stringify({ Status: "Mail sent" }, null, 2));
+  //     console.log(response, "here is response");
+  //   }
+  // };
 
   return (
     <Card
@@ -143,17 +178,16 @@ function mailNode({
       </CardHeader>
       <Separator />
       <CardContent className="flex flex-col  w-full justify-center items-center h-full p-2">
-        
         <div className="flex flex-col w-full p-2 gap-2">
           <Label>API Key</Label>
-          <Input placeholder="API Key" />
+          <Input placeholder="API Key" onChange={handleOnChange} />
         </div>
 
         {parentEvents &&
           parentEvents.map((event) => {
             if (event.isActive) {
               return (
-                <div className="flex flex-col w-full p-2">
+                <div className="flex flex-col w-full p-2" key={event.event}>
                   <Label>{event.event}</Label>
                   <Input placeholder="API Key" />
                 </div>
@@ -165,9 +199,9 @@ function mailNode({
           <Button
             className="flex-1"
             variant={"primary"}
-            onClick={() => {
-              sendMail();
-            }}
+            // onClick={() => {
+            //   sendMail();
+            // }}
           >
             <span>Send Mail</span>
           </Button>

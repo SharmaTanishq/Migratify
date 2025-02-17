@@ -43,7 +43,7 @@ function VtexNode({
 }): JSX.Element {
   const instance = useReactFlow();
 
-  const UIData: NodeData = JSON.parse(data.UIData);
+  const UIData: NodeData = data.ui as NodeData;
 
   //const [isDrawerOpen, setIsDrawerOpen] = useState(selected);
 
@@ -158,10 +158,10 @@ function VtexNode({
             </Popover>
           </div>
           <div className="flex flex-col gap-2">
-            <p className=" flex w-full flex-col text-xs text-[#374151] leading-5 word-break-break-word">
+            <div className=" flex w-full flex-col text-xs text-[#374151] leading-5 word-break-break-word">
               {renderNodeDescription()}
               {/* {UIData.node_description} */}
-            </p>
+            </div>
           </div>
         </div>
         <Separator />

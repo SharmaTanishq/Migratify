@@ -61,10 +61,10 @@ export function NavMain({
             </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-            <Link href={"/events"}>
-            <SidebarMenuButton tooltip="Events"> 
+            <Link href={"/variables"}>
+            <SidebarMenuButton tooltip="API KEYS"> 
                 <KeyRound />
-                Api Keys
+                  Api Keys
             </SidebarMenuButton>
             </Link>
         </SidebarMenuItem>

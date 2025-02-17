@@ -62,6 +62,11 @@ export default defineSchema(
     webhooks: defineTable({
         projectId: v.string(),
         nodeId: v.string(),
+        connectedSource:v.object({
+          nodeId:v.string(),
+          platform:v.string()
+        }),
+      
         secret: v.string(),
         url: v.string(),
         events: v.array(v.object({
@@ -70,7 +75,7 @@ export default defineSchema(
         })),
         isActive: v.boolean(),
         lastCalled: v.optional(v.number()), // Unix timestamp
-      }).index('by_node', ['nodeId']),
+      }).index('by_node',['nodeId','connectedSource']),
     webhookEvents: defineTable({
         
         nodeId:v.id("nodes"),

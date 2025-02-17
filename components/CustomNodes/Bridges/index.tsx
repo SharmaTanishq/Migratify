@@ -38,6 +38,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ScriptCopyBtn } from "@/components/ui/script-copy-btn";
 import { Spinner } from "@heroui/spinner";
+import { Id } from "@/convex/_generated/dataModel";
 
 function BridgesNode({
   data,
@@ -63,15 +64,27 @@ function BridgesNode({
 
   const createWebhook = useMutation(api.webhooks.index.createWebhook);
 
+  
+
   const getWebhookUrl = useQuery(
     api.webhooks.index.getWebhookUrl,
     node?._id ? { nodeId: node._id } : "skip"
   );
+  
+  const sourceNode = edges
+  .filter((edge) => edge.target === id)
+  .map((edge) => nodes.find((node) => node.id === edge.source))[0];
+  
+  const sourceNodeData: NodeData = sourceNode?.data?.ui as NodeData;
 
   useEffect(() => {
-    if (getWebhookUrl === null) {
+    if (getWebhookUrl === null && sourceNode !== undefined) {
       createWebhook({
         nodeId: node._id,
+        connectedSource:{
+          nodeId:sourceNode?.id as Id<"nodes">,
+          platform:sourceNodeData.Name.toLowerCase() as PlatformType,
+        },
         events: selectedEvents.map((event) => ({
           event: event,
           isActive: true,
@@ -79,16 +92,13 @@ function BridgesNode({
         projectId: node.projectId,
       });
     }
-  }, [getWebhookUrl]);
+  }, [getWebhookUrl, sourceNode]);
 
   // Get the source node that's connected to this bridge
-  const sourceNode = edges
-    .filter((edge) => edge.target === id)
-    .map((edge) => nodes.find((node) => node.id === edge.source))[0];
+  
 
   useEffect(() => {
-    if (sourceNode !== undefined) {
-      const sourceNodeData: NodeData = sourceNode?.data?.ui as NodeData;
+    if (sourceNode !== undefined) {     
       setPlatform(sourceNodeData.Name.toLowerCase() as PlatformType);
     }
   }, [sourceNode]);
@@ -219,7 +229,10 @@ function BridgesNode({
           className="p-2 w-full pt-0"
         >
           {getWebhookUrl?.url ? (
-            
+            <motion.div 
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeIn" }}>
             <ScriptCopyBtn
               codeLanguage="http"
               showMultiplePackageOptions={false}
@@ -230,10 +243,10 @@ function BridgesNode({
                 curl: `${getWebhookUrl?.url}`,
               }}
             />
-            
+            </motion.div>
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <Spinner size="sm" />
+            <div className="w-full h-full flex items-center justify-center py-2 gap-2">
+              <p className="text-[11px] text-gray-500 text-center">Waiting for Source</p> <Spinner size="sm" />
             </div>
           )}
         </motion.div>

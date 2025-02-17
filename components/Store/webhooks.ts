@@ -11,8 +11,6 @@ const webhooksStore = create<WebhooksState>()(devtools((set,get)=>({
    setEvents:(nodeId:string,events:Array<{event:string,isActive:boolean}>)=>{
     // If events array is empty, add the first event
 
-    
-      console.log(nodeId,events);
       set({ events: [{ nodeId, events }] });
       return;
 

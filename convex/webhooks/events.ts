@@ -9,6 +9,7 @@ export const getWebhookEvents = query({
         if(args.nodeId === null || undefined) return null;
         return ctx.db.query("webhookEvents")
             .filter((q) => q.eq(q.field("nodeId"), args.nodeId))
+            .filter((q) => q.gte(q.field("processedAt"), Date.now() - 10 * 1000))
             .order("desc")
             .first();        
     }

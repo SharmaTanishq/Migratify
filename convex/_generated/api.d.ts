@@ -26,6 +26,7 @@ import type * as mail_index from "../mail/index.js";
 import type * as myFunctions from "../myFunctions.js";
 import type * as projects from "../projects.js";
 import type * as webhooks_events from "../webhooks/events.js";
+import type * as webhooks_handlers from "../webhooks/handlers.js";
 import type * as webhooks_index from "../webhooks/index.js";
 
 /**
@@ -50,6 +51,7 @@ declare const fullApi: ApiFromModules<{
   myFunctions: typeof myFunctions;
   projects: typeof projects;
   "webhooks/events": typeof webhooks_events;
+  "webhooks/handlers": typeof webhooks_handlers;
   "webhooks/index": typeof webhooks_index;
 }>;
 export declare const api: FilterApi<

@@ -9,6 +9,10 @@ export const createWebhook = mutation({
   args: {
     projectId: v.string(),
     nodeId: v.string(),
+    connectedSource:v.object({
+      nodeId:v.string(),
+      platform:v.string()
+    }),
     events: v.array(v.object({
       event:v.string(),
       isActive:v.boolean()
@@ -20,6 +24,7 @@ export const createWebhook = mutation({
     const webhook = await ctx.db.insert("webhooks", {
       projectId: args.projectId,
       nodeId: args.nodeId,
+      connectedSource:args.connectedSource,
       secret:args.nodeId,
       url: `${process.env.CONVEX_URL}/webhook/${args.nodeId}`,
       events: args.events,

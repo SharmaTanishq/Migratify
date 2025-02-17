@@ -10,9 +10,8 @@ import {
 import Image from "next/image";
 
 import { Button } from "../../ui/button";
-import { useNodeDelete } from "../../hooks/useNodeDelete";
-import useStore from "../../Store/store";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+
+import { memo, useCallback,  useMemo, useState } from "react";
 import NodeIcon from "./Components/NodeIcon";
 import NodeName from "./Components/GenericNodeUtils/NodeName";
 import NodeDescription from "./Components/GenericNodeUtils/NodeDescription";
@@ -164,10 +163,10 @@ function ECommerceNode({
             </Popover>
           </div>
           <div className="flex flex-col gap-2">
-            <p className=" flex w-full flex-col text-xs text-[#374151] leading-5 word-break-break-word">
+            <div className=" flex w-full flex-col text-xs text-[#374151] leading-5 word-break-break-word">
               {renderNodeDescription()}
               {/* {UIData.node_description} */}
-            </p>
+            </div>
           </div>
         </div>
         <Separator />
