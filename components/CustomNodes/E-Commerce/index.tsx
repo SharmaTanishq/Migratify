@@ -1,5 +1,5 @@
 import { Handle, Position, NodeProps, useReactFlow } from "@xyflow/react";
-import { Card } from "../../ui/card";
+import { Card, CardHeader, CardDescription, CardContent, CardFooter, CardTitle } from "../../ui/card";
 
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import {
@@ -21,6 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { DEFAULT_HANDLE_STYLE_SOURCE } from "@/components/Constants/HandleStyles";
 import NodeDrawer from "./Components/NodeDrawer";
+import GenericCardLayout from "../Layouts/Card/CardHolder";
 
 const MemoizedNodeIcon = memo(NodeIcon);
 const MemoizedNodeName = memo(NodeName);
@@ -110,16 +111,15 @@ function ECommerceNode({
 
   return (
     <>
-      <Card
-        className={cn(
-          "w-[300px] space-y-4 bg-gray-50 dark:bg-gray-900  relative hover:shadow-xl transition-shadow duration-300",
-          selected ? "border border-borderSelected" : ""
-        )}
+      <GenericCardLayout
+        id={id}
+        selected={selected}
+       
       >
         {/* Header Section */}
-        <div className="p-4 pb-0">
-          <div className="flex items-center justify-between w-full ">
-            <div className="flex items-center space-x-2">
+        <CardHeader className="">
+        <CardTitle className="flex items-center justify-between w-full ">
+            <div className="flex items-center gap-2 ">
               {renderNodeIcon()}
               {renderNodeName()}
               {/* <h3 className="font-medium">{UIData.Name}</h3> */}
@@ -161,17 +161,14 @@ function ECommerceNode({
                 </div>
               </PopoverContent>
             </Popover>
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className=" flex w-full flex-col text-xs text-[#374151] leading-5 word-break-break-word">
-              {renderNodeDescription()}
-              {/* {UIData.node_description} */}
-            </div>
-          </div>
-        </div>
+          </CardTitle>
+          <CardDescription>            
+              {renderNodeDescription()}                          
+          </CardDescription>
+        </CardHeader>
         <Separator />
         {/* Sections Container */}
-        <div className="space-y-2 p-4 pt-2">
+        <CardContent className="space-y-4 p-4 ">
           {/* Products Section */}
           <div className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200 p-2 rounded-md border border-gray-200 cursor-pointer relative">
             <Handle
@@ -241,15 +238,15 @@ function ECommerceNode({
               <span className="text-sm text-center text-gray-600">Orders</span>
             </div>
           </div>
-        </div>
+        </CardContent>
 
         {/* Sync Button */}
-        <div className="flex w-full space-x-2 p-4 pt-0">
+        <CardFooter className="flex w-full space-x-2 p-4 pt-0">
           <Button className="flex-1" variant={"primary"} onClick={() => {}}>
             <span>Sync</span>
           </Button>
-        </div>
-      </Card>
+        </CardFooter>
+      </GenericCardLayout>
 
       {MemoizedNodeDrawer}
     </>

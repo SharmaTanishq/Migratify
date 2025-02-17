@@ -24,6 +24,7 @@ import { useQuery } from "convex/react";
 import Image from "next/image";
 import { memo, useEffect, useState } from "react";
 import { NodeData } from "@/components/CMS/types";
+import GenericCardLayout from "../Layouts/Card/CardHolder";
 
 function OutputNode({
   data,
@@ -71,13 +72,13 @@ function OutputNode({
 
 
   return (
-    <Card
-      className={cn(
-        "w-[350px] h-full hover:shadow-xl transition-shadow duration-300",
-        selected && "border border-borderSelected"
-      )}
+    <GenericCardLayout
+      id={id}
+      selected={selected}
+      className="w-[400px]"
+      
     >
-      <CardHeader className="p-4 pt-2">
+      <CardHeader>
         <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
           <div className="flex items-center justify-start gap-2">
             <Image
@@ -155,7 +156,7 @@ function OutputNode({
           <p>Trigger an event to see data</p>
         </TooltipContent>
       </Tooltip>
-    </Card>
+    </GenericCardLayout>
   );
 }
 

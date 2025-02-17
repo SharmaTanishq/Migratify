@@ -75,7 +75,7 @@ function NodeName({
         onChange={onChange}
         data-testid={`input-title-${display_name}`}
         onKeyDown={handleKeyDown}
-        className="py-1"
+        className="py-0"
       />
     </div>
   ) : (

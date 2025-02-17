@@ -19,9 +19,11 @@ export const sendMailAction = action({
     const msg = {
       to: args.to, // Change to your recipient
       from: "support@litcoco.com", // Change to your verified sender
-      subject: "Sending with SendGrid is Fun",
-      text: args.text,
-      html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+      templateId:"d-11db05f8c7b54cf5b9a93b12c80fac24",
+      dynamicTemplateData:{
+        subject:args.subject,
+        text:args.text,
+      }
     };
     const processedData = await processWebhookData(args.initialNode, args.eventData);
     try {

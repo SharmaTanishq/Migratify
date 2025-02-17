@@ -39,6 +39,7 @@ import { api } from "@/convex/_generated/api";
 import { ScriptCopyBtn } from "@/components/ui/script-copy-btn";
 import { Spinner } from "@heroui/spinner";
 import { Id } from "@/convex/_generated/dataModel";
+import GenericCardLayout from "../Layouts/Card/CardHolder";
 
 function BridgesNode({
   data,
@@ -110,13 +111,12 @@ function BridgesNode({
   const isEcommerceSource = sourceNode?.type === "ecommerceNode";
 
   return (
-    <Card
-      className={cn(
-        "w-[250px] h-full hover:shadow-xl transition-shadow duration-300",
-        selected && "border border-borderSelected"
-      )}
+    <GenericCardLayout
+      id={id}
+      selected={selected}
+      
     >
-      <CardHeader className="p-4 pt-2">
+      <CardHeader >
         <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
           <div className="flex items-center justify-start gap-2">
             <Image
@@ -236,7 +236,7 @@ function BridgesNode({
             <ScriptCopyBtn
               codeLanguage="http"
               showMultiplePackageOptions={false}
-              className="w-full max-w-[200px]"
+              className="w-full "
               lightTheme="nord"
               darkTheme="vitesse-dark"
               commandMap={{
@@ -314,7 +314,7 @@ function BridgesNode({
           </div>
         </div>
       </CardFooter>
-    </Card>
+    </GenericCardLayout>
   );
 }
 

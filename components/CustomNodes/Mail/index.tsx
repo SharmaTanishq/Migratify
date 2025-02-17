@@ -5,9 +5,16 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 import { Separator } from "@/components/ui/separator";
 import {
@@ -27,7 +34,13 @@ import { NodeData } from "@/components/CMS/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import webhooksStore from "@/components/Store/webhooks";
+
 import { Id } from "@/convex/_generated/dataModel";
+import { Textarea } from "@/components/ui/textarea";
+import { ChevronsUpDown } from "lucide-react";
+import GenericCardLayout from "../Layouts/Card/CardHolder";
+
+
 
 function mailNode({
   data,
@@ -46,7 +59,9 @@ function mailNode({
     JSON.stringify({ getStartedTo: "See the response here" }, null, 2)
   );
 
-  const setNodeConfigurations = useMutation(api.flows.node.data.saveNodeConfigurations)
+  const setNodeConfigurations = useMutation(
+    api.flows.node.data.saveNodeConfigurations
+  );
   //Migrate this to useStore.
   const sourceNode = edges
     .filter((edge) => edge.target === id)
@@ -76,16 +91,16 @@ function mailNode({
   };
 
   useEffect(() => {
-    if(secrets.apiKey !== ""){
-    const timeoutId = setTimeout(
-      () =>
-        setNodeConfigurations({
-          nodeId: id as Id<"nodes">,
-          configurations: {
-            apiKey: secrets.apiKey,
-          },
-        }),
-      1000
+    if (secrets.apiKey !== "") {
+      const timeoutId = setTimeout(
+        () =>
+          setNodeConfigurations({
+            nodeId: id as Id<"nodes">,
+            configurations: {
+              apiKey: secrets.apiKey,
+            },
+          }),
+        1000
       );
       return () => clearTimeout(timeoutId);
     }
@@ -124,13 +139,12 @@ function mailNode({
   // };
 
   return (
-    <Card
-      className={cn(
-        "w-[350px] h-full hover:shadow-xl transition-shadow duration-300",
-        selected && "border border-borderSelected"
-      )}
+    <GenericCardLayout
+      id={id}
+      selected={selected}
+      
     >
-      <CardHeader className="p-4 pt-2">
+      <CardHeader>
         <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
           <div className="flex items-center justify-start gap-2">
             <Image
@@ -177,7 +191,7 @@ function mailNode({
         </CardDescription>
       </CardHeader>
       <Separator />
-      <CardContent className="flex flex-col  w-full justify-center items-center h-full p-2">
+      <CardContent className="flex flex-col  w-full justify-center items-center h-full p-4">
         <div className="flex flex-col w-full p-2 gap-2">
           <Label>API Key</Label>
           <Input placeholder="API Key" onChange={handleOnChange} />
@@ -187,15 +201,45 @@ function mailNode({
           parentEvents.map((event) => {
             if (event.isActive) {
               return (
-                <div className="flex flex-col w-full p-2" key={event.event}>
-                  <Label>{event.event}</Label>
-                  <Input placeholder="API Key" />
+                <div
+                  className="flex flex-col w-full  gap-2"
+                  key={event.event}
+                >
+                  <Tooltip delayDuration={300}>
+                    <Collapsible >
+                      <CollapsibleTrigger asChild>
+                        <TooltipTrigger asChild >
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="justify-between w-full p-2"
+                            
+                          >
+                            <span className="text-sm font-medium">
+                              {event.event}
+                            </span>
+                            <ChevronsUpDown className="h-4 w-4" />
+                            <TooltipContent side="right">
+                              <p>Expand</p>
+                            </TooltipContent>
+                          </Button>
+                        </TooltipTrigger>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="flex flex-col gap-2 p-2">
+                        <Input placeholder="Template ID" />
+                        {/* <Textarea placeholder="Subject" /> */}
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </Tooltip>
                 </div>
               );
             }
           })}
 
-        <div className="flex w-full space-x-2 p-4 pt-2">
+        
+      </CardContent>
+      <CardFooter className="flex w-full space-x-2 p-4 pt-2">
+      <div className="flex w-full space-x-2 p-4 pt-2">
           <Button
             className="flex-1"
             variant={"primary"}
@@ -206,7 +250,7 @@ function mailNode({
             <span>Send Mail</span>
           </Button>
         </div>
-      </CardContent>
+      </CardFooter>
       <Tooltip>
         <TooltipTrigger asChild>
           <Handle
@@ -220,7 +264,7 @@ function mailNode({
           <p>Trigger an event to see data</p>
         </TooltipContent>
       </Tooltip>
-    </Card>
+      </GenericCardLayout>
   );
 }
 
