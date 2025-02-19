@@ -1,15 +1,26 @@
-import { NodeDataType } from "@/components/Types/Flows";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useState } from "react";
 
-function GenericDrawer({
-  data,
-  id,
-  selected,
+function GenericDrawerLayout({
+    children,
+    isOpen,
+    
 }: {
-  data: NodeDataType;
-  id: string;
-  selected: boolean;
+    children: React.ReactNode;
+    isOpen: boolean | undefined;
+    
 }) {
-  return <div>GenericDrawer</div>;
+    const [isExpanded,setExpanded] = useState(false);
+    const handleExpand = () => {
+        setExpanded(!isExpanded);
+    }
+    return (
+        <Sheet open={isOpen} modal={false} >
+            <SheetContent handleExpand={handleExpand} side={isExpanded ? "modal" : "flow"} className=" mt-10   bg-white pointer-events-auto">
+                {children}
+            </SheetContent>
+        </Sheet>
+    );
 }
 
-export default GenericDrawer;
+export default GenericDrawerLayout;

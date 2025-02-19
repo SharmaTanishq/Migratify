@@ -3,7 +3,7 @@
 import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
-import { X } from "lucide-react"
+import { Expand, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -31,7 +31,7 @@ const SheetOverlay = React.forwardRef<
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
 
 const sheetVariants = cva(
-  "fixed z-50 gap-4 bg-background  shadow-lg border  transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out",
+  "fixed z-50 gap-4 bg-background top-[7%]   shadow-lg border  transition ease-in-out data-[state=closed]:duration-500 data-[state=open]:duration-500 ",
   {
     variants: {
       side: {
@@ -42,7 +42,9 @@ const sheetVariants = cva(
         right:
           "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
         flow:
-          "inset-y-10  rounded-xl right-6  w-3/4  min-h-[600px] data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+          "  rounded-xl right-6   w-3/4  h-[1000px]   sm:max-w-sm data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right data-[state=open]:animate-in data-[state=closed]:animate-out ",
+        modal:
+          "left-1/2 -translate-x-1/2 rounded-xl w-[1200px] min-h-[1100px] ",
         flowLeft:
           "inset-y-10 left-20 rounded-xl  w-3/4 border-r  min-h-[600px] data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
       },
@@ -55,12 +57,14 @@ const sheetVariants = cva(
 
 interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
-    VariantProps<typeof sheetVariants> {}
+      VariantProps<typeof sheetVariants> {
+        handleExpand?: () => void;
+      }
 
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
->(({ side = "right", className, children, ...props }, ref) => (
+>(({ side = "right", className, children, handleExpand, ...props }, ref) => (
   <SheetPortal>
     
     <SheetPrimitive.Content
@@ -71,7 +75,11 @@ const SheetContent = React.forwardRef<
       <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none  focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
         <X className="h-7 w-7 border border-gray-200 rounded-md mt-1 p-1 shadow-sm" />
         <span className="sr-only">Close</span>
+        
       </SheetPrimitive.Close>
+      <div className="absolute top-4 right-12" onClick={handleExpand}>
+        <Expand className="h-7 w-7 border border-gray-200 rounded-md mt-1 p-1 shadow-sm" />
+      </div>
         {children}
     </SheetPrimitive.Content>
   </SheetPortal>

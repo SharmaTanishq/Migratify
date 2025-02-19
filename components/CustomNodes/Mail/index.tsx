@@ -29,7 +29,7 @@ import { Handle, Position, useEdges, useNodes } from "@xyflow/react";
 import useStore from "@/components/Store/store";
 import { useQuery, useAction, useMutation } from "convex/react";
 import Image from "next/image";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { NodeData } from "@/components/CMS/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,6 +39,9 @@ import { Id } from "@/convex/_generated/dataModel";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronsUpDown } from "lucide-react";
 import GenericCardLayout from "../Layouts/Card/CardHolder";
+import MailDrawer from "./Drawer";
+
+
 
 
 
@@ -138,7 +141,14 @@ function mailNode({
   //   }
   // };
 
+  const MEMOIZED_MAIL_DRAWER = useMemo(() => {
+    return (
+      selected && <MailDrawer isOpen={true} id={id} />
+    )
+  }, [selected, id]);
+
   return (
+    <>
     <GenericCardLayout
       id={id}
       selected={selected}
@@ -265,6 +275,8 @@ function mailNode({
         </TooltipContent>
       </Tooltip>
       </GenericCardLayout>
+      {MEMOIZED_MAIL_DRAWER}
+      </>
   );
 }
 

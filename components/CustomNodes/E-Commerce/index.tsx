@@ -113,8 +113,7 @@ function ECommerceNode({
     <>
       <GenericCardLayout
         id={id}
-        selected={selected}
-       
+        selected={selected}       
       >
         {/* Header Section */}
         <CardHeader className="">
