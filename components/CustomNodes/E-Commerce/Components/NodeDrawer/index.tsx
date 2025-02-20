@@ -32,29 +32,9 @@ function NodeDrawer({ isOpen, onClose, nodeData, nodeId }: NodeDrawerProps) {
   }, [node]);
 
   return (
-    <GenericDrawerLayout isOpen={isOpen}>
+    <GenericDrawerLayout isOpen={isOpen} node={node}>
       
-      <SheetHeader className="flex justify-center items-start rounded-t-xl mb-5 p-4 pb-0">
-        <SheetTitle>
-          <div>
-            <div className="flex flex-col items-start gap-2  ">
-              <div className="flex h-9 w-9 items-center rounded gap-2 ">
-                {/* Icon placeholder - you can replace this with actual icon */}
-
-                <Image
-                  src={nodeData?.node_logo?.url!}
-                  alt={nodeData?.Name!}
-                  width={30}
-                  height={30}
-                />
-
-                <span className="text-xl font-medium">{nodeData?.Name}</span>
-              </div>
-            </div>
-          </div>
-        </SheetTitle>
-        <SheetDescription>{nodeData?.node_description}</SheetDescription>
-      </SheetHeader>
+      
       <Separator orientation="horizontal" className="w-full bg-gray-300 " />
 
      

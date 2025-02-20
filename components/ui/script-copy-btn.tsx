@@ -6,6 +6,7 @@ import { Check, Copy } from "lucide-react";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
 import { HTMLAttributes, useEffect, useState } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger   } from "./tooltip";
 
 interface ScriptCopyBtnProps extends HTMLAttributes<HTMLDivElement> {
   showMultiplePackageOptions?: boolean;
@@ -124,11 +125,13 @@ export function ScriptCopyBtn({
             )}
             
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="relative  w-8 h-6 px-1 rounded-sm"
-            onClick={copyToClipboard}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative  w-8 h-6 px-1 rounded-sm"
+                onClick={copyToClipboard}
             aria-label={copied ? "Copied" : "Copy to clipboard"}
           >
             <span className="sr-only">{copied ? "Copied" : "Copy"}</span>
@@ -143,6 +146,11 @@ export function ScriptCopyBtn({
               }`}
             />
           </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{copied ? "Copied" : "Copy"}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </div>

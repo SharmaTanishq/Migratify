@@ -6,6 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { Expand, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
 
 const Sheet = SheetPrimitive.Root
 
@@ -31,7 +32,7 @@ const SheetOverlay = React.forwardRef<
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
 
 const sheetVariants = cva(
-  "fixed z-50 gap-4 bg-background top-[7%]   shadow-lg border  transition ease-in-out data-[state=closed]:duration-500 data-[state=open]:duration-500 ",
+  "fixed z-50 gap-4 bg-background top-[2%]   shadow-lg border  transition ease-in-out data-[state=closed]:duration-500 data-[state=open]:duration-500 ",
   {
     variants: {
       side: {
@@ -42,9 +43,9 @@ const sheetVariants = cva(
         right:
           "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
         flow:
-          "  rounded-xl right-6   w-3/4  h-[1000px]   sm:max-w-sm data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right data-[state=open]:animate-in data-[state=closed]:animate-out ",
+          "  rounded-xl right-6   w-3/4  h-[90vh]   sm:max-w-sm overflow-hidden data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right data-[state=open]:animate-in data-[state=closed]:animate-out ",
         modal:
-          "left-1/2 -translate-x-1/2 rounded-xl w-[1200px] min-h-[1100px] ",
+          "left-1/2 -translate-x-1/2 rounded-xl w-[85%]  h-[90%] overflow-hidden ",
         flowLeft:
           "inset-y-10 left-20 rounded-xl  w-3/4 border-r  min-h-[600px] data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
       },
@@ -72,15 +73,23 @@ const SheetContent = React.forwardRef<
       className={cn(sheetVariants({ side }), className)}
       {...props}
     >
-      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none  focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+      {/* <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none  focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
         <X className="h-7 w-7 border border-gray-200 rounded-md mt-1 p-1 shadow-sm" />
         <span className="sr-only">Close</span>
         
       </SheetPrimitive.Close>
-      <div className="absolute top-4 right-12" onClick={handleExpand}>
-        <Expand className="h-7 w-7 border border-gray-200 rounded-md mt-1 p-1 shadow-sm" />
-      </div>
-        {children}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="absolute top-4 right-12" onClick={handleExpand}>
+            <Expand className="h-7 w-7 border border-gray-200 rounded-md mt-1 p-1 shadow-sm" />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{side === "flow" ? "Expand" : "Collapse"}</p>
+        </TooltipContent>
+      </Tooltip> */}
+      
+      {children}
     </SheetPrimitive.Content>
   </SheetPortal>
 ))
