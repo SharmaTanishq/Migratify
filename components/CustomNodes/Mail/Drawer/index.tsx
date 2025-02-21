@@ -1,44 +1,94 @@
-import {
-  Sheet,
-  SheetTitle,
-  SheetHeader,
-  SheetContent,
-  SheetDescription,
-} from "@/components/ui/sheet";
 import GenericDrawerLayout from "../../Layouts/Drawer";
 import flowStore from "@/components/Store/store";
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Separator } from "@/components/ui/separator";
+
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { CodeBlock } from "@/components/ui/code-block";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { X, Expand } from "lucide-react";
+import { ArrowUpDown, ChevronsUpDown, MoreHorizontal } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import {
+    ColumnDef,
+    ColumnFiltersState,
+    SortingState,
+    VisibilityState,
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable,
+  } from "@tanstack/react-table"
+
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardContent,
+  CardTitle,
+} from "@/components/ui/card";
+import { ModalStore } from "@/components/Store/modal";
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from "react";
+import {DataTableDemo} from "../DataMappingTable";
+
+
+  
 
 function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
   const node = flowStore((state) => state.getNode(id));
-  
+  const { modalOpen } = ModalStore();
 
-  useEffect(() => {
-    console.log(node?.data?.ui);
-  }, [node]);
 
   return (
-    <GenericDrawerLayout isOpen={isOpen} node={node}  >
-     
-      
-        <ScrollArea className="w-full md:h-[80vh] h-[40vh] rounded-xl">
+    <GenericDrawerLayout isOpen={isOpen} node={node} id={id}>
+      <div className="w-full p-2">
+        <Card className={cn("w-full h-full shadow-none ",modalOpen?"rounded-xl":"rounded-md")}>
+          <CardHeader>
+            <CardTitle>Data Mapping :</CardTitle>
+            <CardDescription>
+              Configure data mapping to send email.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DataTableDemo />
+          </CardContent>
+        </Card>
+      </div>
+
+      {modalOpen ? (
+        <ScrollArea className="w-full h-[70vh] p-2 rounded-xl">
           <SyntaxHighlighter
             language="json"
             style={atomDark}
             customStyle={{
               margin: 0,
               padding: 20,
-              borderRadius: "10px",
+
               width: "100%",
-              height: "100%", 
-              overflowY: "auto",
+              height: "100%",
+
               fontSize: "0.915rem",
             }}
             wrapLines={true}
@@ -48,19 +98,43 @@ function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
             {VTEX_ORDER_SCHEMA}
           </SyntaxHighlighter>
         </ScrollArea>
-        <div className="w-full h-[80vh] rounded-xl bg-gray-100 p-2">
-            {"Content"}
-        </div>
+      ) : (
+        <Collapsible>
+          <div className="flex items-center justify-between space-x-4 px-4">
+            <h4 className="text-sm font-semibold">View Sample Data</h4>
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" size="sm" className="w-9 p-0">
+                <ChevronsUpDown className="h-4 w-4" />
+                <span className="sr-only">Toggle</span>
+              </Button>
+            </CollapsibleTrigger>
+          </div>
 
-        {/* <CodeBlock
-            code={VTEX_ORDER_SCHEMA}
-            language="json"
-            filename="vtex-order-schema.json"
-          /> */}
-      
-      {/* DATA MAPPING */}
-      {/* SHOW SCHEMA OF CONNECTED PLATFORM */}
-      {/* RIGHT SIDE GIVE MAPPING WITH UNIQUE Fiels */}
+          <CollapsibleContent>
+            <ScrollArea className="w-full h-[40vh] rounded-xl p-2">
+              <SyntaxHighlighter
+                language="json"
+                style={atomDark}
+                customStyle={{
+                  margin: 0,
+                  padding: 10,
+                  paddingLeft: 0,
+                  borderRadius: "10px",
+                  width: "100%",
+                  height: "100%",
+                  overflowY: "auto",
+                  fontSize: modalOpen ? "0.915rem" : "0.715rem",
+                }}
+                wrapLines={true}
+                showLineNumbers={true}
+                PreTag={"div"}
+              >
+                {VTEX_ORDER_SCHEMA}
+              </SyntaxHighlighter>
+            </ScrollArea>
+          </CollapsibleContent>
+        </Collapsible>
+      )}
     </GenericDrawerLayout>
   );
 }

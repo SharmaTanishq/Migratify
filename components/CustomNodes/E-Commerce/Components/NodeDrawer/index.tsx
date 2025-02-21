@@ -32,21 +32,15 @@ function NodeDrawer({ isOpen, onClose, nodeData, nodeId }: NodeDrawerProps) {
   }, [node]);
 
   return (
-    <GenericDrawerLayout isOpen={isOpen} node={node}>
-      
-      
-      <Separator orientation="horizontal" className="w-full bg-gray-300 " />
-
-     
-        <div
-          className="w-full h-full p-2"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <DrawerTabs nodeId={id as Id<"nodes">} />
-        </div>
-      
+    <GenericDrawerLayout isOpen={isOpen} node={node} id={id}>
+      <div
+        className="w-full h-full p-2"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <DrawerTabs nodeId={id as Id<"nodes">} />
+      </div>
     </GenericDrawerLayout>
   );
 }

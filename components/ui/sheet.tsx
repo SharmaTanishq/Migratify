@@ -3,10 +3,10 @@
 import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
-import { Expand, X } from "lucide-react"
+
 
 import { cn } from "@/lib/utils"
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
+
 
 const Sheet = SheetPrimitive.Root
 
@@ -78,17 +78,10 @@ const SheetContent = React.forwardRef<
         <span className="sr-only">Close</span>
         
       </SheetPrimitive.Close>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="absolute top-4 right-12" onClick={handleExpand}>
-            <Expand className="h-7 w-7 border border-gray-200 rounded-md mt-1 p-1 shadow-sm" />
-          </div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{side === "flow" ? "Expand" : "Collapse"}</p>
-        </TooltipContent>
-      </Tooltip> */}
+      */}
       
+      
+
       {children}
     </SheetPrimitive.Content>
   </SheetPortal>

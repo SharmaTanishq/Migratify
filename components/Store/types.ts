@@ -49,3 +49,8 @@ import {
     }>;
     isActive:boolean;
   }
+
+  export type ModalState = {
+    modalOpen:boolean;
+    setModalOpen: (open: boolean) => void;
+  }

@@ -59,6 +59,7 @@ export default defineSchema(
       edges: v.array(v.any()),
     })
       .index('by_project', ['projectId']),
+
     webhooks: defineTable({
         projectId: v.string(),
         nodeId: v.string(),
@@ -76,6 +77,7 @@ export default defineSchema(
         isActive: v.boolean(),
         lastCalled: v.optional(v.number()), // Unix timestamp
       }).index('by_node',['nodeId','connectedSource']),
+
     webhookEvents: defineTable({
         
         nodeId:v.id("nodes"),
@@ -83,6 +85,21 @@ export default defineSchema(
         processedAt: v.number(),
         
       }).index('by_node', ['nodeId']),
+
+      dataMappings: defineTable({
+        nodeId: v.string(), // ID of the node this mapping belongs to
+        projectId: v.string(), // Project ID
+        mappings: v.array(v.object({
+          id: v.string(),
+          targetField: v.string(),
+          sourceField: v.string(),
+          type: v.string(),
+          isActive: v.boolean(),
+        })),
+        createdAt: v.number(),
+        updatedAt: v.number(),
+      })
+    
   },
   
   // If you ever get an error about schema mismatch

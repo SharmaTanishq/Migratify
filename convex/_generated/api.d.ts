@@ -23,6 +23,7 @@ import type * as flows_node_updateNode from "../flows/node/updateNode.js";
 import type * as flows_nodes from "../flows/nodes.js";
 import type * as http from "../http.js";
 import type * as mail_index from "../mail/index.js";
+import type * as mappings_dataMap from "../mappings/dataMap.js";
 import type * as myFunctions from "../myFunctions.js";
 import type * as projects from "../projects.js";
 import type * as webhooks_events from "../webhooks/events.js";
@@ -48,6 +49,7 @@ declare const fullApi: ApiFromModules<{
   "flows/nodes": typeof flows_nodes;
   http: typeof http;
   "mail/index": typeof mail_index;
+  "mappings/dataMap": typeof mappings_dataMap;
   myFunctions: typeof myFunctions;
   projects: typeof projects;
   "webhooks/events": typeof webhooks_events;
