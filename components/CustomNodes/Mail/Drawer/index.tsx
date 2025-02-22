@@ -72,7 +72,7 @@ function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <DataTableDemo />
+            <DataTableDemo nodeId={id} />
           </CardContent>
         </Card>
       </div>

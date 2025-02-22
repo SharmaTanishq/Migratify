@@ -37,8 +37,8 @@ function ModalLayout({
         setModalOpen(isOpen);
     },[isOpen])
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={cn(
+    <Dialog open={isOpen} onOpenChange={onClose} >
+      <DialogContent  className={cn(
         "flex flex-col overflow-hidden transition-all duration-200",
         sizeClasses[size],
         "min-h-[200px] max-h-[90vh]",
@@ -51,7 +51,7 @@ function ModalLayout({
             {data?.data?.ui?.node_description}
           </DialogDescription>
         </DialogHeader>
-        <div className="w-full h-full ">{children}</div>
+        {children}
       </DialogContent>
     </Dialog>
   );

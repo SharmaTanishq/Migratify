@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
   ColumnFiltersState,
+  RowData,
   RowSelectionState,
   SortingState,
   TableMeta,
@@ -13,17 +14,11 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"; 
-import { ChevronDown, Plus } from "lucide-react";
+} from "@tanstack/react-table";
+import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -39,16 +34,26 @@ import { useMutation } from "convex/react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { TableDataEmail, columns } from "./columns";
+import { toast } from "sonner";
+import { useMemo } from "react";
+import { debounce } from "./debounced";
 
+declare module "@tanstack/react-table" {
+  interface TableMeta<TData extends RowData> {
+    updateData: (rowIndex: number, columnId: string, value: unknown) => void;
+    addRow: (rowIndex: number, row: TableDataEmail) => void;
+    deleteRow: (rowIndex: number) => void;
+  }
+}
 
-export function DataTableDemo() {
-    const params = useParams();
-    
-    
-   // const saveMappings = useMutation(api.mappings.dataMap.saveMappings);
-    // const existingMappings = useQuery(api.mappings.dataMap.getMappings, {
-    //   nodeId:  params.nodeId as string,
-    // });
+export function DataTableDemo({ nodeId }: { nodeId: string }) {
+  const params = useParams();
+
+  const saveMappings = useMutation(api.mappings.dataMap.saveMappings);
+  // const existingMappings = useQuery(api.mappings.dataMap.getMappings, {
+  //   nodeId:  params.nodeId as string,
+  // });
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -61,9 +66,18 @@ export function DataTableDemo() {
 
   
 
+  const onDelete = React.useCallback(
+    (rowIndex: number) => {
+      console.log(rowIndex);
+      setTableData(tableData.filter((_, index) => index !== rowIndex));
+    },
+
+    []
+  );
+
   const table = useReactTable({
     data: tableData,
-    columns,
+    columns: columns(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -72,7 +86,36 @@ export function DataTableDemo() {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-   
+    
+    meta: {
+      
+      updateData: (rowIndex, columnId, value) => {
+        // Skip page index reset until after next rerender
+
+        setTableData((old) =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              return {
+                ...old[rowIndex]!,
+                [columnId]: value,
+              };
+            }
+            return row;
+          })
+        );
+        saveMappings({
+          nodeId: nodeId,
+          projectId: params.projectId as string,
+          mappings: tableData as any,
+        });
+      },
+      addRow: (rowIndex, row) => {
+        setTableData([...tableData, row]);
+      },
+      deleteRow: (rowIndex) => {
+        setTableData(tableData.filter((_, index) => index !== rowIndex));
+      },
+    },
     state: {
       sorting,
       columnFilters,
@@ -80,25 +123,27 @@ export function DataTableDemo() {
       rowSelection,
     },
   });
-  const addNewRow = () => {
-    const newRow: TableDataEmail = {
-      id: Math.random().toString(36).substring(7),
-      targetField: "New Target Field",
-            // Here you would typically make an API call to save to database
-            // For now just console logging the value
-            
-    
-      
-      sourceField: "New Source Field",
-      type: "string",
-    };
-    // Create a ref for the new input
-    
-    
-    // Focus the input after a short delay to ensure the DOM is ready
-   
-    setTableData([...tableData, newRow]);
-  };
+
+  //   const debouncedSave = React.useMemo(
+  //     () =>
+  //       debounce((data: TableDataEmail[]) => {
+  //         console.log(data);
+  //         saveMappings({
+  //           nodeId: nodeId,
+  //           projectId: params.projectId as string,
+  //           mappings: data as any,
+  //         });
+  //       }, 1000),
+  //     [nodeId, params.projectId, saveMappings]
+  //   );
+
+  //   React.useEffect(() => {
+  //     if (tableData.length > 0) {
+  //       debouncedSave(tableData);
+  //     }
+  //   }, [tableData, debouncedSave]);
+
+  
 
   return (
     <div className="w-full">
@@ -118,38 +163,18 @@ export function DataTableDemo() {
             variant="primary"
             className="ml-auto"
             onClick={() => {
-              addNewRow();
+              table.options.meta?.addRow(tableData.length, {
+                id: Math.random().toString(36).substring(7),
+                targetField: "",
+                sourceField: "",
+                type: "",
+                isActive: true,
+              });
             }}
           >
             <Plus />
             Add New
           </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
       <div className="rounded-md border">
@@ -192,7 +217,7 @@ export function DataTableDemo() {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={table.getAllColumns().length}
                   className="h-24 text-center"
                 >
                   No results.
@@ -229,4 +254,3 @@ export function DataTableDemo() {
     </div>
   );
 }
-
