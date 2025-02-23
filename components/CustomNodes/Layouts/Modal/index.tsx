@@ -15,7 +15,7 @@ const sizeClasses = {
   sm: "max-w-md",
   default: "max-w-2xl",
   lg: "max-w-4xl",
-  content: "w-fit max-w-[90vw]", // Adapts to content
+  content: "w-full max-w-[90vw]", // Adapts to content
   full: "w-[90vw]",
 };
 

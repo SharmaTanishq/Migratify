@@ -34,9 +34,10 @@ import { useMutation } from "convex/react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { TableDataEmail, columns } from "./columns";
+
+import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import { useMemo } from "react";
-import { debounce } from "./debounced";
+
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
@@ -50,9 +51,10 @@ export function DataTableDemo({ nodeId }: { nodeId: string }) {
   const params = useParams();
 
   const saveMappings = useMutation(api.mappings.dataMap.saveMappings);
-  // const existingMappings = useQuery(api.mappings.dataMap.getMappings, {
-  //   nodeId:  params.nodeId as string,
-  // });
+
+  const existingMappings = useQuery(api.mappings.dataMap.getMappings, {
+    nodeId: nodeId as string,
+  });
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -64,17 +66,8 @@ export function DataTableDemo({ nodeId }: { nodeId: string }) {
 
   const [tableData, setTableData] = React.useState<TableDataEmail[]>([]);
 
-  
-
-  const onDelete = React.useCallback(
-    (rowIndex: number) => {
-      console.log(rowIndex);
-      setTableData(tableData.filter((_, index) => index !== rowIndex));
-    },
-
-    []
-  );
-
+    
+ 
   const table = useReactTable({
     data: tableData,
     columns: columns(),
@@ -91,23 +84,40 @@ export function DataTableDemo({ nodeId }: { nodeId: string }) {
       
       updateData: (rowIndex, columnId, value) => {
         // Skip page index reset until after next rerender
+        setTableData((old) => {
+          const newData = old.map((row, index) => {
+            if (index === rowIndex) {
+              return {
+                ...row,
+                [columnId]: value,
+              };
+            }
+            return row;
+          });
+
+          saveMappings({
+            nodeId: nodeId,
+            projectId: params.projectId as string,
+            mappings: newData as any,
+          })
+
+          return newData;
+        });
 
         setTableData((old) =>
           old.map((row, index) => {
+            
             if (index === rowIndex) {
               return {
-                ...old[rowIndex]!,
+                ...row,
                 [columnId]: value,
               };
             }
             return row;
           })
         );
-        saveMappings({
-          nodeId: nodeId,
-          projectId: params.projectId as string,
-          mappings: tableData as any,
-        });
+        
+       
       },
       addRow: (rowIndex, row) => {
         setTableData([...tableData, row]);
@@ -123,6 +133,14 @@ export function DataTableDemo({ nodeId }: { nodeId: string }) {
       rowSelection,
     },
   });
+
+  useEffect(() => {
+    if (existingMappings && existingMappings.mappings !== tableData) {
+      
+      setTableData(existingMappings.mappings);
+    }
+  }, [existingMappings]);
+
 
   //   const debouncedSave = React.useMemo(
   //     () =>
