@@ -108,6 +108,13 @@
     background-size: calc(var(--grid-gap-size)* 2);
     background-repeat: no-repeat;
 }
+.draggable-field {
+  cursor: grab;
+}
+
+.draggable-field:active {
+  cursor: grabbing;
+}
   
   .animate-gradient {
     background-size: 300%;

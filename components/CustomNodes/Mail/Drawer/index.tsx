@@ -51,7 +51,8 @@ import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
-import {DataTableDemo} from "../DataMappingTable";
+import { DataMappingTable } from "../CodeMirror/component";
+
 
 
   
@@ -59,7 +60,7 @@ import {DataTableDemo} from "../DataMappingTable";
 function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
   const node = flowStore((state) => state.getNode(id));
   const { modalOpen } = ModalStore();
-
+ 
 
   return (
     <GenericDrawerLayout isOpen={isOpen} node={node} id={id}>
@@ -72,12 +73,17 @@ function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <DataTableDemo nodeId={id} />
+              {/* //Finalised on a drag approach, I'll be draggable schema in the window. 
+              // There will be a finite amount of mappings right now, for Example - Order Id, Customer Information, shipping information, items & payments and I am hopping to introduce more mappings in the future.  */}
+            {/* <DataTableDemo nodeId={id} /> */}
+            {/* <SampleDataMapping /> */}
+            <DataMappingTable />
           </CardContent>
         </Card>
       </div>
 
       {modalOpen ? (
+        //I am going to add tabs here and the default tab would be schema with drag & drop and the other tab would be JSON.
         <ScrollArea className="w-full h-[70vh] p-2 rounded-xl">
           <SyntaxHighlighter
             language="json"
@@ -141,7 +147,7 @@ function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
 
 export default MailDrawer;
 
-const VTEX_ORDER_SCHEMA = `{
+export const VTEX_ORDER_SCHEMA = `{
   "orderId": "1172452900788-01",
   "sequence": "502556",
   "marketplaceOrderId": "1172452900788-01",
