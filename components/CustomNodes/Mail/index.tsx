@@ -36,7 +36,6 @@ import { Label } from "@/components/ui/label";
 import webhooksStore from "@/components/Store/webhooks";
 
 import { Id } from "@/convex/_generated/dataModel";
-import { Textarea } from "@/components/ui/textarea";
 import { ChevronsUpDown } from "lucide-react";
 import GenericCardLayout from "../Layouts/Card/CardHolder";
 import MailDrawer from "./Drawer";

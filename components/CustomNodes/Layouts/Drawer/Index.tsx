@@ -110,7 +110,7 @@ function GenericDrawerLayout({
         data={node}
         size="content"
       >
-        <div className="grid grid-cols-2 gap-4 w-full">
+        <div className="w-full">
           {children}
         </div>
       </ModalLayout>

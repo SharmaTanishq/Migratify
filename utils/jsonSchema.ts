@@ -1,11 +1,11 @@
 import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 
 export const schemaIcons = {
-  object: 'cube',
+  object: 'box',
   array: 'list',
-  string: 'font',
-  null: 'font',
-  number: 'hashtag',
+  string: 'case-upper',
+  null: 'case-upper',
+  number: 'hash',
   boolean: 'check-square',
   function: 'code',
   bigint: 'calculator',
@@ -39,6 +39,7 @@ export function jsonToSchema(json: any, title?: string): ExtendedJSONSchema7 {
     $schema: 'http://json-schema.org/draft-07/schema#',
     type,
     icon: getIconForType(type),
+    examples: [json],
   };
 
   if (title) {
