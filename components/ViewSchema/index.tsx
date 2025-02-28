@@ -142,7 +142,7 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
     <>
       <ScrollArea
         className={cn(
-          "border-none flex-1 w-full bg-white/80",
+          "border-none flex-1  bg-white/80",
           className
         )}
       >

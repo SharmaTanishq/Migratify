@@ -66,6 +66,7 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@uiw/codemirror-theme-dracula": "^4.23.8",
+    "@uiw/react-json-view": "^2.0.0-alpha.30",
     "@xyflow/react": "^12.3.6",
     "autoprefixer": "10.4.15",
     "axios": "^1.7.9",

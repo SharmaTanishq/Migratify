@@ -17,11 +17,16 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
 import { ViewData } from "./TabsComponent";
-import { Card } from "../ui/card";
+
 import { Separator } from "../ui/separator";
 import { cn } from "@/lib/utils";
 import { DraggableField } from "./DraggableField";
-import { DraggableJSONTree } from './DraggableJSONTree';
+
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable"
 
 interface InputFieldProps {
   label: string;
@@ -62,8 +67,8 @@ const InputField = ({
           className={cn(
             "w-full transition-all duration-200",
             isDragging &&
-              "border-2 border-dashed border-red-800/20 bg-red-50/5",
-            isOver && "border-2 border-dashed border-red-800/50 bg-red-50/10"
+              "border-2 border-dashed border-red-800/50 bg-red-50/5",
+            isOver && "border-2 border-dashed border-red-400 bg-red-50/10"
           )}
           placeholder={`Map ${label.toLowerCase()}...`}
         />
@@ -114,7 +119,7 @@ function DroppableArea({
     <div
       className={cn(
         "p-6 rounded-lg  bg-white  transition-all duration-200",
-        isDragging && "ring-1 ring-red-800/10"
+        
       )}
     >
       <div className="space-y-6">
@@ -250,19 +255,25 @@ export const SchemaViewerDemo = () => {
   return (
     <div className="">
       <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-        <div className="grid grid-cols-2 gap-3 divide-x">
-          <ViewData schema={schema as ExtendedJSONSchema7} />
+        <ResizablePanelGroup className="grid grid-cols-2 gap-3 " direction="horizontal">
+          <ResizablePanel defaultSize={80}>
+            <div className="p-3">
+              <ViewData schema={schema as ExtendedJSONSchema7} />
+            </div>
+          </ResizablePanel>
 
-          
-          <div className="pl-3 max-w-[500px]">
-            <DroppableArea
-              id="target"
-              items={items.target}
-              fields={fields}
-              onFieldChange={handleFieldChange}
-            />
-          </div>
-        </div>
+          <ResizableHandle withHandle />
+          <ResizablePanel>
+            <div className="pl-3 max-w-[500px]">
+              <DroppableArea
+                id="target"
+                items={items.target}
+                fields={fields}
+                onFieldChange={handleFieldChange}
+              />
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </DndContext>
     </div>
   );

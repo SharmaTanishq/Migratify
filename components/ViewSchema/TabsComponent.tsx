@@ -10,7 +10,7 @@ import { DraggableJSONTree } from './DraggableJSONTree';
 
 export function ViewData({ schema }: { schema: ExtendedJSONSchema7 }) {
   return (
-    <Tabs className="p-4 pl-0 bg-">
+    <Tabs className="p-4 pl-0">
       <div className="flex justify-end w-full">
         <TabsList className=" flex justify-end ">
           <TabsTrigger value="schema">Schema</TabsTrigger>
@@ -18,7 +18,7 @@ export function ViewData({ schema }: { schema: ExtendedJSONSchema7 }) {
         </TabsList>
       </div>
       <TabsContent value="schema" className="h-[800px] overflow-auto">
-        <div className="h-full">
+        <div className="h-full ">
           <SchemaViewer schema={schema as ExtendedJSONSchema7} />
         </div>
       </TabsContent>

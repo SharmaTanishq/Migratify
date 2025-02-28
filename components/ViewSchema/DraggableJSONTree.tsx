@@ -1,10 +1,8 @@
-import { JSONTree } from 'react-json-tree';
 import { DraggableField } from './DraggableField';
 import { SchemaIcon } from './types';
-import type { LabelRenderer, KeyPath } from 'react-json-tree';
 import { DragOverlay, useDndMonitor, type Modifier } from '@dnd-kit/core';
-import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { useState } from 'react';
+import JsonView from '@uiw/react-json-view';
 
 interface DraggableJSONTreeProps {
   data: any;
@@ -73,81 +71,115 @@ export const DraggableJSONTree: React.FC<DraggableJSONTreeProps> = ({ data, clas
     },
   });
 
-  const renderLabel: LabelRenderer = (rawKeyPath: KeyPath, nodeType, expanded, expandable) => {
-    // Convert readonly array to regular array and ensure all elements are strings
-    const keyPath = [...rawKeyPath].map(k => String(k));
+  // Function to build a proper path from JsonView's context
+  const buildPath = (path: any[], keyName: string): string => {
+    if (!path || path.length === 0) return keyName;
     
-    // KeyPath in react-json-tree is in reverse order (leaf to root)
-    // We need to reverse it to get the correct path order (root to leaf)
-    const reversedPath = [...keyPath].reverse();
+    // Create a full path array including the current key
+    const fullPathArray = [...path, keyName];
     
-    // Filter out the "root" element which is added by react-json-tree
-    const filteredPath = reversedPath.filter(segment => segment !== 'root');
-    
-    // Create a proper JSON path notation with square brackets for array indices
-    const fullPath = filteredPath.reduce((path, segment, index) => {
-      // If segment is a number, it's an array index - use bracket notation
-      if (!isNaN(Number(segment))) {
-        // Check if this is the last segment or if the next segment is also a number
-        const isLastSegment = index === filteredPath.length - 1;
-        const nextSegmentIsNumber = !isLastSegment && !isNaN(Number(filteredPath[index + 1]));
-        
-        // Add a dot after the bracket if there's a property name following the array index
-        return isLastSegment || nextSegmentIsNumber 
-          ? `${path}[${segment}]` 
-          : `${path}[${segment}].`;
-      }
+    // Build the path string with proper notation
+    return fullPathArray.reduce((result, segment, index) => {
+      const segmentStr = String(segment);
       
-      // For the first segment or after an array index with dot already added, don't add another dot
-      if (index === 0 || (index > 0 && !isNaN(Number(filteredPath[index - 1])))) {
-        return `${path}${segment}`;
+      if (typeof segment === 'number' || !isNaN(Number(segmentStr))) {
+        // Array index - use bracket notation
+        return `${result}[${segmentStr}]`;
+      } else if (index === 0) {
+        // First segment - no dot
+        return segmentStr;
+      } else {
+        // Property - use dot notation
+        return `${result}.${segmentStr}`;
       }
-      
-      // Otherwise use dot notation
-      return `${path}.${segment}`;
     }, '');
-    
-    const key = keyPath[0]; // The current key is the first element in the original keyPath
-    
-    // Format the display label - if it's a number, show parent[index]
-    let displayLabel = key;
-    if (!isNaN(Number(key)) && keyPath.length > 1) {
-      const parentKey = keyPath[1];
-      displayLabel = `${parentKey}[${key}]`;
-    }
-    
-    // For the value, we'll use a simpler approach that's less error-prone
-    const type = nodeType.toLowerCase();
-    const icon = getIconForType(type);
-    
-    return (
-      <DraggableField
-        id={fullPath}
-        icon={icon}
-        label={displayLabel}
-        value={key}
-        path={fullPath}
-        className="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800"
-      />
-    );
   };
 
   return (
     <>
       <div className={className}>
-        <JSONTree
-          data={data}
-          theme={{
-            base00: 'transparent',
-            extend: {
-              background: 'transparent',
-            }
+        <JsonView 
+          value={data} 
+          displayDataTypes={false}
+          displayObjectSize={false}
+          enableClipboard={false}
+        
+          style={{
+            backgroundColor: 'transparent',
+            fontFamily: 'monospace',
+            fontSize: '14px',
+            lineHeight: '2',
           }}
-          labelRenderer={renderLabel}
-          shouldExpandNodeInitially={() => true}
-        />
+         
+        >
+          <JsonView.KeyName
+            
+            render={(props, context) => {
+              // Get the key name
+                const keyName = String(context.keyName);
+                
+                // Get the path from JsonView's context
+                const rawPath = (context as any).path || [];
+                
+                // Build the full path
+                const fullPath = buildPath(rawPath, keyName);
+                
+                // Determine the type of the value for icon selection
+                let valueType = typeof context.value;
+                if (Array.isArray(context.value)) {
+                    valueType = 'object'; // Treat arrays as objects for icon purposes
+                } else if (context.value === null) {
+                    valueType = 'string'; // Treat null as string for icon purposes
+                }
+                
+                const icon = getIconForType(valueType);
+                
+                // Format display label
+                let displayLabel = keyName;
+                if (!isNaN(Number(keyName)) && rawPath.length > 0) {
+                    const parentKey = String(rawPath[rawPath.length - 1]);
+                    displayLabel = `${parentKey}[${keyName}]`;
+                }
+                return (
+                    <span className="cursor-grab transition-all duration-200 hover:bg-gray-300 p-1 rounded-md" draggable>
+                        {displayLabel}
+                    </span>)
+            }}
+          />
+        </JsonView>
       </div>
-      <DragOverlay 
+      {/* <style jsx global>{`
+        .custom-json-view {
+          display: flex;
+          flex-direction: column;
+        }
+        .custom-json-view > div {
+          display: flex;
+          flex-direction: row-reverse;
+          justify-content: flex-start;
+          align-items: center;
+          padding: 2px 0;
+        }
+        .custom-json-view > div > div {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+        }
+        .custom-json-view .w-json-view-value {
+          color: #a6e22e;
+          padding-left: 8px;
+        }
+        .custom-json-view .w-json-view-value-number {
+          color: #fd971f;
+        }
+        .custom-json-view .w-json-view-value-boolean {
+          color: #ae81ff;
+        }
+        .custom-json-view .w-json-view-value-null {
+          color: #f8f8f2;
+        }
+      `}</style> */}
+      {/* <DragOverlay 
         dropAnimation={null} 
         modifiers={[adjustForModalPosition]}
         className="drag-overlay"
@@ -163,7 +195,7 @@ export const DraggableJSONTree: React.FC<DraggableJSONTreeProps> = ({ data, clas
             className="shadow-lg bg-white"
           />
         )}
-      </DragOverlay>
+      </DragOverlay> */}
     </>
   );
 }; 

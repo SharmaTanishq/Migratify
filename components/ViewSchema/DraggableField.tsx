@@ -12,16 +12,19 @@ interface DraggableFieldProps {
   path: string;
   className?: string;
   showValue?: boolean;
+  showIcon?: boolean;
 }
 
 export const DraggableField = ({ 
   id, 
   icon, 
+
   label, 
   value, 
   path,
   className,
-  showValue = false 
+  showValue = false,
+  showIcon = true
 }: DraggableFieldProps) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id,
@@ -54,21 +57,13 @@ export const DraggableField = ({
         className
       )}
     >
-      {getIcon(icon)}
+      {showIcon && getIcon(icon)}
       <Separator
         orientation="vertical"
         className="h-4 bg-gray-500 rounded-full opacity-0 transition-all duration-200 group-hover:opacity-100"
       />
       <h2 className="text-sm font-semibold text-gray-800">{label}</h2>
-      {/* {showValue && (
-        <>
-          <Separator
-            orientation="vertical"
-            className="h-4 bg-gray-500 rounded-full opacity-0 transition-all duration-200 group-hover:opacity-100"
-          />
-          <span className="text-xs text-gray-600">{value}</span>
-        </>
-      )} */}
+      
     </div>
   );
 }; 
