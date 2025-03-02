@@ -1,12 +1,14 @@
 import { DraggableField } from './DraggableField';
 import { SchemaIcon } from './types';
 import { DragOverlay, useDndMonitor, type Modifier } from '@dnd-kit/core';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import JsonView from '@uiw/react-json-view';
+import { DraggableSpan } from './DraggableSpan';
 
 interface DraggableJSONTreeProps {
   data: any;
   className?: string;
+  searchTerm?: string;
 }
 
 interface DraggedItem {
@@ -49,8 +51,62 @@ const adjustForModalPosition: Modifier = ({transform}) => {
   };
 };
 
-export const DraggableJSONTree: React.FC<DraggableJSONTreeProps> = ({ data, className }) => {
+export const DraggableJSONTree: React.FC<DraggableJSONTreeProps> = ({ 
+  data, 
+  className,
+  searchTerm = "" 
+}) => {
   const [draggedItem, setDraggedItem] = useState<DraggedItem | null>(null);
+  // Use a ref to maintain a counter for generating unique IDs
+  const idCounterRef = useRef(0);
+  const [filteredData, setFilteredData] = useState(data);
+
+  // Filter data based on search term
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredData(data);
+      return;
+    }
+
+    // Function to filter JSON data based on search term
+    const filterData = (obj: any, path: string[] = []): any => {
+      // For primitive values, check if they match the search term
+      if (typeof obj !== 'object' || obj === null) {
+        return String(obj).toLowerCase().includes(searchTerm.toLowerCase()) ? obj : undefined;
+      }
+
+      // For arrays, filter each item
+      if (Array.isArray(obj)) {
+        const filtered = obj
+          .map((item, index) => filterData(item, [...path, index.toString()]))
+          .filter(item => item !== undefined);
+        
+        return filtered.length > 0 ? filtered : undefined;
+      }
+
+      // For objects, filter each property
+      const result: Record<string, any> = {};
+      let hasMatch = false;
+
+      for (const key in obj) {
+        // Check if key matches search term
+        const keyMatches = key.toLowerCase().includes(searchTerm.toLowerCase());
+        
+        // Recursively filter value
+        const filteredValue = filterData(obj[key], [...path, key]);
+        
+        if (keyMatches || filteredValue !== undefined) {
+          result[key] = keyMatches ? obj[key] : filteredValue;
+          hasMatch = true;
+        }
+      }
+
+      return hasMatch ? result : undefined;
+    };
+
+    const filtered = filterData(data);
+    setFilteredData(filtered !== undefined ? filtered : {});
+  }, [searchTerm, data]);
 
   useDndMonitor({
     onDragStart: (event) => {
@@ -95,107 +151,94 @@ export const DraggableJSONTree: React.FC<DraggableJSONTreeProps> = ({ data, clas
     }, '');
   };
 
+  // Reset the counter when the component renders
+  // This ensures we start fresh with each render
+  idCounterRef.current = 0;
+
   return (
     <>
       <div className={className}>
         <JsonView 
-          value={data} 
+          value={filteredData} 
           displayDataTypes={false}
           displayObjectSize={false}
           enableClipboard={false}
-        
           style={{
             backgroundColor: 'transparent',
             fontFamily: 'monospace',
             fontSize: '14px',
             lineHeight: '2',
           }}
-         
         >
           <JsonView.KeyName
-            
             render={(props, context) => {
               // Get the key name
-                const keyName = String(context.keyName);
-                
-                // Get the path from JsonView's context
-                const rawPath = (context as any).path || [];
-                
-                // Build the full path
-                const fullPath = buildPath(rawPath, keyName);
-                
-                // Determine the type of the value for icon selection
-                let valueType = typeof context.value;
-                if (Array.isArray(context.value)) {
-                    valueType = 'object'; // Treat arrays as objects for icon purposes
-                } else if (context.value === null) {
-                    valueType = 'string'; // Treat null as string for icon purposes
-                }
-                
-                const icon = getIconForType(valueType);
-                
-                // Format display label
-                let displayLabel = keyName;
-                if (!isNaN(Number(keyName)) && rawPath.length > 0) {
-                    const parentKey = String(rawPath[rawPath.length - 1]);
-                    displayLabel = `${parentKey}[${keyName}]`;
-                }
-                return (
-                    <span className="cursor-grab transition-all duration-200 hover:bg-gray-300 p-1 rounded-md" draggable>
-                        {displayLabel}
-                    </span>)
+              console.log("Context",context)
+              const keyName = String(context.keyName);
+              
+              // Get the path from JsonView's context
+              const rawPath = (context as any).path || [];
+              
+              // Build the full path
+              const fullPath = buildPath(rawPath, keyName);
+              
+              // Determine the type of the value for icon selection
+              let valueType = typeof context.value;
+              if (Array.isArray(context.value)) {
+                  valueType = 'object'; // Treat arrays as objects for icon purposes
+              } else if (context.value === null) {
+                  valueType = 'string'; // Treat null as string for icon purposes
+              }
+              
+              // Format display label
+              let displayLabel = keyName;
+              if (!isNaN(Number(keyName)) && rawPath.length > 0) {
+                  const parentKey = String(rawPath[rawPath.length - 1]);
+                  displayLabel = `${parentKey}[${keyName}]`;
+              }
+
+              // Increment the counter to ensure a unique ID for each item
+              const uniqueCounter = idCounterRef.current++;
+              const uniqueId = `draggable-${fullPath}-${uniqueCounter}`;
+            
+              return (
+                  <DraggableSpan 
+                      id={uniqueId}
+                      label={displayLabel}
+                      value={context.value}
+                      path={fullPath}
+                  />
+              )
             }}
           />
+           <JsonView.KeyName 
+          render={({ ...props }, { parentValue, value, keyName , keys = []}) => {
+            
+            if (Array.isArray(parentValue) && Number.isFinite( props.children)) {
+                
+              return <span>{`${keys[keys.length-2]}[${props.children}]`}</span>
+            }
+            return <span {...props} >{keyName}</span>
+          }}
+        />
         </JsonView>
       </div>
-      {/* <style jsx global>{`
-        .custom-json-view {
-          display: flex;
-          flex-direction: column;
-        }
-        .custom-json-view > div {
-          display: flex;
-          flex-direction: row-reverse;
-          justify-content: flex-start;
-          align-items: center;
-          padding: 2px 0;
-        }
-        .custom-json-view > div > div {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-        }
-        .custom-json-view .w-json-view-value {
-          color: #a6e22e;
-          padding-left: 8px;
-        }
-        .custom-json-view .w-json-view-value-number {
-          color: #fd971f;
-        }
-        .custom-json-view .w-json-view-value-boolean {
-          color: #ae81ff;
-        }
-        .custom-json-view .w-json-view-value-null {
-          color: #f8f8f2;
-        }
-      `}</style> */}
-      {/* <DragOverlay 
+     
+      <DragOverlay 
         dropAnimation={null} 
         modifiers={[adjustForModalPosition]}
         className="drag-overlay"
       >
         {draggedItem && (
-          <DraggableField
+          <DraggableSpan
             id={draggedItem.id}
-            icon={draggedItem.icon}
             label={draggedItem.label}
             value={draggedItem.value}
             path={draggedItem.path}
-            showValue={true}
             className="shadow-lg bg-white"
           />
         )}
-      </DragOverlay> */}
+      </DragOverlay>
     </>
   );
 }; 

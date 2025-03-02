@@ -49,16 +49,7 @@ const InputField = ({
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-2">
-        <DraggableField
-          id={`${fieldId}-label`}
-          icon="tag"
-          label={label}
-          value={value}
-          path={fieldId}
-          className="bg-gray-100 hover:bg-gray-200"
-        />
-      </div>
+     
       <div ref={setNodeRef}>
         <Input
           id={fieldId}

@@ -43,4 +43,5 @@ export interface SchemaViewerProps {
   className?: string;
   level?: number;
   path?: string;
+  searchTerm?: string;
 } 
