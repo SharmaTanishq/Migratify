@@ -82,14 +82,14 @@ function OutputNode({
         <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
           <div className="flex items-center justify-start gap-2">
             <Image
-              src={componentData.node_logo.url}
-              alt={componentData.Name}
+              src={componentData?.node_logo?.url}
+              alt={componentData?.Name}
               width={20}
               height={20}
               className="rounded-sm bg-gray-100 p-1"
             />
             <span className="text-sm font-regular text-gray-600">
-              {componentData.Name}
+              {componentData?.Name}
             </span>
           </div>
 

@@ -1,64 +1,28 @@
 import GenericDrawerLayout from "../../Layouts/Drawer";
 import flowStore from "@/components/Store/store";
 
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { ChevronsUpDown } from "lucide-react";
-
 import {
   Card,
-  CardDescription,
-  CardHeader,
+  
   CardContent,
-  CardTitle,
+  
 } from "@/components/ui/card";
 import { ModalStore } from "@/components/Store/modal";
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "@/components/ui/collapsible";
-import { Button } from "@/components/ui/button";
-import { DndContext, DragOverlay } from "@dnd-kit/core";
+
 import { cn } from "@/lib/utils";
 
-import { CSS } from "@dnd-kit/utilities";
 
-import SchemaViewerDemo from "@/components/ViewSchema/demo";
+import SchemaViewerDemo from "@/components/ViewSchema/SchemaUpdate";
 
 import { useState } from "react";
-import { Draggable } from "@/components/DNDKit/draggable";
-import { Droppable } from "@/components/DNDKit/droppable";
 
 function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
   const node = flowStore((state) => state.getNode(id));
   const { modalOpen } = ModalStore();
 
-  const [isDropped, setIsDropped] = useState(false);
-  // const draggableMarkup = <Draggable>Drag me</Draggable>;
-  const [droppableValue, setDroppableValue] = useState(null);
-
-  function handleDragStart(event: any) {
-    const {active} = event;
-    console.log("active", active.data.current.type);
-    setDroppableValue(active.data.current.type);
-  }
-  function handleDragEnd(event: any) {
-    const {active, over } = event;
-    
-    if (event.over && event.over.id === "droppable") {
-    
-      setIsDropped(true);
-    }
-  }
-
-  //  const schema = jsonToSchema(VTEX_ORDER_SCHEMA);
 
   return (
     <GenericDrawerLayout isOpen={isOpen} node={node} id={id}>
-      
       <div className="w-full ">
         <Card
           className={cn(
@@ -66,16 +30,11 @@ function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
             modalOpen ? "rounded-xl" : "rounded-md"
           )}
         >
-      
           <CardContent className="w-full">
-           
-            
-            
-            <SchemaViewerDemo /> 
+            <SchemaViewerDemo  />
           </CardContent>
         </Card>
       </div>
-    
     </GenericDrawerLayout>
   );
 }

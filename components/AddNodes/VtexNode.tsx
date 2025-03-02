@@ -55,9 +55,9 @@ function VtexNode({
   const renderNodeIcon = useCallback(() => {
     return (
       <MemoizedNodeIcon
-        dataType={UIData.Name}
+        dataType={UIData?.Name}
         showNode={true}
-        icon={UIData.node_logo.url}
+        icon={UIData?.node_logo?.url}
         isGroup={!!data.node?.flow}
         hasToolMode={false}
       />
@@ -67,7 +67,7 @@ function VtexNode({
   const renderNodeName = useCallback(() => {
     return (
       <MemoizedNodeName
-        display_name={UIData.Name}
+        display_name={UIData?.Name}
         selected={selected}
         nodeId={id}
         showNode={true}
@@ -83,7 +83,7 @@ function VtexNode({
   const renderNodeDescription = useCallback(() => {
     return (
       <MemoizedNodeDescription
-        description={UIData.node_description}
+        description={UIData?.node_description}
         selected={selected}
         nodeId={id}
         emptyPlaceholder={""}
