@@ -243,7 +243,7 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
 
   return (
     <>
-      <ScrollArea className={cn("border-none flex-1 bg-white/80", className)}>
+      <ScrollArea className={cn("border-none flex-1 bg-none", className)}>
         <div className="p-1 pl-0" style={{ scrollbarGutter: "stable" }}>
           <div className="flex items-center gap-2 mb-4">
             {getIcon(filteredSchema.icon || "file-json")}

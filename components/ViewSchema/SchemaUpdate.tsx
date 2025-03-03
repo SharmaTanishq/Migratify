@@ -19,15 +19,13 @@ import { Checkbox } from "../ui/checkbox";
 
 import { ViewData } from "./TabsComponent";
 
-import { Separator } from "../ui/separator";
 import { cn } from "@/lib/utils";
-import { DraggableField } from "./DraggableField";
 
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable"
+} from "@/components/ui/resizable";
 import { ModalStore } from "../Store/modal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/shadcn-tabs";
 import { Button } from "../ui/button";
@@ -45,6 +43,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Textarea } from "../ui/textarea";
 
 interface InputFieldProps {
   label: string;
@@ -74,33 +73,12 @@ const InputField = ({
   return (
     <div className={cn("flex flex-col", indented && "ml-6")}>
       <div className="flex items-center justify-between mb-2">
-        <Label 
-          htmlFor={fieldId}
-          className="text-sm font-normal text-black"
-        >
+        <Label htmlFor={fieldId} className="text-sm font-normal text-black">
           {label}
         </Label>
-        
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div>
-                <Checkbox 
-                  id={`${fieldId}-enabled`} 
-                  checked={enabled}
-                  onCheckedChange={onEnabledChange}
-                  className="h-5 w-5 rounded-sm border-gray-300"
-                />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{enabled ? "Disable" : "Enable"} {label}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
       </div>
-      
-      <div ref={setNodeRef}>
+
+      <div ref={setNodeRef} className="flex items-center justify-between gap-6">
         <Input
           id={fieldId}
           value={value}
@@ -109,12 +87,43 @@ const InputField = ({
           className={cn(
             "w-full transition-all duration-200 rounded-md border-gray-300",
             !enabled && "opacity-50 cursor-not-allowed",
-            isDragging && enabled &&
-              "border-2 border-dashed border-gray-400 bg-gray-50",
-            isOver && enabled && "border-2 border-dashed border-blue-400 bg-blue-50/10"
+            isDragging &&
+              enabled &&
+              "border-2 border-dashed border-gray-400  bg-gray-50",
+            isOver &&
+              enabled &&
+              "border-2 border-dashed border-purple-500 bg-purple-50/50"
           )}
-          placeholder={fieldId === "orderId" ? "Pietro Schirano" : fieldId === "items" ? "@skirano" : `Enter ${label.toLowerCase()}...`}
+          placeholder={
+            fieldId === "orderId" ? "Order Id" : 
+            fieldId === "itemName" ? "Enter item name..." : 
+            fieldId === "itemImage" ? "Enter item image..." : 
+            fieldId === "itemQuantity" ? "Enter item quantity..." : 
+            fieldId === "itemPrice" ? "Enter item price..." : 
+            fieldId === "shippingAddress" ? "Enter shipping address..." : 
+            fieldId === "billingAddress" ? "Enter billing address..." : 
+            `Enter ${label.toLowerCase()}...`
+          }
         />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <Checkbox
+                  id={`${fieldId}-enabled`}
+                  checked={enabled}
+                  onCheckedChange={onEnabledChange}
+                  className="w-5 h-5 rounded-sm  data-[state=checked]:border-none data-[state=checked]:bg-green-600 "
+                />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>
+                {enabled ? "Disable" : "Enable"} {label}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );
@@ -190,9 +199,9 @@ function DroppableArea({
   };
 
   return (
-    <div className="rounded-lg bg-white p-3">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="px-4 pt-4">
+    <div className="rounded-lg bg-white p-3 shadow-sm border border-gray-100 flex flex-col">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1">
+        <div className="px-1 pt-4">
           <TabsList className="grid w-[180px] grid-cols-2 bg-gray-100 rounded-md">
             <TabsTrigger 
               value="global" 
@@ -209,12 +218,13 @@ function DroppableArea({
           </TabsList>
         </div>
 
-        <TabsContent value="global" className="p-6">
+        <TabsContent 
+          value="global" 
+          className="p-6"
+        >
           <div className="space-y-6">
             <div className="text-gray-600 text-sm mb-4">
               Configure Values and Data for your emails here.
-              <br />
-              Click save when you're done.
             </div>
             
             <div className="text-gray-500 text-sm font-medium mb-4">
@@ -311,10 +321,6 @@ function DroppableArea({
                 />
               </div>
             </div>
-
-            <Button className="bg-gray-900 hover:bg-gray-800 text-white mt-4">
-              Save
-            </Button>
           </div>
         </TabsContent>
 
@@ -380,13 +386,16 @@ function DroppableArea({
                 No events available. Connect this node to a source node with events.
               </div>
             )}
-
-            <Button className="bg-gray-900 hover:bg-gray-800 text-white mt-4">
-              Save
-            </Button>
           </div>
         </TabsContent>
       </Tabs>
+      
+      {/* Save button outside of the tabs content for consistent visibility */}
+      <div className="mt-4 flex justify-end">
+        <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+          Save
+        </Button>
+      </div>
     </div>
   );
 }
@@ -467,20 +476,20 @@ export const SchemaViewerDemo = () => {
   };
 
   return (
-    <div className="">
+    <div className="h-full">
       <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
         {modalOpen ? (
-          <ResizablePanelGroup className="grid grid-cols-2 gap-3" direction="horizontal">
-            <ResizablePanel defaultSize={80}>
-              <div className="p-3">
+          <ResizablePanelGroup className=" gap-3 h-full" direction="horizontal">
+            <ResizablePanel defaultSize={80} className="bg-white rounded-lg shadow-sm">
+              <div className="p-3 max-h-[900px] overflow-auto">
                 <ViewData schema={schema as ExtendedJSONSchema7} />
               </div>
             </ResizablePanel>
             
             <ResizableHandle withHandle />
             
-            <ResizablePanel>
-              <div className="pl-3 max-w-[500px]">
+            <ResizablePanel className="bg-white rounded-lg shadow-sm">
+              <div className="p-2 max-w-[500px]">
                 <DroppableArea
                   id="target"
                   items={items.target}

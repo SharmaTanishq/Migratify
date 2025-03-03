@@ -23,17 +23,8 @@ function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
 
   return (
     <GenericDrawerLayout isOpen={isOpen} node={node} id={id}>
-      <div className="w-full ">
-        <Card
-          className={cn(
-            "w-full h-full shadow-none ",
-            modalOpen ? "rounded-xl" : "rounded-md"
-          )}
-        >
-          <CardContent className="w-full">
-            <SchemaViewerDemo  />
-          </CardContent>
-        </Card>
+      <div className="w-full p-2">
+        <SchemaViewerDemo  />
       </div>
     </GenericDrawerLayout>
   );

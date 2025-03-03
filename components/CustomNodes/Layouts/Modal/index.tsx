@@ -41,7 +41,7 @@ function ModalLayout({
       <DialogContent  className={cn(
         "flex flex-col overflow-hidden transition-all duration-200",
         sizeClasses[size],
-        "min-h-[200px] max-h-[90vh]",
+        "min-h-[200px] max-h-[90vh] pb-5",
         // Center content when smaller than max width
         "mx-auto"
       )}>
