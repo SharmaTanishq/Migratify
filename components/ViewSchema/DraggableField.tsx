@@ -43,7 +43,7 @@ export const DraggableField = ({
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
       .join("");
     const Icon = (Icons as any)[iconKey] || Icons.HelpCircle;
-    return <Icon className="w-4 h-4 text-gray-500" />;
+    return <Icon className="w-5 h-5  text-gray-600 " />;
   };
 
   return (
@@ -52,8 +52,8 @@ export const DraggableField = ({
       {...listeners}
       {...attributes}
       className={cn(
-        "cursor-move font-bold text-black flex items-center justify-center bg-gray-200 dark:bg-gray-800 gap-1 hover:bg-gray-300 dark:hover:bg-gray-700 px-2 py-1 rounded-md touch-none",
-        isDragging && "opacity-50",
+        "cursor-grab font-bold text-black flex items-center justify-center bg-gray-200 dark:bg-gray-800 gap-2 hover:bg-gray-300 dark:hover:bg-gray-700 px-2 py-2 rounded-md touch-none",
+        isDragging && "opacity-50 ",
         className
       )}
     >
@@ -62,7 +62,7 @@ export const DraggableField = ({
         orientation="vertical"
         className="h-4 bg-gray-500 rounded-full opacity-0 transition-all duration-200 group-hover:opacity-100"
       />
-      <h2 className="text-sm font-semibold text-gray-800">{label}</h2>
+      <span className="text-sm font-mono font-semibold  text-black">{label}</span>
       
     </div>
   );

@@ -188,7 +188,7 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
       return (
         <Collapsible key={key} defaultOpen={shouldExpand} className="w-full">
           <CollapsibleTrigger
-            className="flex items-center gap-2 w-full hover:bg-gray-100 dark:hover:bg-gray-800 p-1 rounded"
+            className="flex items-center gap-4 w-full hover:bg-gray-100 dark:hover:bg-gray-800 p-1 rounded"
             onClick={() => setIsExpanded(!isExpanded)}
           >
             {isExpanded ? (
@@ -212,7 +212,7 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
                 renderValue(v as ExtendedJSONSchema7, k, fullPath)
               )}
             {value.type === "array" && value.items && (
-              <div className="py-1">
+              <div className="py-2">
                 {renderValue(
                   value.items as ExtendedJSONSchema7,
                   "items",
@@ -226,7 +226,7 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
     }
 
     return (
-      <div className="flex items-center gap-2 p-1 group">
+      <div className="flex items-center gap-3 mb-1 p-1 group">
         <DraggableField
           id={fullPath}
           icon={value.icon || "circle"}
@@ -243,8 +243,9 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
 
   return (
     <>
-      <ScrollArea className={cn("border-none flex-1 bg-none", className)}>
-        <div className="p-1 pl-0" style={{ scrollbarGutter: "stable" }}>
+      <ScrollArea className={cn("border-none  bg-none h-[60vh]", className)}>
+        
+        <div className="p-1 pl-0" >
           <div className="flex items-center gap-2 mb-4">
             {getIcon(filteredSchema.icon || "file-json")}
             <h3 className="text-lg font-semibold">
@@ -260,7 +261,7 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
               Object.keys(filteredSchema.properties).length === 0 &&
               searchTerm && (
                 <div className="text-gray-500 italic">
-                  No matching fields found
+                    No matching fields found
                 </div>
               )}
           </div>
@@ -275,8 +276,9 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
             label={draggedItem.label}
             value={draggedItem.value}
             path={draggedItem.path}
+            showIcon={false}
             showValue={true}
-            className="shadow-lg"
+            className="shadow-lg border border-dashed border-indigo-600 bg-none gap-0 cursor-grabbing "
           />
         )}
       </DragOverlay>

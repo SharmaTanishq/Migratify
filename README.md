@@ -1,8 +1,8 @@
-# Migratify
+# Bridgeflow
 
-![Migratify Logo](public/icons/Bridgeflow.svg)
+![Bridgeflow Logo](public/icons/Bridgeflow.svg)
 
-Migratify is a powerful e-commerce platform migration tool that helps businesses seamlessly transition between different e-commerce platforms. With an intuitive visual workflow builder and intelligent data mapping, Migratify simplifies the complex process of migrating your online store.
+Bridgeflow is a powerful e-commerce platform migration tool that helps businesses seamlessly transition between different e-commerce platforms. With an intuitive visual workflow builder and intelligent data mapping, Bridgeflow simplifies the complex process of migrating your online store.
 
 ## Features
 

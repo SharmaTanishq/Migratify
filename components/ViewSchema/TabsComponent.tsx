@@ -18,7 +18,7 @@ export function ViewData({ schema }: { schema: ExtendedJSONSchema7 }) {
     <Tabs defaultValue="schema" className="p-4 pl-0 bg-white rounded-lg">
       <div className="flex justify-between px-4 items-center w-full mb-4 ">
         {/* Search bar on the left */}
-        <div className="relative w-1/2">
+        <div className="relative w-1/2 ">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
           <Input
             type="text"
@@ -34,12 +34,12 @@ export function ViewData({ schema }: { schema: ExtendedJSONSchema7 }) {
           <TabsTrigger value="schema" className="data-[state=active]:bg-transparent data-[state=active]:shadow-none">Schema</TabsTrigger>
           <TabsTrigger value="json" className="data-[state=active]:bg-transparent data-[state=active]:shadow-none">JSON</TabsTrigger>
         </TabsList>
-      </div>
       
-      <TabsContent value="schema" className=" max-h-[850px] overflow-auto pl-7">
-        <div className="h-full">
+      </div>
+      <TabsContent value="schema" className=" pl-7">
+        
           <SchemaViewer schema={schema as ExtendedJSONSchema7} searchTerm={searchTerm} />
-        </div>
+        
       </TabsContent>
       
       <TabsContent value="json" className=" pl-7">
@@ -47,7 +47,7 @@ export function ViewData({ schema }: { schema: ExtendedJSONSchema7 }) {
           <ScrollBar orientation="vertical" />
           <DraggableJSONTree 
             data={VTEX_ORDER_SCHEMA} 
-            className="overflow-auto" 
+            className="max-h-[60vh]" 
             searchTerm={searchTerm}
           />
         </ScrollArea>

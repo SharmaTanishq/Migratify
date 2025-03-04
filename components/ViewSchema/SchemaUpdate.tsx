@@ -95,14 +95,21 @@ const InputField = ({
               "border-2 border-dashed border-purple-500 bg-purple-50/50"
           )}
           placeholder={
-            fieldId === "orderId" ? "Order Id" : 
-            fieldId === "itemName" ? "Enter item name..." : 
-            fieldId === "itemImage" ? "Enter item image..." : 
-            fieldId === "itemQuantity" ? "Enter item quantity..." : 
-            fieldId === "itemPrice" ? "Enter item price..." : 
-            fieldId === "shippingAddress" ? "Enter shipping address..." : 
-            fieldId === "billingAddress" ? "Enter billing address..." : 
-            `Enter ${label.toLowerCase()}...`
+            fieldId === "orderId"
+              ? "Order Id"
+              : fieldId === "itemName"
+                ? "Enter item name..."
+                : fieldId === "itemImage"
+                  ? "Enter item image..."
+                  : fieldId === "itemQuantity"
+                    ? "Enter item quantity..."
+                    : fieldId === "itemPrice"
+                      ? "Enter item price..."
+                      : fieldId === "shippingAddress"
+                        ? "Enter shipping address..."
+                        : fieldId === "billingAddress"
+                          ? "Enter billing address..."
+                          : `Enter ${label.toLowerCase()}...`
           }
         />
         <TooltipProvider>
@@ -171,18 +178,19 @@ function DroppableArea({
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [activeTab, setActiveTab] = useState("global");
-  
+
   // Get parent node and events
   const sourceNode = flowStore((state) => {
-    const edges = state.edges.filter(edge => edge.target === nodeId);
+    const edges = state.edges.filter((edge) => edge.target === nodeId);
     if (edges.length > 0) {
       const sourceId = edges[0].source;
       return state.getNode(sourceId);
     }
     return null;
   });
-  
-  const parentEvents = webhooksStore().getEvents(sourceNode?._id as string) || [];
+
+  const parentEvents =
+    webhooksStore().getEvents(sourceNode?._id as string) || [];
 
   useDndMonitor({
     onDragStart: () => setIsDragging(true),
@@ -194,23 +202,28 @@ function DroppableArea({
     onFieldChange(field, value);
   };
 
-  const handleFieldEnabledChange = (field: keyof Fields) => (enabled: boolean) => {
-    onFieldEnabledChange(field, enabled);
-  };
+  const handleFieldEnabledChange =
+    (field: keyof Fields) => (enabled: boolean) => {
+      onFieldEnabledChange(field, enabled);
+    };
 
   return (
-    <div className="rounded-lg bg-white p-3 shadow-sm border border-gray-100 flex flex-col">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1">
+    <div className="rounded-lg bg-white p-2 flex flex-col   ">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="w-full flex-1"
+      >
         <div className="px-1 pt-4">
           <TabsList className="grid w-[180px] grid-cols-2 bg-gray-100 rounded-md">
-            <TabsTrigger 
-              value="global" 
+            <TabsTrigger
+              value="global"
               className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-none"
             >
               Global
             </TabsTrigger>
-            <TabsTrigger 
-              value="event" 
+            <TabsTrigger
+              value="event"
               className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-none"
             >
               Event
@@ -218,21 +231,18 @@ function DroppableArea({
           </TabsList>
         </div>
 
-        <TabsContent 
-          value="global" 
-          className="p-6"
-        >
-          <div className="space-y-6">
-            <div className="text-gray-600 text-sm mb-4">
-              Configure Values and Data for your emails here.
-            </div>
+        <TabsContent value="global" className="p-6 min-h-[60vh]">
+          <div className="space-y-4">
             
+
             <div className="text-gray-500 text-sm font-medium mb-4">
               Drag Values from Schema or JSON
             </div>
 
             {/* Order Information */}
-            <div className="space-y-3 mb-6">
+            <div className="mb-6">
+               <h3 className="text-base font-medium mb-3">Order Information</h3>
+              <div className="space-y-4">
               <InputField
                 label="Order Number :"
                 fieldId="orderId"
@@ -240,8 +250,10 @@ function DroppableArea({
                 value={fields.orderId.value}
                 onChange={handleFieldChange("orderId")}
                 enabled={fields.orderId.enabled}
+                indented
                 onEnabledChange={handleFieldEnabledChange("orderId")}
               />
+              </div>
             </div>
 
             {/* Items Section */}
@@ -258,7 +270,7 @@ function DroppableArea({
                   onEnabledChange={handleFieldEnabledChange("itemName")}
                   indented
                 />
-                
+
                 <InputField
                   label="Item Image"
                   fieldId="itemImage"
@@ -269,7 +281,7 @@ function DroppableArea({
                   onEnabledChange={handleFieldEnabledChange("itemImage")}
                   indented
                 />
-                
+
                 <InputField
                   label="Item Quantity"
                   fieldId="itemQuantity"
@@ -280,7 +292,7 @@ function DroppableArea({
                   onEnabledChange={handleFieldEnabledChange("itemQuantity")}
                   indented
                 />
-                
+
                 <InputField
                   label="Item Price"
                   fieldId="itemPrice"
@@ -296,7 +308,9 @@ function DroppableArea({
 
             {/* Shipping Information */}
             <div className="mb-6">
-              <h3 className="text-base font-medium mb-3">Shipping Information</h3>
+              <h3 className="text-base font-medium mb-3">
+                Shipping Information
+              </h3>
               <div className="space-y-4">
                 <InputField
                   label="Shipping Address"
@@ -308,7 +322,7 @@ function DroppableArea({
                   onEnabledChange={handleFieldEnabledChange("shippingAddress")}
                   indented
                 />
-                
+
                 <InputField
                   label="Billing Address"
                   fieldId="billingAddress"
@@ -324,12 +338,12 @@ function DroppableArea({
           </div>
         </TabsContent>
 
-        <TabsContent value="event" className="p-6">
+        <TabsContent value="event" className="p-6 min-h-[60vh]">
           <div className="space-y-6">
             <div className="text-gray-600 text-sm mb-4">
               Configure event-specific values here.
             </div>
-            
+
             {parentEvents.length > 0 ? (
               <div className="space-y-4">
                 {parentEvents.map((event) => (
@@ -351,7 +365,7 @@ function DroppableArea({
                           onEnabledChange={handleFieldEnabledChange("subject")}
                         />
                       </div>
-                      
+
                       {/* To Field */}
                       <div className="space-y-3 mb-4">
                         <InputField
@@ -364,7 +378,7 @@ function DroppableArea({
                           onEnabledChange={handleFieldEnabledChange("to")}
                         />
                       </div>
-                      
+
                       {/* Content Field */}
                       <div className="space-y-3">
                         <InputField
@@ -383,13 +397,14 @@ function DroppableArea({
               </div>
             ) : (
               <div className="text-gray-500 text-sm p-4 border rounded-md">
-                No events available. Connect this node to a source node with events.
+                No events available. Connect this node to a source node with
+                events.
               </div>
             )}
           </div>
         </TabsContent>
       </Tabs>
-      
+
       {/* Save button outside of the tabs content for consistent visibility */}
       <div className="mt-4 flex justify-end">
         <Button className="bg-purple-600 hover:bg-purple-700 text-white">
@@ -422,16 +437,16 @@ export const SchemaViewerDemo = () => {
   });
 
   const handleFieldChange = (field: keyof Fields, value: string) => {
-    setFields((prev) => ({ 
-      ...prev, 
-      [field]: { ...prev[field], value } 
+    setFields((prev) => ({
+      ...prev,
+      [field]: { ...prev[field], value },
     }));
   };
 
   const handleFieldEnabledChange = (field: keyof Fields, enabled: boolean) => {
-    setFields((prev) => ({ 
-      ...prev, 
-      [field]: { ...prev[field], enabled } 
+    setFields((prev) => ({
+      ...prev,
+      [field]: { ...prev[field], enabled },
     }));
   };
 
@@ -480,14 +495,17 @@ export const SchemaViewerDemo = () => {
       <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
         {modalOpen ? (
           <ResizablePanelGroup className=" gap-3 h-full" direction="horizontal">
-            <ResizablePanel defaultSize={80} className="bg-white rounded-lg shadow-sm">
-              <div className="p-3 max-h-[900px] overflow-auto">
+            <ResizablePanel
+              defaultSize={80}
+              className="bg-white  shadow-sm"
+            >
+              <div className="p-3  overflow-auto">
                 <ViewData schema={schema as ExtendedJSONSchema7} />
               </div>
             </ResizablePanel>
-            
+
             <ResizableHandle withHandle />
-            
+
             <ResizablePanel className="bg-white rounded-lg shadow-sm">
               <div className="p-2 max-w-[500px]">
                 <DroppableArea
@@ -496,7 +514,11 @@ export const SchemaViewerDemo = () => {
                   fields={fields}
                   onFieldChange={handleFieldChange}
                   onFieldEnabledChange={handleFieldEnabledChange}
-                  nodeId={flowStore.getState().nodes.find(node => node.type === "mailNode")?.id || ""}
+                  nodeId={
+                    flowStore
+                      .getState()
+                      .nodes.find((node) => node.type === "mailNode")?.id || ""
+                  }
                 />
               </div>
             </ResizablePanel>
@@ -509,7 +531,11 @@ export const SchemaViewerDemo = () => {
               fields={fields}
               onFieldChange={handleFieldChange}
               onFieldEnabledChange={handleFieldEnabledChange}
-              nodeId={flowStore.getState().nodes.find(node => node.type === "mailNode")?.id || ""}
+              nodeId={
+                flowStore
+                  .getState()
+                  .nodes.find((node) => node.type === "mailNode")?.id || ""
+              }
             />
           </div>
         )}
