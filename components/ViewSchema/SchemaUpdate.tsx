@@ -3,6 +3,7 @@ import SchemaViewer from "./index";
 import { jsonToSchema } from "@/utils/jsonSchema";
 import { VTEX_ORDER_SCHEMA } from "../CustomNodes/Mail/Drawer";
 import { ExtendedJSONSchema7 } from "./types";
+import {AutoScrollActivator} from '@dnd-kit/core';
 import {
   DndContext,
   DragEndEvent,
@@ -44,6 +45,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Textarea } from "../ui/textarea";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 interface InputFieldProps {
   label: string;
@@ -208,7 +210,7 @@ function DroppableArea({
     };
 
   return (
-    <div className="rounded-lg bg-white p-2 flex flex-col   ">
+    <div className="rounded-lg bg-white p-2 flex flex-col overflow-auto  ">
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
@@ -231,110 +233,115 @@ function DroppableArea({
           </TabsList>
         </div>
 
-        <TabsContent value="global" className="p-6 min-h-[60vh]">
+        <TabsContent value="global" className="p-6 min-h-[60vh] flex-1">
           <div className="space-y-4">
-            
-
             <div className="text-gray-500 text-sm font-medium mb-4">
               Drag Values from Schema or JSON
             </div>
 
             {/* Order Information */}
-            <div className="mb-6">
-               <h3 className="text-base font-medium mb-3">Order Information</h3>
-              <div className="space-y-4">
-              <InputField
-                label="Order Number :"
-                fieldId="orderId"
-                isDragging={isDragging}
-                value={fields.orderId.value}
-                onChange={handleFieldChange("orderId")}
-                enabled={fields.orderId.enabled}
-                indented
-                onEnabledChange={handleFieldEnabledChange("orderId")}
-              />
+            <ScrollArea className="h-[50vh] p-4 pt-0 pb-0 pl-0">
+              <ScrollBar orientation="vertical"  />
+              <div className="mb-6  "style={{ scrollbarGutter: "stable" }}>
+                <h3 className="text-base font-medium mb-3">
+                  Order Information
+                </h3>
+                <div className="space-y-2">
+                  <InputField
+                    label="Order Number :"
+                    fieldId="orderId"
+                    isDragging={isDragging}
+                    value={fields.orderId.value}
+                    onChange={handleFieldChange("orderId")}
+                    enabled={fields.orderId.enabled}
+                    indented
+                    onEnabledChange={handleFieldEnabledChange("orderId")}
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Items Section */}
-            <div className="mb-6">
-              <h3 className="text-base font-medium mb-3">Items</h3>
-              <div className="space-y-4">
-                <InputField
-                  label="Item Name"
-                  fieldId="itemName"
-                  isDragging={isDragging}
-                  value={fields.itemName.value}
-                  onChange={handleFieldChange("itemName")}
-                  enabled={fields.itemName.enabled}
-                  onEnabledChange={handleFieldEnabledChange("itemName")}
-                  indented
-                />
+              {/* Items Section */}
+              <div className="mb-6">
+                <h3 className="text-base font-medium mb-3">Items</h3>
+                <div className="space-y-4">
+                  <InputField
+                    label="Item Name"
+                    fieldId="itemName"
+                    isDragging={isDragging}
+                    value={fields.itemName.value}
+                    onChange={handleFieldChange("itemName")}
+                    enabled={fields.itemName.enabled}
+                    onEnabledChange={handleFieldEnabledChange("itemName")}
+                    indented
+                  />
 
-                <InputField
-                  label="Item Image"
-                  fieldId="itemImage"
-                  isDragging={isDragging}
-                  value={fields.itemImage.value}
-                  onChange={handleFieldChange("itemImage")}
-                  enabled={fields.itemImage.enabled}
-                  onEnabledChange={handleFieldEnabledChange("itemImage")}
-                  indented
-                />
+                  <InputField
+                    label="Item Image"
+                    fieldId="itemImage"
+                    isDragging={isDragging}
+                    value={fields.itemImage.value}
+                    onChange={handleFieldChange("itemImage")}
+                    enabled={fields.itemImage.enabled}
+                    onEnabledChange={handleFieldEnabledChange("itemImage")}
+                    indented
+                  />
 
-                <InputField
-                  label="Item Quantity"
-                  fieldId="itemQuantity"
-                  isDragging={isDragging}
-                  value={fields.itemQuantity.value}
-                  onChange={handleFieldChange("itemQuantity")}
-                  enabled={fields.itemQuantity.enabled}
-                  onEnabledChange={handleFieldEnabledChange("itemQuantity")}
-                  indented
-                />
+                  <InputField
+                    label="Item Quantity"
+                    fieldId="itemQuantity"
+                    isDragging={isDragging}
+                    value={fields.itemQuantity.value}
+                    onChange={handleFieldChange("itemQuantity")}
+                    enabled={fields.itemQuantity.enabled}
+                    onEnabledChange={handleFieldEnabledChange("itemQuantity")}
+                    indented
+                  />
 
-                <InputField
-                  label="Item Price"
-                  fieldId="itemPrice"
-                  isDragging={isDragging}
-                  value={fields.itemPrice.value}
-                  onChange={handleFieldChange("itemPrice")}
-                  enabled={fields.itemPrice.enabled}
-                  onEnabledChange={handleFieldEnabledChange("itemPrice")}
-                  indented
-                />
+                  <InputField
+                    label="Item Price"
+                    fieldId="itemPrice"
+                    isDragging={isDragging}
+                    value={fields.itemPrice.value}
+                    onChange={handleFieldChange("itemPrice")}
+                    enabled={fields.itemPrice.enabled}
+                    onEnabledChange={handleFieldEnabledChange("itemPrice")}
+                    indented
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Shipping Information */}
-            <div className="mb-6">
-              <h3 className="text-base font-medium mb-3">
-                Shipping Information
-              </h3>
-              <div className="space-y-4">
-                <InputField
-                  label="Shipping Address"
-                  fieldId="shippingAddress"
-                  isDragging={isDragging}
-                  value={fields.shippingAddress.value}
-                  onChange={handleFieldChange("shippingAddress")}
-                  enabled={fields.shippingAddress.enabled}
-                  onEnabledChange={handleFieldEnabledChange("shippingAddress")}
-                  indented
-                />
+              {/* Shipping Information */}
+              <div className="mb-6">
+                <h3 className="text-base font-medium mb-3">
+                  Shipping Information
+                </h3>
+                <div className="space-y-4">
+                  <InputField
+                    label="Shipping Address"
+                    fieldId="shippingAddress"
+                    isDragging={isDragging}
+                    value={fields.shippingAddress.value}
+                    onChange={handleFieldChange("shippingAddress")}
+                    enabled={fields.shippingAddress.enabled}
+                    onEnabledChange={handleFieldEnabledChange(
+                      "shippingAddress"
+                    )}
+                    indented
+                  />
 
-                <InputField
-                  label="Billing Address"
-                  fieldId="billingAddress"
-                  isDragging={isDragging}
-                  value={fields.billingAddress.value}
-                  onChange={handleFieldChange("billingAddress")}
-                  enabled={fields.billingAddress.enabled}
-                  onEnabledChange={handleFieldEnabledChange("billingAddress")}
-                  indented
-                />
+                  <InputField
+                    label="Billing Address"
+                    fieldId="billingAddress"
+                    isDragging={isDragging}
+                    value={fields.billingAddress.value}
+                    onChange={handleFieldChange("billingAddress")}
+                    enabled={fields.billingAddress.enabled}
+                    onEnabledChange={handleFieldEnabledChange("billingAddress")}
+                    indented
+                  />
+                </div>
               </div>
-            </div>
+            </ScrollArea>
           </div>
         </TabsContent>
 
@@ -492,22 +499,19 @@ export const SchemaViewerDemo = () => {
 
   return (
     <div className="h-full">
-      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd} autoScroll={{activator: AutoScrollActivator.DraggableRect}}>
         {modalOpen ? (
           <ResizablePanelGroup className=" gap-3 h-full" direction="horizontal">
-            <ResizablePanel
-              defaultSize={80}
-              className="bg-white  shadow-sm"
-            >
-              <div className="p-3  overflow-auto">
+            <ResizablePanel defaultSize={60} className="bg-white  shadow-sm">
+              <div className="p-3 ">
                 <ViewData schema={schema as ExtendedJSONSchema7} />
               </div>
             </ResizablePanel>
 
             <ResizableHandle withHandle />
 
-            <ResizablePanel className="bg-white rounded-lg shadow-sm">
-              <div className="p-2 max-w-[500px]">
+            <ResizablePanel className="bg-white shadow-sm">
+              <div className="p-2 ">
                 <DroppableArea
                   id="target"
                   items={items.target}
@@ -524,7 +528,7 @@ export const SchemaViewerDemo = () => {
             </ResizablePanel>
           </ResizablePanelGroup>
         ) : (
-          <div className="w-full">
+          <div className="w-full ">
             <DroppableArea
               id="target"
               items={items.target}

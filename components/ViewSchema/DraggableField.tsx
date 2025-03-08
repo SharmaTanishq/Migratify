@@ -51,6 +51,7 @@ export const DraggableField = ({
       ref={setNodeRef}
       {...listeners}
       {...attributes}
+      data-draggable="true"
       className={cn(
         "cursor-grab font-bold text-black flex items-center justify-center bg-gray-200 dark:bg-gray-800 gap-2 hover:bg-gray-300 dark:hover:bg-gray-700 px-2 py-2 rounded-md touch-none",
         isDragging && "opacity-50 ",

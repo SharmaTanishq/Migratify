@@ -31,8 +31,9 @@ export const DraggableSpan = ({
       ref={setNodeRef}
       {...listeners}
       {...attributes}
+      data-draggable="true"
       className={cn(
-        "cursor-grab transition-all duration-200 hover:bg-gray-300 p-1 rounded-md",
+        "cursor-grab transition-all duration-200 hover:bg-gray-300 p-1 rounded-md max-w-full overflow-hidden text-ellipsis inline-block",
         isDragging && "opacity-50",
         className
       )}

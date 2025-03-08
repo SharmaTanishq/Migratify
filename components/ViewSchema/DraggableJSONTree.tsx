@@ -118,12 +118,18 @@ export const DraggableJSONTree: React.FC<DraggableJSONTreeProps> = ({
         value: data.value,
         path: data.path,
       });
+      // Add dragging class to body to prevent horizontal scrolling
+      document.body.classList.add('dragging');
     },
     onDragEnd: () => {
       setDraggedItem(null);
+      // Remove dragging class from body
+      document.body.classList.remove('dragging');
     },
     onDragCancel: () => {
       setDraggedItem(null);
+      // Remove dragging class from body
+      document.body.classList.remove('dragging');
     },
   });
 
@@ -157,7 +163,7 @@ export const DraggableJSONTree: React.FC<DraggableJSONTreeProps> = ({
 
   return (
     <>
-      <div className={className}>
+      <div className={`${className} overflow-x-hidden`}>
         <JsonView 
           value={filteredData} 
           displayDataTypes={false}
@@ -227,7 +233,7 @@ export const DraggableJSONTree: React.FC<DraggableJSONTreeProps> = ({
       <DragOverlay 
         dropAnimation={null} 
         modifiers={[adjustForModalPosition]}
-        className="drag-overlay"
+        className="drag-overlay overflow-x-hidden"
       >
         {draggedItem && (
           <DraggableSpan

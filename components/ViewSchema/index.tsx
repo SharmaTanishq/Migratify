@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import * as Icons from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import {
   Collapsible,
   CollapsibleContent,
@@ -31,7 +31,7 @@ const modalPositionModifier = (args: any) => {
 
   return {
     ...transform,
-    x: transform.x - modalRect.left,
+    x: transform.x - modalRect.left ,
     y: transform.y - modalRect.top,
   };
 };
@@ -140,12 +140,18 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
         value: data.value,
         path: data.path,
       });
+      // Add dragging class to body to prevent horizontal scrolling
+      document.body.classList.add('dragging');
     },
     onDragEnd: () => {
       setDraggedItem(null);
+      // Remove dragging class from body
+      document.body.classList.remove('dragging');
     },
     onDragCancel: () => {
       setDraggedItem(null);
+      // Remove dragging class from body
+      document.body.classList.remove('dragging');
     },
   });
 
@@ -236,23 +242,23 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
           showValue={true}
         />
 
-        <span className="text-[11px] text-gray-500">{value.examples?.[0]}</span>
+        <span className="text-[11px] text-gray-500 truncate">{value.examples?.[0]}</span>
       </div>
     );
   };
 
   return (
     <>
-      <ScrollArea className={cn("border-none  bg-none h-[60vh]", className)}>
-        
-        <div className="p-1 pl-0" >
+      <ScrollArea className={cn("border-none   bg-none h-[60vh]", className)}>
+        <ScrollBar orientation="vertical" />
+        <div className="p-1 pl-0 ">
           <div className="flex items-center gap-2 mb-4">
             {getIcon(filteredSchema.icon || "file-json")}
-            <h3 className="text-lg font-semibold">
+            <h3 className="text-lg font-semibold truncate">
               {filteredSchema.title || "Schema Viewer"}
             </h3>
           </div>
-          <div className="grid grid-cols-1">
+          <div className="grid grid-cols-1 max-w-[500px]">
             {filteredSchema.properties &&
               Object.entries(filteredSchema.properties).map(([key, value]) =>
                 renderValue(value as ExtendedJSONSchema7, key, path)
@@ -268,7 +274,11 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
         </div>
       </ScrollArea>
 
-      <DragOverlay dropAnimation={null} modifiers={[modalPositionModifier]}>
+      <DragOverlay 
+        dropAnimation={null} 
+        modifiers={[modalPositionModifier]} 
+        
+      >
         {draggedItem && (
           <DraggableField
             id={draggedItem.id}
@@ -278,7 +288,7 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
             path={draggedItem.path}
             showIcon={false}
             showValue={true}
-            className="shadow-lg border border-dashed border-indigo-600 bg-none gap-0 cursor-grabbing "
+            className="shadow-lg border border-dashed border-indigo-600 bg-none gap-0 cursor-grabbing overflow-visible"
           />
         )}
       </DragOverlay>
