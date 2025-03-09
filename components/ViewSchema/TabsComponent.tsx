@@ -1,4 +1,4 @@
-import SchemaViewer from ".";
+import SchemaViewer from "./SchemaViewer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/shadcn-tabs";
 
 import { ExtendedJSONSchema7 } from "./types";
@@ -9,6 +9,7 @@ import { DraggableJSONTree } from "./DraggableJSONTree";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 import { useState } from "react";
+import { Separator } from "../ui/separator";
 
 export function ViewData({ schema }: { schema: ExtendedJSONSchema7 }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +28,7 @@ export function ViewData({ schema }: { schema: ExtendedJSONSchema7 }) {
             className="pl-8 pr-4 py-2 w-full"
           />
         </div>
-
+      
         {/* Tabs on the right */}
         <TabsList className="flex">
           <TabsTrigger
@@ -44,6 +45,9 @@ export function ViewData({ schema }: { schema: ExtendedJSONSchema7 }) {
           </TabsTrigger>
         </TabsList>
       </div>
+      <Separator orientation="horizontal" className=" w-full" />
+        
+      
       <TabsContent value="schema" className="pl-7 overflow-x-hidden">
         <SchemaViewer
           schema={schema as ExtendedJSONSchema7}

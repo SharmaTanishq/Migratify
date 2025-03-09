@@ -12,7 +12,7 @@ import { ModalStore } from "@/components/Store/modal";
 import { cn } from "@/lib/utils";
 
 
-import SchemaViewerDemo from "@/components/ViewSchema/SchemaUpdate";
+import DataViewer from "@/components/ViewSchema";
 
 import { useState } from "react";
 
@@ -24,7 +24,7 @@ function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
   return (
     <GenericDrawerLayout isOpen={isOpen} node={node} id={id}>
       <div className="w-full p-2">
-        <SchemaViewerDemo  />
+        <DataViewer  />
       </div>
     </GenericDrawerLayout>
   );

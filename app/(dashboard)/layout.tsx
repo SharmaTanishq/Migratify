@@ -45,12 +45,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </header>
                   <Separator orientation="horizontal" className="w-full" />
                          
-                  <div className="h-full ">
+                  <main className="h-full ">
                           
                     {children}
-                    <Toaster/>
                           
-                  </div>
+                    </main>
+                    <Toaster/>
                       
                   </SidebarInset>
             </SidebarProvider>
