@@ -47,6 +47,8 @@ import {
 
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useToast } from "@/hooks/use-toast"
+import { api } from "@/convex/_generated/api";
+import { useMutation, useQuery } from "convex/react";
 
 
 
@@ -184,6 +186,13 @@ function DroppableArea({
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [activeTab, setActiveTab] = useState("global");
+
+  const dataMappings = useQuery(api.mappings.dataMap.getDataMappings ,
+    nodeId ? { nodeId: nodeId } : "skip",
+  
+);
+
+const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
   
   const { toast } = useToast()
 
@@ -198,6 +207,16 @@ function DroppableArea({
     return null;
   });
 
+  const getMappings = useQuery(api.mappings.dataMap.getDataMappings, 
+    nodeId?{nodeId: sourceNode?._id as string}:'skip',
+  );
+
+  useEffect(()=>{
+    if(getMappings){
+      console.log(getMappings);
+    }
+  },[getMappings]);
+
   const parentEvents =
     webhooksStore().getEvents(sourceNode?._id as string) || [];
 
@@ -208,12 +227,40 @@ function DroppableArea({
   });
 
   const handleSave = () => {
-
-    toast({
-      title: "Saved successfully",
-      description: "Values saved successfully",
-      duration: 1500,
-      
+    saveDataMappings({
+      nodeId,
+      projectId: sourceNode?.projectId as string,
+      mappings: {
+        global: items.map((item) => ({
+          fieldId: item.id,
+          value: item.path,
+          enabled: true,
+          type: "string",
+          isActive: true,
+        })),
+        events: parentEvents.map((event) => ({
+          eventName: event.event,
+          fields: items.map((item) => ({
+            fieldId: item.id,
+            value: item.path,
+            enabled: true,
+            type: "string",
+            isActive: true,
+          })),
+        })),
+      },
+    }).then(() => {
+      toast({
+        title: "Saved successfully",
+        description: "Values saved successfully",
+        duration: 1500,
+      });
+    }).catch((error) => {
+      toast({
+        title: "Error",
+        description: "Error saving values",
+        duration: 1500,
+      });
     });
   };
 

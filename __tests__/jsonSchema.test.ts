@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { jsonToSchema, schemaIcons } from '@/utils/jsonSchema';
 import Ajv from 'ajv';
 import { JSONSchema7 } from 'json-schema';

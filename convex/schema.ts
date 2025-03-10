@@ -5,6 +5,32 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
+export interface DataMapping {
+  nodeId: string;
+  projectId: string;
+  mappings: {
+    global: Array<{
+      fieldId: string;
+      value: string;
+      enabled: boolean;
+      type: string;
+      isActive: boolean;
+    }>;
+    events: Array<{
+      eventName: string;
+      fields: Array<{
+        fieldId: string;
+        value: string;
+        enabled: boolean;
+        type: string;
+        isActive: boolean;
+      }>;
+    }>;
+  };
+  createdAt: number;
+  updatedAt: number;
+}
+
 export default defineSchema(
   {
     documents: defineTable({
@@ -86,19 +112,38 @@ export default defineSchema(
         
       }).index('by_node', ['nodeId']),
 
-      dataMappings: defineTable({
-        nodeId: v.string(), // ID of the node this mapping belongs to
-        projectId: v.string(), // Project ID
-        mappings: v.array(v.object({
-          id: v.string(),
-          targetField: v.string(),
-          sourceField: v.string(),
-          type: v.string(),
-          isActive: v.boolean(),
-        })),
+    dataMappings: defineTable({
+        nodeId: v.string(),
+        projectId: v.string(),
+        mappings: v.object({
+          global: v.array(
+            v.object({
+              fieldId: v.string(),
+              value: v.string(),
+              enabled: v.boolean(),
+              type: v.string(),
+              isActive: v.boolean(),
+            })
+          ),
+          events: v.array(
+            v.object({
+              eventName: v.string(),
+              fields: v.array(
+                v.object({
+                  fieldId: v.string(),
+                  value: v.string(),
+                  enabled: v.boolean(),
+                  type: v.string(),
+                  isActive: v.boolean(),
+                })
+              ),
+            })
+          ),
+        }),
         createdAt: v.number(),
         updatedAt: v.number(),
-      })
+      }).index('by_nodeId', ['nodeId'])
+        .index('by_projectId', ['projectId']),
     
   },
   
