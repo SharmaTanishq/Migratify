@@ -253,6 +253,9 @@ body.dragging {
   overflow-x: hidden;
 }
 
+.json-viewer .data-key-colon .MuiBox-root .css-794n63{
+  color: red;
+}
 /* Ensure all draggable elements don't cause horizontal scrolling */
 
 

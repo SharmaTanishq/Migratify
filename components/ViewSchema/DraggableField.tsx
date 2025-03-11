@@ -7,8 +7,8 @@ import { SchemaIcon } from "./types";
 interface DraggableFieldProps {
   id: string;
   icon: SchemaIcon;
-  label: string;
-  value: any;
+  label?: any;
+  value?: any;
   path: string;
   className?: string;
   showValue?: boolean;

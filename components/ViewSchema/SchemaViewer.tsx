@@ -13,6 +13,10 @@ import { Separator } from "../ui/separator";
 import { DragOverlay, useDndMonitor } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { DraggableField } from "./DraggableField";
+import { JsonViewer,PathValueCustomGetter,JsonViewerKeyRenderer,defineDataType} from "@textea/json-viewer";
+
+import { VTEX_ORDER_SCHEMA } from "../CustomNodes/Mail/Drawer";
+import { Badge } from "../ui/badge";
 
 interface DraggableItemProps {
   id: string;
@@ -31,10 +35,11 @@ const modalPositionModifier = (args: any) => {
 
   return {
     ...transform,
-    x: transform.x - modalRect.left ,
+    x: transform.x - modalRect.left,
     y: transform.y - modalRect.top,
   };
 };
+
 
 const SchemaViewer: React.FC<SchemaViewerProps> = ({
   schema,
@@ -141,19 +146,54 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
         path: data.path,
       });
       // Add dragging class to body to prevent horizontal scrolling
-      document.body.classList.add('dragging');
+      document.body.classList.add("dragging");
     },
     onDragEnd: () => {
       setDraggedItem(null);
       // Remove dragging class from body
-      document.body.classList.remove('dragging');
+      document.body.classList.remove("dragging");
     },
     onDragCancel: () => {
       setDraggedItem(null);
       // Remove dragging class from body
-      document.body.classList.remove('dragging');
+      document.body.classList.remove("dragging");
     },
   });
+
+  const urlType = defineDataType<any>({
+    is: (value) => typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean',
+    Component: (props) => {
+      
+      return (
+        <div className="inline-block my-2">
+          <p
+            className="text-[11px] font-mono font-semibold text-gray-500"
+            
+        >
+          {props.value}
+        </p>
+        </div>
+      )
+    }
+  })
+
+  const KeyRenderer: JsonViewerKeyRenderer = ({ path, value }) => {
+    return (
+      <div className="inline-block my-2">
+        <DraggableField
+          id={convertToJSONPath(path)}
+          //SET ICON PATH.
+          icon={"circle"}
+          label={path.slice(-1)}
+          value={path.slice(-1)}
+          path={convertToJSONPath(path)}
+          showValue={true}
+        />
+      </div>
+    )
+  }
+  KeyRenderer.when = (props) => true
+  
 
   const getIcon = (iconName: SchemaIcon) => {
     const iconKey = iconName
@@ -164,6 +204,18 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
     return <Icon className="w-4 h-4 text-gray-500" />;
   };
 
+  const convertToJSONPath = (pathArray: Array<string | number>): string => {
+    return (
+      "$" +
+      pathArray.reduce((path, segment) => {
+        if (typeof segment === "number") {
+          return `${path}[${segment}]`;
+        }
+        return `${path}.${segment}`;
+      }, "")
+    );
+  };
+
   const renderValue = (
     value: ExtendedJSONSchema7,
     key: string,
@@ -171,7 +223,7 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
   ) => {
     // Create the path based on the type of the parent and current key
     let fullPath;
-    
+
     // Handle array items with proper indexing
     if (key === "items" && currentPath.endsWith("]")) {
       // If we're already in an array context, don't add another index
@@ -242,7 +294,9 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
           showValue={true}
         />
 
-        <span className="text-[11px] text-gray-500 truncate">{value.examples?.[0]}</span>
+        <span className="text-[11px] text-gray-500 truncate">
+          {value.examples?.[0]}
+        </span>
       </div>
     );
   };
@@ -252,7 +306,7 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
       <ScrollArea className={cn("border-none   bg-none h-[60vh]", className)}>
         <ScrollBar orientation="vertical" />
         <div className="p-1 pl-0 ">
-          <div className="flex items-center gap-2 mb-4">
+          {/* <div className="flex items-center gap-2 mb-4">
             {getIcon(filteredSchema.icon || "file-json")}
             <h3 className="text-lg font-semibold truncate">
               {filteredSchema.title || "Schema Viewer"}
@@ -270,15 +324,27 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
                     No matching fields found
                 </div>
               )}
-          </div>
+          </div> */}
+          <JsonViewer
+            value={VTEX_ORDER_SCHEMA}
+            
+            keyRenderer={KeyRenderer}
+            displayDataTypes={false}
+            enableClipboard={false}
+            quotesOnKeys={false}
+            indentWidth={5}
+            rootName={false}
+            valueTypes={[urlType]}
+            onCopy={(path, value) => {
+              console.log(convertToJSONPath(path), value);
+            }}
+          >
+            
+          </JsonViewer>
         </div>
       </ScrollArea>
 
-      <DragOverlay 
-        dropAnimation={null} 
-        modifiers={[modalPositionModifier]} 
-        
-      >
+      <DragOverlay dropAnimation={null} modifiers={[modalPositionModifier]}>
         {draggedItem && (
           <DraggableField
             id={draggedItem.id}
