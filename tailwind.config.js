@@ -247,6 +247,7 @@ module.exports = {
   		backgroundSize: {
   			'300%': '300%'
   		},
+		opacity: ['group-hover'],
   		fontFamily: {
   			poppins: [
   				'var(--font-poppins)'

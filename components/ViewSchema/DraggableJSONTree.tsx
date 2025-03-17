@@ -19,22 +19,6 @@ interface DraggedItem {
   path: string;
 }
 
-const getIconForType = (type: string): SchemaIcon => {
-  switch (type) {
-    case 'object':
-      return 'box';
-    case 'array':
-      return 'list';
-    case 'string':
-      return 'font';
-    case 'number':
-      return 'hashtag';
-    case 'boolean':
-      return 'check-square';
-    default:
-      return 'circle';
-  }
-};
 
 const adjustForModalPosition: Modifier = ({transform}) => {
   const modalElement = document.querySelector('[role="dialog"]');
@@ -176,57 +160,7 @@ export const DraggableJSONTree: React.FC<DraggableJSONTreeProps> = ({
             lineHeight: '2',
           }}
         >
-          <JsonView.KeyName
-            render={(props, context) => {
-              // Get the key name
-              console.log("Context",context)
-              const keyName = String(context.keyName);
-              
-              // Get the path from JsonView's context
-              const rawPath = (context as any).path || [];
-              
-              // Build the full path
-              const fullPath = buildPath(rawPath, keyName);
-              
-              // Determine the type of the value for icon selection
-              let valueType = typeof context.value;
-              if (Array.isArray(context.value)) {
-                  valueType = 'object'; // Treat arrays as objects for icon purposes
-              } else if (context.value === null) {
-                  valueType = 'string'; // Treat null as string for icon purposes
-              }
-              
-              // Format display label
-              let displayLabel = keyName;
-              if (!isNaN(Number(keyName)) && rawPath.length > 0) {
-                  const parentKey = String(rawPath[rawPath.length - 1]);
-                  displayLabel = `${parentKey}[${keyName}]`;
-              }
-
-              // Increment the counter to ensure a unique ID for each item
-              const uniqueCounter = idCounterRef.current++;
-              const uniqueId = `draggable-${fullPath}-${uniqueCounter}`;
-            
-              return (
-                  <DraggableSpan 
-                      id={uniqueId}
-                      label={displayLabel}
-                      value={context.value}
-                      path={fullPath}
-                  />
-              )
-            }}
-          />
-           <JsonView.KeyName 
-          render={({ ...props }, { parentValue, value, keyName , keys = []}) => {
-            
-            if (Array.isArray(parentValue) && Number.isFinite( props.children)) {
-                
-              return <span>{`${keys[keys.length-2]}[${props.children}]`}</span>
-            }
-            return <span {...props} >{keyName}</span>
-          }}
-        />
+         
         </JsonView>
       </div>
      

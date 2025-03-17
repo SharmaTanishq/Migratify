@@ -56,14 +56,13 @@ export function ViewData({ schema }: { schema: ExtendedJSONSchema7 }) {
       </TabsContent>
 
       <TabsContent value="json" className="pl-7 overflow-x-hidden">
-        <ScrollArea className="h-full flex-1 overflow-x-hidden">
-          <ScrollBar orientation="vertical" />
+       
           <DraggableJSONTree
             data={VTEX_ORDER_SCHEMA}
             className="max-h-[60vh] overflow-x-hidden"
             searchTerm={searchTerm}
           />
-        </ScrollArea>
+       
       </TabsContent>
     </Tabs>
   );

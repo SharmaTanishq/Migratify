@@ -1,20 +1,22 @@
 import { JSONSchema7 } from 'json-schema';
 
-export type SchemaIcon = 
-  | 'cube'
-  | 'list'
-  | 'font'
-  | 'hashtag'
-  | 'check-square'
-  | 'code'
-  | 'calculator'
-  | 'sun'
-  | 'ban'
-  | 'file-json'
-  | 'folder'
-  | 'circle'
-  | 'tag'
-  | 'box';
+export type SchemaIcon = {
+  number: 'hashtag';
+  string: 'text';
+  boolean: 'toggle';
+  array: 'cube';
+  object: 'folder';
+  default: 'circle';
+  root: 'file-json';
+}[keyof {
+  number: any;
+  string: any;
+  boolean: any;
+  array: any;
+  object: any;
+  default: any;
+  root: any;
+}];
 
 export interface ExtendedJSONSchema7 extends JSONSchema7 {
   icon?: SchemaIcon;

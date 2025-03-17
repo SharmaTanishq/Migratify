@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import SchemaViewer from "./SchemaViewer";
+
 import { jsonToSchema } from "@/utils/jsonSchema";
 import { VTEX_ORDER_SCHEMA } from "../CustomNodes/Mail/Drawer";
 import { ExtendedJSONSchema7 } from "./types";
-import {AutoScrollActivator} from '@dnd-kit/core';
+import { AutoScrollActivator, PointerSensor } from "@dnd-kit/core";
 import {
   DndContext,
   DragEndEvent,
@@ -11,16 +11,10 @@ import {
   TouchSensor,
   useSensor,
   useSensors,
-  useDroppable,
   useDndMonitor,
 } from "@dnd-kit/core";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Checkbox } from "../ui/checkbox";
 
 import { ViewData } from "./TabsComponent";
-
-import { cn } from "@/lib/utils";
 
 import {
   ResizableHandle,
@@ -30,119 +24,21 @@ import {
 import { ModalStore } from "../Store/modal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/shadcn-tabs";
 import { Button } from "../ui/button";
-import webhooksStore from "@/components/Store/webhooks";
-import flowStore from "@/components/Store/store";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronsUpDown } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast";
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
-
-
-
-interface InputFieldProps {
-  label: string;
-  fieldId: string;
-  isDragging: boolean;
-  value: string;
-  onChange: (value: string) => void;
-  enabled: boolean;
-  onEnabledChange: (enabled: boolean) => void;
-  indented?: boolean;
-}
-
-const InputField = ({
-  label,
-  fieldId,
-  isDragging,
-  value,
-  onChange,
-  enabled,
-  onEnabledChange,
-  indented = false,
-}: InputFieldProps) => {
-  const { setNodeRef, isOver } = useDroppable({
-    id: fieldId,
-  });
-
-  return (
-    <div className={cn("flex flex-col", indented && "ml-6")}>
-      <div className="flex items-center justify-between mb-2">
-        <Label htmlFor={fieldId} className="text-sm font-normal text-black">
-          {label}
-        </Label>
-      </div>
-
-      <div ref={setNodeRef} className="flex items-center justify-between gap-6">
-        <Input
-          id={fieldId}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          disabled={!enabled}
-          className={cn(
-            "w-full transition-all duration-200 rounded-md border-gray-300",
-            !enabled && "opacity-50 cursor-not-allowed",
-            isDragging &&
-              enabled &&
-              "border-2 border-dashed border-gray-400  bg-gray-50",
-            isOver &&
-              enabled &&
-              "border-2 border-dashed border-purple-500 bg-purple-50/50"
-          )}
-          placeholder={
-            fieldId === "orderId"
-              ? "Order Id"
-              : fieldId === "itemName"
-                ? "Enter item name..."
-                : fieldId === "itemImage"
-                  ? "Enter item image..."
-                  : fieldId === "itemQuantity"
-                    ? "Enter item quantity..."
-                    : fieldId === "itemPrice"
-                      ? "Enter item price..."
-                      : fieldId === "shippingAddress"
-                        ? "Enter shipping address..."
-                        : fieldId === "billingAddress"
-                          ? "Enter billing address..."
-                          : `Enter ${label.toLowerCase()}...`
-          }
-        />
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div>
-                <Checkbox
-                  id={`${fieldId}-enabled`}
-                  checked={enabled}
-                  onCheckedChange={onEnabledChange}
-                  className="w-5 h-5 rounded-sm  data-[state=checked]:border-none data-[state=checked]:bg-green-600 "
-                />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>
-                {enabled ? "Disable" : "Enable"} {label}
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-    </div>
-  );
-};
+import flowStore from "@/components/Store/store";
+import DroppableInput from "./DroppableInput";
+import webhooksStore from "@/components/Store/webhooks";
 
 interface DraggedItem {
   id: string;
@@ -187,15 +83,14 @@ function DroppableArea({
   const [isDragging, setIsDragging] = useState(false);
   const [activeTab, setActiveTab] = useState("global");
 
-  const dataMappings = useQuery(api.mappings.dataMap.getDataMappings ,
-    nodeId ? { nodeId: nodeId } : "skip",
-  
-);
+  const dataMappings = useQuery(
+    api.mappings.dataMap.getDataMappings,
+    nodeId ? { nodeId: nodeId } : "skip"
+  );
 
-const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
-  
-  const { toast } = useToast()
+  const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
 
+  const { toast } = useToast();
 
   // Get parent node and events
   const sourceNode = flowStore((state) => {
@@ -207,15 +102,16 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
     return null;
   });
 
-  const getMappings = useQuery(api.mappings.dataMap.getDataMappings, 
-    nodeId?{nodeId: sourceNode?._id as string}:'skip',
+  const getMappings = useQuery(
+    api.mappings.dataMap.getDataMappings,
+    nodeId ? { nodeId: sourceNode?._id as string } : "skip"
   );
 
-  useEffect(()=>{
-    if(getMappings){
+  useEffect(() => {
+    if (getMappings) {
       console.log(getMappings);
     }
-  },[getMappings]);
+  }, [getMappings]);
 
   const parentEvents =
     webhooksStore().getEvents(sourceNode?._id as string) || [];
@@ -249,19 +145,21 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
           })),
         })),
       },
-    }).then(() => {
-      toast({
-        title: "Saved successfully",
-        description: "Values saved successfully",
-        duration: 1500,
+    })
+      .then(() => {
+        toast({
+          title: "Saved successfully",
+          description: "Values saved successfully",
+          duration: 1500,
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: "Error",
+          description: "Error saving values",
+          duration: 1500,
+        });
       });
-    }).catch((error) => {
-      toast({
-        title: "Error",
-        description: "Error saving values",
-        duration: 1500,
-      });
-    });
   };
 
   const handleFieldChange = (field: keyof Fields) => (value: string) => {
@@ -305,13 +203,13 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
 
             {/* Order Information */}
             <ScrollArea className="h-[50vh] p-4 pt-0 pb-0 pl-0">
-              <ScrollBar orientation="vertical"  />
-              <div className="mb-6  "style={{ scrollbarGutter: "stable" }}>
+              <ScrollBar orientation="vertical" />
+              <div className="mb-6  " style={{ scrollbarGutter: "stable" }}>
                 <h3 className="text-base font-medium mb-3">
                   Order Information
                 </h3>
                 <div className="space-y-2">
-                  <InputField
+                  <DroppableInput
                     label="Order Number :"
                     fieldId="orderId"
                     isDragging={isDragging}
@@ -328,7 +226,7 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
               <div className="mb-6">
                 <h3 className="text-base font-medium mb-3">Items</h3>
                 <div className="space-y-4">
-                  <InputField
+                  <DroppableInput
                     label="Item Name"
                     fieldId="itemName"
                     isDragging={isDragging}
@@ -339,7 +237,7 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
                     indented
                   />
 
-                  <InputField
+                  <DroppableInput
                     label="Item Image"
                     fieldId="itemImage"
                     isDragging={isDragging}
@@ -350,7 +248,7 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
                     indented
                   />
 
-                  <InputField
+                  <DroppableInput
                     label="Item Quantity"
                     fieldId="itemQuantity"
                     isDragging={isDragging}
@@ -361,7 +259,7 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
                     indented
                   />
 
-                  <InputField
+                  <DroppableInput
                     label="Item Price"
                     fieldId="itemPrice"
                     isDragging={isDragging}
@@ -380,7 +278,7 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
                   Shipping Information
                 </h3>
                 <div className="space-y-4">
-                  <InputField
+                  <DroppableInput
                     label="Shipping Address"
                     fieldId="shippingAddress"
                     isDragging={isDragging}
@@ -393,7 +291,7 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
                     indented
                   />
 
-                  <InputField
+                  <DroppableInput
                     label="Billing Address"
                     fieldId="billingAddress"
                     isDragging={isDragging}
@@ -420,28 +318,35 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
                 <ScrollArea className="h-[calc(80vh-24rem)] pr-4">
                   <div className="space-y-4">
                     {parentEvents.map((event) => (
-                      <Collapsible key={event.event} className="border rounded-md">
+                      <Collapsible
+                        key={event.event}
+                        className="border rounded-md"
+                      >
                         <CollapsibleTrigger className="flex w-full items-center justify-between p-3 hover:bg-gray-50">
-                          <span className="font-medium text-sm">{event.event}</span>
+                          <span className="font-medium text-sm">
+                            {event.event}
+                          </span>
                           <ChevronsUpDown className="h-4 w-4 text-gray-500" />
                         </CollapsibleTrigger>
                         <CollapsibleContent className="p-3 pt-0 border-t">
                           {/* Subject Field */}
                           <div className="space-y-3 mb-4">
-                            <InputField
+                            <DroppableInput
                               label="Subject :"
                               fieldId="subject"
                               isDragging={isDragging}
                               value={fields.subject.value}
                               onChange={handleFieldChange("subject")}
                               enabled={fields.subject.enabled}
-                              onEnabledChange={handleFieldEnabledChange("subject")}
+                              onEnabledChange={handleFieldEnabledChange(
+                                "subject"
+                              )}
                             />
                           </div>
 
                           {/* To Field */}
                           <div className="space-y-3 mb-4">
-                            <InputField
+                            <DroppableInput
                               label="to"
                               fieldId="to"
                               isDragging={isDragging}
@@ -454,14 +359,16 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
 
                           {/* Content Field */}
                           <div className="space-y-3">
-                            <InputField
+                            <DroppableInput
                               label="Content : HTML Markdown."
                               fieldId="content"
                               isDragging={isDragging}
                               value={fields.content.value}
                               onChange={handleFieldChange("content")}
                               enabled={fields.content.enabled}
-                              onEnabledChange={handleFieldEnabledChange("content")}
+                              onEnabledChange={handleFieldEnabledChange(
+                                "content"
+                              )}
                             />
                           </div>
                         </CollapsibleContent>
@@ -481,13 +388,14 @@ const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
         </TabsContent>
       </Tabs>
 
-      
-
       {/* Save button outside of the tabs content for consistent visibility */}
       <div className="mt-4 flex justify-end">
-        <Button className="bg-purple-600 hover:bg-purple-700 text-white"  onClick={() => {
-          handleSave()
-      }}>
+        <Button
+          className="bg-purple-600 hover:bg-purple-700 text-white"
+          onClick={() => {
+            handleSave();
+          }}
+        >
           Save
         </Button>
       </div>
@@ -533,13 +441,17 @@ export const DataViewer = () => {
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 10,
+        distance: 1,
       },
+    }),
+
+    useSensor(PointerSensor, {
+      activationConstraint: { delay: 2, tolerance: 2 },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 250,
-        tolerance: 5,
+        delay: 0,
+        tolerance: 1,
       },
     })
   );
@@ -572,7 +484,12 @@ export const DataViewer = () => {
 
   return (
     <div className="h-full">
-      <DndContext sensors={sensors} onDragEnd={handleDragEnd} autoScroll={{activator: AutoScrollActivator.DraggableRect}}>
+      <DndContext
+        sensors={sensors}
+        onDragEnd={handleDragEnd}
+        autoScroll={{ activator: AutoScrollActivator.DraggableRect }}
+        modifiers={[snapCenterToCursor]}
+      >
         {modalOpen ? (
           <ResizablePanelGroup className=" gap-3 h-full" direction="horizontal">
             <ResizablePanel defaultSize={60} className="bg-white  shadow-sm">
