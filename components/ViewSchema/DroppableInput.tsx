@@ -20,6 +20,7 @@ import {
   ExpressionRendererHandle,
 } from "./ExpressionRenderer";
 import { Code2 } from "lucide-react";
+import { AspectRatio } from "../ui/aspect-ratio";
 
 interface InputFieldProps {
   label: string;
@@ -55,6 +56,7 @@ const DroppableInput = ({
   const [isOpen, setIsOpen] = useState(false);
 
 
+
   return (
     <div className={cn("flex flex-col", indented && "ml-6")}>
       <div className="flex items-center justify-between mb-2">
@@ -63,7 +65,7 @@ const DroppableInput = ({
         </Label>
       </div>
 
-      <div ref={setNodeRef} className="flex items-center justify-between gap-6">
+      <div ref={setNodeRef} className="flex items-center justify-between gap-6 w-full">
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger asChild className="w-full" >
             <div className="relative">
@@ -72,12 +74,11 @@ const DroppableInput = ({
                 ref={inputRef}
                 autoComplete="off"
                 value={value}
+                onClick={() => setIsOpen(true)}
                 onSelect={(e) => {
                   
-                  if(value.length > 0){
-                      setIsOpen(true);
-                    }
-                  setIsSelected(true);
+                  setIsOpen(true);
+                  
                 }}
 
                 onBlur={(e) => {
@@ -104,13 +105,17 @@ const DroppableInput = ({
               </div>
             </div>
           </PopoverTrigger>
-          <PopoverContent className="w-[300px] p-0" align="start">
-            <ExpressionRenderer
-              ref={expressionRendererRef}
-              value={value}
-              inputRef={inputRef}
+          
+            <PopoverContent className="w-full bg-white flex-1 border-none rounded-xl  p-0.5" align="start">
+               
+              <ExpressionRenderer
+                ref={expressionRendererRef}
+                value={value}
+                inputRef={inputRef}
             />
+           
           </PopoverContent>
+          
         </Popover>
         {/* <Input
             id={fieldId}
