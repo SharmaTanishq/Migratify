@@ -2,36 +2,36 @@ import React from "react";
 
 import { Dock, DockIcon } from "@/components/ui/dock";
 
-import { useDnD } from '@/components/AddNodes/DnDContext';
-
+import { useDnD } from "@/components/AddNodes/DnDContext";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
 export function DockDemo() {
-    const [_, setType] = useDnD();
- 
-    const onDragStart = (event:any, nodeType:any) => {
-        
-        if (setType === null) return;
-        
-        setType(nodeType);
-        event.dataTransfer.effectAllowed = 'move';
-    };
+  const [_, setType] = useDnD();
+
+  const onDragStart = (event: any, nodeType: any) => {
+    if (setType === null) return;
+
+    setType(nodeType);
+    event.dataTransfer.effectAllowed = "move";
+  };
 
   return (
     <div className="relative">
-      <Dock direction="middle" >
-      <DockIcon onDragStart={(event) => onDragStart(event, 'eCommerceNode')} >
+      <Dock direction="middle">
+        <DockIcon onDragStart={(event) => onDragStart(event, "eCommerceNode")}>
           <Icons.gitHub className="size-6" />
         </DockIcon>
-        <DockIcon onDragStart={(event) => onDragStart(event, 'bridgeNode')} >
-          <Icons.gitHub className="size-6" />
+        <DockIcon onDragStart={(event) => onDragStart(event, "bridgeNode")}>
+          <Icons.notion className="size-6" />
         </DockIcon>
-        <DockIcon onDragStart={(event) => onDragStart(event, 'inventoryFileNode')} >
+        <DockIcon
+          onDragStart={(event) => onDragStart(event, "inventoryFileNode")}
+        >
           <Icons.googleDrive className="size-6" />
         </DockIcon>
-       
-        <DockIcon onDragStart={(event) => onDragStart(event, 'eCommerceNode')} >
+
+        <DockIcon onDragStart={(event) => onDragStart(event, "eCommerceNode")}>
           <Icons.whatsapp className="size-6" />
         </DockIcon>
       </Dock>
@@ -98,17 +98,30 @@ export const Icons = {
     </svg>
   ),
   whatsapp: (props: IconProps) => (
-    <svg  width="50"
-    height="40" viewBox="0 10 180 100" xmlns="http://www.w3.org/2000/svg">
- 
-  <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" transform="translate(-48.186108,-47.31959)">
-    <g id="Artboard" fillRule="nonzero" fill="#ff3366">
-      <g id="vtex-logo" transform="translate(48,47)">
-        <path xmlns="http://www.w3.org/2000/svg" d="M 118.77,0.32 H 23.05 C 19.586315,0.35166678 16.388901,2.1841531 14.61068,5.1567016 12.832459,8.12925 12.729906,11.813127 14.34,14.88 l 9.58,18.24 H 6.56 C 4.3421294,33.079643 2.2685207,34.216027 1.109161,36.107181 -0.05019865,37.998335 -0.12215931,40.361817 0.92,42.32 l 30.8,58.2 c 1.10523,2.09008 3.275685,3.39759 5.64,3.39759 2.364314,0 4.53477,-1.30751 5.64,-3.39759 l 8.36,-15.77 10.5,19.86 c 1.707211,3.22421 5.056702,5.24072 8.705,5.24072 3.648297,0 6.997789,-2.01651 8.705,-5.24072 l 48,-90.25 c 1.5893,-2.970574 1.49395,-6.5591519 -0.25085,-9.4411411 C 125.27436,2.0368696 122.13886,0.28884316 118.77,0.32 Z M 76,38.45 55,77.83 c -0.7215,1.360201 -2.13529,2.210648 -3.675,2.210648 -1.53971,0 -2.953501,-0.850447 -3.675,-2.210648 l -20.73,-39 C 26.280421,37.629796 26.317769,36.18196 27.018378,35.016327 27.718987,33.850695 28.980019,33.138359 30.34,33.14 h 42.42 c 1.27814,-0.01967 2.471383,0.638051 3.1372,1.729251 0.665817,1.0912 0.704917,2.453148 0.1028,3.580749 z" id="path15"/>
+    <svg
+      width="50"
+      height="40"
+      viewBox="0 10 180 100"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        id="Page-1"
+        stroke="none"
+        strokeWidth="1"
+        fill="none"
+        fillRule="evenodd"
+        transform="translate(-48.186108,-47.31959)"
+      >
+        <g id="Artboard" fillRule="nonzero" fill="#ff3366">
+          <g id="vtex-logo" transform="translate(48,47)">
+            <path
+              xmlns="http://www.w3.org/2000/svg"
+              d="M 118.77,0.32 H 23.05 C 19.586315,0.35166678 16.388901,2.1841531 14.61068,5.1567016 12.832459,8.12925 12.729906,11.813127 14.34,14.88 l 9.58,18.24 H 6.56 C 4.3421294,33.079643 2.2685207,34.216027 1.109161,36.107181 -0.05019865,37.998335 -0.12215931,40.361817 0.92,42.32 l 30.8,58.2 c 1.10523,2.09008 3.275685,3.39759 5.64,3.39759 2.364314,0 4.53477,-1.30751 5.64,-3.39759 l 8.36,-15.77 10.5,19.86 c 1.707211,3.22421 5.056702,5.24072 8.705,5.24072 3.648297,0 6.997789,-2.01651 8.705,-5.24072 l 48,-90.25 c 1.5893,-2.970574 1.49395,-6.5591519 -0.25085,-9.4411411 C 125.27436,2.0368696 122.13886,0.28884316 118.77,0.32 Z M 76,38.45 55,77.83 c -0.7215,1.360201 -2.13529,2.210648 -3.675,2.210648 -1.53971,0 -2.953501,-0.850447 -3.675,-2.210648 l -20.73,-39 C 26.280421,37.629796 26.317769,36.18196 27.018378,35.016327 27.718987,33.850695 28.980019,33.138359 30.34,33.14 h 42.42 c 1.27814,-0.01967 2.471383,0.638051 3.1372,1.729251 0.665817,1.0912 0.704917,2.453148 0.1028,3.580749 z"
+              id="path15"
+            />
+          </g>
+        </g>
       </g>
-    </g>
-  </g>
- 
-</svg>
+    </svg>
   ),
 };

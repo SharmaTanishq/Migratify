@@ -53,8 +53,7 @@ function BridgesNode({
   //onConnect?: (event: any) => void;
 }): JSX.Element {
   const instance = useReactFlow();
-  const [componentData,setComponentData] = useState<NodeData>(data.ui || {});
-  
+  const [componentData, setComponentData] = useState<NodeData>(data.ui || {});
 
   const edges = useEdges();
   const nodes = useNodes();
@@ -65,26 +64,24 @@ function BridgesNode({
 
   const createWebhook = useMutation(api.webhooks.index.createWebhook);
 
-  
-
   const getWebhookUrl = useQuery(
     api.webhooks.index.getWebhookUrl,
     node?._id ? { nodeId: node._id } : "skip"
   );
-  
+
   const sourceNode = edges
-  .filter((edge) => edge.target === id)
-  .map((edge) => nodes.find((node) => node.id === edge.source))[0];
-  
+    .filter((edge) => edge.target === id)
+    .map((edge) => nodes.find((node) => node.id === edge.source))[0];
+
   const sourceNodeData: NodeData = sourceNode?.data?.ui as NodeData;
 
   useEffect(() => {
     if (getWebhookUrl === null && sourceNode !== undefined) {
       createWebhook({
         nodeId: node._id,
-        connectedSource:{
-          nodeId:sourceNode?.id as Id<"nodes">,
-          platform:sourceNodeData.Name.toLowerCase() as PlatformType,
+        connectedSource: {
+          nodeId: sourceNode?.id as Id<"nodes">,
+          platform: sourceNodeData.Name.toLowerCase() as PlatformType,
         },
         events: selectedEvents.map((event) => ({
           event: event,
@@ -94,13 +91,12 @@ function BridgesNode({
       });
     }
   }, [getWebhookUrl, sourceNode]);
-
+  ``;
   // Get the source node that's connected to this bridge
-  
 
   useEffect(() => {
-    if (sourceNode !== undefined) {     
-      setPlatform(sourceNodeData.Name.toLowerCase() as PlatformType);
+    if (sourceNode !== undefined) {
+      setPlatform(sourceNodeData?.Name.toLowerCase() as PlatformType);
     }
   }, [sourceNode]);
 
@@ -111,16 +107,12 @@ function BridgesNode({
   const isEcommerceSource = sourceNode?.type === "ecommerceNode";
 
   return (
-    <GenericCardLayout
-      id={id}
-      selected={selected}
-      
-    >
-      <CardHeader >
+    <GenericCardLayout id={id} selected={selected}>
+      <CardHeader>
         <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
           <div className="flex items-center justify-start gap-2">
             <Image
-              src={componentData?.node_logo?.url || ""}  
+              src={componentData?.node_logo?.url || ""}
               alt={componentData?.Name || ""}
               width={20}
               height={20}
@@ -229,24 +221,28 @@ function BridgesNode({
           className="p-2 w-full pt-0"
         >
           {getWebhookUrl?.url ? (
-            <motion.div 
-            initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: "easeIn" }}>
-            <ScriptCopyBtn
-              codeLanguage="http"
-              showMultiplePackageOptions={false}
-              className="w-full "
-              lightTheme="nord"
-              darkTheme="vitesse-dark"
-              commandMap={{
-                curl: `${getWebhookUrl?.url}`,
-              }}
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: "easeIn" }}
+            >
+              <ScriptCopyBtn
+                codeLanguage="http"
+                showMultiplePackageOptions={false}
+                className="w-full "
+                lightTheme="nord"
+                darkTheme="vitesse-dark"
+                commandMap={{
+                  curl: `${getWebhookUrl?.url}`,
+                }}
+              />
             </motion.div>
           ) : (
             <div className="w-full h-full flex items-center justify-center py-2 gap-2">
-              <p className="text-[11px] text-gray-500 text-center">Waiting for Source</p> <Spinner size="sm" />
+              <p className="text-[11px] text-gray-500 text-center">
+                Waiting for Source
+              </p>{" "}
+              <Spinner size="sm" />
             </div>
           )}
         </motion.div>

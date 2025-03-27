@@ -1,5 +1,12 @@
 import { Handle, Position, NodeProps, useReactFlow } from "@xyflow/react";
-import { Card, CardHeader, CardDescription, CardContent, CardFooter, CardTitle } from "../../ui/card";
+import {
+  Card,
+  CardHeader,
+  CardDescription,
+  CardContent,
+  CardFooter,
+  CardTitle,
+} from "../../ui/card";
 
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import {
@@ -11,7 +18,7 @@ import Image from "next/image";
 
 import { Button } from "../../ui/button";
 
-import { memo, useCallback,  useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import NodeIcon from "./Components/NodeIcon";
 import NodeName from "./Components/GenericNodeUtils/NodeName";
 import NodeDescription from "./Components/GenericNodeUtils/NodeDescription";
@@ -43,9 +50,7 @@ function ECommerceNode({
 }): JSX.Element {
   const instance = useReactFlow();
 
-  const [componentData,setComponentData] = useState<NodeData>(data.ui || {});
-  
-  
+  const [componentData, setComponentData] = useState<NodeData>(data.ui || {});
 
   //const [isDrawerOpen, setIsDrawerOpen] = useState(selected);
 
@@ -100,7 +105,9 @@ function ECommerceNode({
 
   const MemoizedNodeDrawer = useMemo(() => {
     return (
-      selected && <NodeDrawer isOpen={true} nodeData={componentData} nodeId={id} />
+      selected && (
+        <NodeDrawer isOpen={true} nodeData={componentData} nodeId={id} />
+      )
     );
   }, [selected, id]);
 
@@ -111,13 +118,10 @@ function ECommerceNode({
 
   return (
     <>
-      <GenericCardLayout
-        id={id}
-        selected={selected}       
-      >
+      <GenericCardLayout id={id} selected={selected}>
         {/* Header Section */}
         <CardHeader className="">
-        <CardTitle className="flex items-center justify-between w-full ">
+          <CardTitle className="flex items-center justify-between w-full ">
             <div className="flex items-center gap-2 ">
               {renderNodeIcon()}
               {renderNodeName()}
@@ -161,9 +165,7 @@ function ECommerceNode({
               </PopoverContent>
             </Popover>
           </CardTitle>
-          <CardDescription>            
-              {renderNodeDescription()}                          
-          </CardDescription>
+          <CardDescription>{renderNodeDescription()}</CardDescription>
         </CardHeader>
         <Separator />
         {/* Sections Container */}
@@ -238,7 +240,6 @@ function ECommerceNode({
             </div>
           </div>
         </CardContent>
-
         {/* Sync Button */}
         <CardFooter className="flex w-full space-x-2 p-4 pt-0">
           <Button className="flex-1" variant={"primary"} onClick={() => {}}>

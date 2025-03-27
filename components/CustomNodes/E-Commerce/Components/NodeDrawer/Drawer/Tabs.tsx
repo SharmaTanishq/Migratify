@@ -316,6 +316,7 @@ export function DrawerTabs({ nodeId }: DrawerTabsProps) {
   const saveNodeConfigurations = useMutation(
     api.flows.node.data.saveNodeConfigurations
   );
+  console.log(nodeId, "here is node Id");
   const getNodeConfigurations = useQuery(
     api.flows.node.data.getNodeConfigurations,
     {
@@ -323,13 +324,11 @@ export function DrawerTabs({ nodeId }: DrawerTabsProps) {
     }
   );
 
-  React.useEffect(()=>{
-    
-      form.setValue("appKey", getNodeConfigurations?.configurations?.appKey);
-      form.setValue("apiKey", getNodeConfigurations?.configurations?.apiKey);
-      form.setValue("baseUrl", getNodeConfigurations?.configurations?.baseUrl);
-    
-  },[getNodeConfigurations]);
+  React.useEffect(() => {
+    form.setValue("appKey", getNodeConfigurations?.configurations?.appKey);
+    form.setValue("apiKey", getNodeConfigurations?.configurations?.apiKey);
+    form.setValue("baseUrl", getNodeConfigurations?.configurations?.baseUrl);
+  }, [getNodeConfigurations]);
   const form = useForm();
 
   const onSubmit = (event: any) => {
@@ -340,9 +339,8 @@ export function DrawerTabs({ nodeId }: DrawerTabsProps) {
         apiKey: form.getValues("apiKey"),
         baseUrl: form.getValues("baseUrl"),
       },
-    }).then(()=>{
+    }).then(() => {
       toast.success("Node configurations saved successfully");
-
     });
   };
 
@@ -356,9 +354,10 @@ export function DrawerTabs({ nodeId }: DrawerTabsProps) {
               <CardTitle className="text-lg font-bold">
                 Authentication Settings
               </CardTitle>
-            <CardDescription className="text-sm text-gray-500 font-normal">
-              Enter your VTEX API credentials to authenticate with the VTEX API.
-            </CardDescription>
+              <CardDescription className="text-sm text-gray-500 font-normal">
+                Enter your VTEX API credentials to authenticate with the VTEX
+                API.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>

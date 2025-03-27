@@ -124,7 +124,7 @@ export default function Page() {
     (event: any) => {
       event.preventDefault();
       const data = event.dataTransfer.getData("flow");
-      
+
       // check if the dropped element is valid
       if (!type) {
         return;

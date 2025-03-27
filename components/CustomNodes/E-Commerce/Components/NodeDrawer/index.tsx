@@ -39,7 +39,7 @@ function NodeDrawer({ isOpen, onClose, nodeData, nodeId }: NodeDrawerProps) {
           e.stopPropagation();
         }}
       >
-        <DrawerTabs nodeId={id as Id<"nodes">} />
+        <DrawerTabs nodeId={nodeId as Id<"nodes">} />
       </div>
     </GenericDrawerLayout>
   );
