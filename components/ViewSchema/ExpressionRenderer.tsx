@@ -9,7 +9,6 @@ import { VTEX_ORDER_SCHEMA } from "../CustomNodes/Mail/Drawer";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-import { CodeBlock } from "../ui/code-block";
 
 interface ExpressionRendererProps {
   value: string;
@@ -59,11 +58,11 @@ export const ExpressionRenderer = React.forwardRef<
               Json Expression
             </CardTitle>
 
-            <div className="flex items-center justify-center gap-1">
-              <Button variant="ghost" size="icon" onClick={() => {}}>
+            <div className="flex items-center justify-center ">
+              <Button variant="ghost" size="icon" onClick={() => {}} className=" scale-[0.8]" >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={() => {}} >
+              <Button variant="ghost" size="icon" onClick={() => {}} className="scale-[0.8]" >
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>

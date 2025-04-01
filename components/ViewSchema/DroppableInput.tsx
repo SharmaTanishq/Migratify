@@ -117,49 +117,7 @@ const DroppableInput = ({
           </PopoverContent>
           
         </Popover>
-        {/* <Input
-            id={fieldId}
-            ref={inputRef}
-            autoComplete="off"
-            value={value}
-            
-            onClick={() => setIsSelected(true)}
-            onMouseDown={(e) => {
-              // Prevent the event from bubbling up which could cause input blur
-
-              e.stopPropagation();
-            }}
-            onBlur={(e) => {
-                e.stopPropagation();
-              if (
-                expressionRendererRef.current?.contains(e.relatedTarget as Node)
-              ) {
-                return;
-              }
-
-              // Your existing blur handler (hiding the card etc)
-              setIsSelected(false);
-            }}
-            onChange={(e) => onChange(e.target.value)}
-            disabled={!enabled}
-            className={cn(
-              "w-full transition-all duration-250 rounded-md border-gray-300 bg-white p-5 font-mono",
-              !enabled && "opacity-50 cursor-not-allowed",
-              isDragging &&
-                enabled &&
-                "border-2 border-dashed border-gray-400  ",
-              isOver &&
-                enabled &&
-                "border-2 border-dashed border-purple-500 bg-purple-50/50"
-            )}
-          /> */}
-        {/* {isSelected && value && (
-            <ExpressionRenderer
-              ref={expressionRendererRef}
-              value={value}
-              inputRef={inputRef}
-            />
-          )} */}
+        
 
         <TooltipProvider>
           <Tooltip>
