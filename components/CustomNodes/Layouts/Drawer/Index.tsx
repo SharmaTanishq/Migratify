@@ -110,7 +110,7 @@ function GenericDrawerLayout({
         data={node}
         size="content"
       >
-        <div className="w-full">
+        <div className="w-full overflow-hidden">
           {children}
         </div>
       </ModalLayout>

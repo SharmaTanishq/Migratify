@@ -237,26 +237,8 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
   return (
     <>
       
-        <div className="p-1 pl-0 overflow-y h-[60vh] ">
-          {/* <div className="flex items-center gap-2 mb-4">
-            {getIcon(filteredSchema.icon || "file-json")}
-            <h3 className="text-lg font-semibold truncate">
-              {filteredSchema.title || "Schema Viewer"}
-            </h3>
-          </div>
-          <div className="grid grid-cols-1 max-w-[500px]">
-            {filteredSchema.properties &&
-              Object.entries(filteredSchema.properties).map(([key, value]) =>
-                renderValue(value as ExtendedJSONSchema7, key, path)
-              )}
-            {filteredSchema.properties &&
-              Object.keys(filteredSchema.properties).length === 0 &&
-              searchTerm && (
-                <div className="text-gray-500 italic">
-                    No matching fields found
-                </div>
-              )}
-          </div> */}
+        <div className="p-1 pl-0  h-[calc(70vh-10rem)] ">
+         
           <JsonViewer
             value={VTEX_ORDER_SCHEMA}
             collapseStringsAfterLength={30}

@@ -46,6 +46,8 @@ import {
   CardHeader,
   CardFooter,
 } from "../ui/card";
+import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface DraggedItem {
   id: string;
@@ -90,7 +92,10 @@ function DroppableArea({
   const [isDragging, setIsDragging] = useState(false);
   const [activeTab, setActiveTab] = useState("global");
 
+  const [savedMappings,setSavedMappings] = useState<{global:any,events:any} | null>(null)
+
   const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
+  const { modalOpen } = ModalStore();
 
   const { toast } = useToast();
 
@@ -112,6 +117,7 @@ function DroppableArea({
   useEffect(() => {
     if (getMappings) {
       console.log(getMappings);
+      setSavedMappings(getMappings.mappings)
     }
     console.log(getMappings);
   }, []);
@@ -175,7 +181,7 @@ function DroppableArea({
     };
 
   return (
-    <div className=" relative bg-white     ">
+    <div className=" relative bg-white">
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
@@ -198,10 +204,10 @@ function DroppableArea({
           </TabsList>
         </div>
 
-        <TabsContent value="global" className="p-6  max-h-[60vh] ">
+        <TabsContent value="global" className={ cn("max-h-[60vh] ", modalOpen && "p-0")}>
           
             <Card className="shadow-none border-none ">
-              <CardHeader>
+              <CardHeader className="text-gray-600 text-sm mb-4">
                 <CardTitle>Drag Values from Schema or JSON</CardTitle>
               </CardHeader>
               <CardContent>
@@ -332,7 +338,7 @@ function DroppableArea({
         
         </TabsContent>
 
-        <TabsContent value="event" className="p-6 max-h-[60vh]">
+        <TabsContent value="event" className=" max-h-[60vh]">
           <Card className=" shadow-none border-none">
             <CardHeader className="text-gray-600 text-sm mb-4">
               <CardTitle>Configure event-specific values here.</CardTitle>
@@ -352,7 +358,14 @@ function DroppableArea({
                             <span className="font-medium text-sm">
                               {event.event}
                             </span>
+                            <Tooltip>
+                            <TooltipTrigger asChild>
                             <ChevronsUpDown className="h-4 w-4 text-gray-500" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Expand</p>
+                            </TooltipContent>
+                            </Tooltip>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="p-3 pt-0 border-t">
                             {/* Subject Field */}
@@ -425,18 +438,7 @@ function DroppableArea({
           </Card>
         </TabsContent>
       </Tabs>
-      {/* <div className="sticky bottom-0 w-full  z-50 flex justify-end bg-white p-2 border-t border-gray-200 " >
-                <Button
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
-                  onClick={() => {
-                    handleSave();
-                  }}
-                >
-                  Save
-                </Button>
-        
-        </div> */}
-      {/* Save button outside of the tabs content for consistent visibility */}
+      
     </div>
   );
 }

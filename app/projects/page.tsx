@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import {
   Trash2,
   Settings,
@@ -61,7 +61,7 @@ import {
 export default function Page() {
   const data = useQuery(api.projects.listProjects, {});
   const [isLoading, setIsLoading] = useState(true);
-
+ 
   useEffect(() => {
     if (data) {
       setIsLoading(false);

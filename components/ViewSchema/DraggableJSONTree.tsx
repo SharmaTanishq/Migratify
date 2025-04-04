@@ -147,7 +147,7 @@ export const DraggableJSONTree: React.FC<DraggableJSONTreeProps> = ({
 
   return (
     <>
-      <div className={`${className} overflow-x-hidden`}>
+      <div className={`${className} overflow-x-hidden h-[calc(70vh-10rem)]`}>
         <JsonView 
           value={filteredData} 
           displayDataTypes={false}

@@ -34,8 +34,11 @@ import IntegrationCards from "@/components/landing/IntegrateCards/integrationCar
 import ProductCard from "@/components/landing/MigrateSection/product-cards";
 import { Ripple } from "@/components/magicui/ripple";
 
+
 const Signout = ({ bridgesData }: any) => {
   const router = useRouter();
+  
+  
   const words = [
     "faster",
     "cheaper",

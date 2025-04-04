@@ -2,8 +2,7 @@
 
 import * as React from "react"
 import {
-  BookOpen,
-  Bot,
+  
   Command,
   Frame,
   LifeBuoy,
@@ -11,7 +10,7 @@ import {
   PieChart,
   Send,
   Settings2,
-  SquareTerminal,
+  
 } from "lucide-react"
 
 
@@ -27,12 +26,12 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+import { useUser } from "@clerk/nextjs"
+
+
+
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
+  
   navMain: [
     
     {
@@ -91,12 +90,25 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  
+  const { user } = useUser();
+  
+  if(!user) {
+    return null;
+  }
+  
+  const userData = {
+    name: `${user.fullName || ''} ${user.lastName || ''}`.trim() || "User",
+    email: user.emailAddresses?.[0]?.emailAddress || "user@example.com",
+    avatar: user.hasImage? user.imageUrl : "",
+    fallback: `${user.firstName?.charAt(0) || ''}${user.lastName?.charAt(0) || ''}`.trim().toUpperCase() || "U",
+  }
   return (
     <Sidebar variant="inset" {...props} collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem >
-            <SidebarMenuButton variant={"outline"} size="lg" asChild>
+            <SidebarMenuButton variant={"outline"} size="lg" asChild >
               <a href="#">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Command className="size-4" />
@@ -114,7 +126,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain  items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser  user={data.user} />
+        <NavUser  user={userData} />
       </SidebarFooter>
     </Sidebar>
   )

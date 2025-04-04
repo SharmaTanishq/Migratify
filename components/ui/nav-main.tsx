@@ -45,23 +45,23 @@ export function NavMain({
             </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-            <Link href={"/events"}>
-            <SidebarMenuButton tooltip="Events"> 
+            <Link href={"/schemas"}>
+            <SidebarMenuButton tooltip="Schemas"> 
                 <Scroll />
-                Events
+                  Schemas
             </SidebarMenuButton>
             </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-            <Link href={"/events"}>
-            <SidebarMenuButton tooltip="Events"> 
+            <Link href={"/connections"}>
+            <SidebarMenuButton tooltip="Connections"> 
                 <Share2 />
                 Connections
             </SidebarMenuButton>
             </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-            <Link href={"/variables"}>
+            <Link href={"/api-keys"}>
             <SidebarMenuButton tooltip="API KEYS"> 
                 <KeyRound />
                   Api Keys

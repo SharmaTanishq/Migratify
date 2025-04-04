@@ -23,7 +23,7 @@ function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
 
   return (
     <GenericDrawerLayout isOpen={isOpen} node={node} id={id}>
-      <div className="w-full p-2">
+      <div className="w-full ">
         <DataViewer  />
       </div>
     </GenericDrawerLayout>
