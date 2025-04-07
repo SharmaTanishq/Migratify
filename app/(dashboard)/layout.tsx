@@ -26,6 +26,18 @@ import { useConvexAuth } from "convex/react";
 
 import { useAuth } from "@clerk/nextjs";
 import {useUser} from "@clerk/nextjs"
+import flowStore from "@/components/Store/store";
+import { useParams } from "next/navigation";
+import { useGetNodes } from "@/components/hooks/getNodes";
+import { AppNode } from "@/components/Store/types";
+import { useShallow } from "zustand/react/shallow";
+import { useEffect } from "react";
+
+const selector = (state: any) => ({
+  
+  setInitialNodes: state.setInitialNodes,
+  setInitialEdges: state.setInitialEdges,
+});
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   
@@ -41,7 +53,28 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 
 function AuthenticatedContent({ children }: { children: React.ReactNode }) {
- 
+  
+  const { setInitialEdges,setInitialNodes} = flowStore(useShallow(selector));
+  const params = useParams();
+  const projectId = params.projectId as string;
+  
+  if(!projectId) return <div>No project id or Incorrect Project Id</div>
+
+  const {nodes,isLoading,error} = useGetNodes(projectId);
+
+  
+
+  useEffect(()=>{
+    setInitialNodes(nodes);
+  },[nodes]);
+  
+  if(isLoading){
+    return <div>Loading...</div>
+  }
+
+  if(error){
+    return <div>Error: {error.message}</div>
+  }
 
   return (
     <ReactFlowProvider>

@@ -20,6 +20,7 @@ import {
 
 export function NavMain({
   items,
+  projectId,
 }: {
   items: {
     title: string
@@ -31,13 +32,14 @@ export function NavMain({
       url: string
     }[]
   }[]
+  projectId: string
 }) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-white">Platform</SidebarGroupLabel>
       <SidebarMenu className="space-y-2">       
         <SidebarMenuItem>
-            <Link href={"/projects"}>
+            <Link href={`/projects`}>
             <SidebarMenuButton tooltip="Projects"> 
                 <Folder />
                 Projects
@@ -45,7 +47,7 @@ export function NavMain({
             </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-            <Link href={"/schemas"}>
+            <Link href={`/schemas/${projectId}`}>
             <SidebarMenuButton tooltip="Schemas"> 
                 <Scroll />
                   Schemas

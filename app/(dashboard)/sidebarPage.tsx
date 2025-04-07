@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import { useUser } from "@clerk/nextjs"
+import { useParams } from "next/navigation"
 
 
 
@@ -92,7 +93,9 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   
   const { user } = useUser();
-  
+  const params = useParams();
+  const projectId = params.projectId as string;
+
   if(!user) {
     return null;
   }
@@ -123,7 +126,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain  items={data.navMain} />
+        <NavMain  items={data.navMain} projectId={projectId} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser  user={userData} />
