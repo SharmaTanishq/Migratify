@@ -55,7 +55,7 @@ export function NavMain({
             </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-            <Link href={"/connections"}>
+            <Link href={`/connections/${projectId}`}>
             <SidebarMenuButton tooltip="Connections"> 
                 <Share2 />
                 Connections
@@ -63,7 +63,7 @@ export function NavMain({
             </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-            <Link href={"/api-keys"}>
+            <Link href={`/variables/${projectId}`}>
             <SidebarMenuButton tooltip="API KEYS"> 
                 <KeyRound />
                   Api Keys

@@ -70,7 +70,7 @@ export default function Page() {
   const router = useRouter();
 
   return (
-    <>
+    <div className=" w-full min-h-screen  flex flex-col justify-start   ">
       <StickyHeader className="px-4 ">
         <div className="flex justify-center items-center  ">
           <div className="flex justify-between items-center w-full max-w-6xl ">
@@ -95,12 +95,8 @@ export default function Page() {
           </div>
         </div>
       </StickyHeader>
-      <div className="w-full h-[calc(100vh-100px)]  flex justify-center   ">
-        <DotPattern
-          className={cn(
-            "[mask-image:radial-gradient(700px_circle_at_bottom,white,transparent)]"
-          )}
-        />
+      <div className=" w-full h-full  flex justify-center   ">
+       
 
         <div className="flex flex-col w-full h-full max-w-6xl  ">
           {/* Add project bar */}
@@ -231,7 +227,7 @@ export default function Page() {
               {data?.map((project) => (
                 <Card
                   key={project._id}
-                  className="  aspect-video  max-h-[500px] shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg"
+                  className="  aspect-video  max-h-[500px] shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg z-50"
                 >
                   <CardHeader>
                     <CardTitle>
@@ -296,8 +292,13 @@ export default function Page() {
             </div>
           )}
         </div>
+        <DotPattern
+          className={cn(
+            "[mask-image:radial-gradient(700px_circle_at_bottom,white,transparent)]"
+          )}
+        />
       </div>
-    </>
+    </div>
   );
 }
 

@@ -76,10 +76,8 @@ export default function Page() {
     edges,
     onNodesChange,
     onEdgesChange,
-    setInitialNodes,
     addNode,
     addEdge,
-    setInitialEdges,
   } = flowStore(useShallow(selector));
 
   const addNodeMutation = useMutation(api.flows.nodes.addNode);
@@ -96,20 +94,10 @@ export default function Page() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  const nodesData = useQuery(api.flows.nodes.getNodes, {
-    projectId: projectId,
-  });
-  const edgesData = useQuery(api.flows.edges.getEdges, {
-    projectId: projectId,
-  });
 
-  useEffect(() => {
-    if (nodesData) setInitialNodes(nodesData);
-  }, [nodesData]);
 
-  useEffect(() => {
-    if (edgesData) setInitialEdges(edgesData);
-  }, [nodes]);
+
+
 
   const { screenToFlowPosition } = useReactFlow();
 
