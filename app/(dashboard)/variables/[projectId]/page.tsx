@@ -6,12 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function Page(){
     const { projectId } = useParams();
+    
     return (
         <div className="flex flex-col gap-4 w-full h-full  items-start justify-start ">
             
             <Card className="flex flex-col gap-4 w-full h-full p-5  ">
                 <CardHeader>
-                    <CardTitle>Global Variables</CardTitle>
+                    <CardTitle className="text-3xl font-bold">Global Variables</CardTitle>
                     <CardDescription>Global variables are shared across all flows in the project.</CardDescription>
                 </CardHeader>
                 <CardContent>
