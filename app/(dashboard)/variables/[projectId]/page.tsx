@@ -15,7 +15,7 @@ export default function Page(){
                     <CardDescription>Global variables are shared across all flows in the project.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <GlobalVariablesTable />
+                    <GlobalVariablesTable projectId={projectId as string} />
                 </CardContent>
             </Card>
         </div>

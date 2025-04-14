@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,21 +12,35 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Pencil, Trash } from "lucide-react"
+} from "@tanstack/react-table";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  Trash,
+} from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -34,48 +48,28 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-
-const data: Variable[] = [
-  {
-    id: "m5gr84i9",
-    name: "Variable Name",
-    value: "Variable Value",
-    email: "ken99@example.com",
-  },
-  {
-    id: "3u1reuv4",
-    name: "Variable Name",
-    value: "Variable Value",
-    email: "Abe45@example.com",
-  },
-  {
-    id: "derv1ws0",
-    name: "Variable Name",
-    value: "Variable Value",
-    email: "Monserrat44@example.com",
-  },
-  {
-    id: "5kma53ae",
-    name: "Variable Name",
-    value: "Variable Value",
-    email: "Silas22@example.com",
-  },
-  {
-    id: "bhqecj4p",
-    name: "Variable Name",
-    value: "Variable Value",
-    email: "carmella@example.com",
-  },
-]
+} from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Label } from "@/components/ui/label";
+import { Id } from "@/convex/_generated/dataModel";
+import { useToast } from "@/hooks/use-toast";
 
 export type Variable = {
-  id: string
-  name: string
-  value: string
-  email: string
-}
+  id: string;
+  _id: Id<"variables">;
+  projectId?: string;
+  name: string;
+  value: string;
+  type?: string;
+  isActive?: boolean;
+};
 
 export const columns: ColumnDef<Variable>[] = [
   {
@@ -103,9 +97,7 @@ export const columns: ColumnDef<Variable>[] = [
   {
     accessorKey: "name",
     header: "Name",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("name")}</div>
-    ),
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
     accessorKey: "value",
@@ -115,64 +107,52 @@ export const columns: ColumnDef<Variable>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Value 
+          Value
           <ArrowUpDown />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("value")}</div>,
   },
   {
     id: "actions",
     header: "Actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const variable = row.original
+      
+      const variable = row.original;
+      
       
       return (
         <div className="flex items-end gap-2">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={() => {}}>
-                  <Pencil />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                Edit Variable
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="destructive" size="icon" onClick={() => {}}>
-                  <Trash />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                Delete Variable
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <EditVariableDialog projectId={"projectId"}  data={variable} />
+          <DeleteVariableDialog variableId={variable._id as Id<"variables">} />
         </div>
-      )
+      );
     },
   },
-]
+];
 
-export function GlobalVariablesTable() {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+export function GlobalVariablesTable({ projectId }: { projectId: string }) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
+
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
+
+  const variables =
+    useQuery(api.variables.index.getVariables, {
+      projectId: projectId,
+    }) || [];
+
+  
 
   const table = useReactTable({
-    data,
-    columns,
+    data: variables,
+    columns: columns as ColumnDef<(typeof variables)[0]>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -187,11 +167,11 @@ export function GlobalVariablesTable() {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4 ">
         <Input
           placeholder="Filter variables..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -200,32 +180,35 @@ export function GlobalVariablesTable() {
           }
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center gap-2 ">
+          <AddVariableDialog projectId={projectId} />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" className="ml-auto">
+                Columns <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -242,7 +225,7 @@ export function GlobalVariablesTable() {
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -302,5 +285,202 @@ export function GlobalVariablesTable() {
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+function AddVariableDialog({ projectId }: { projectId: string }) {
+  const [name, setName] = React.useState("");
+  const [value, setValue] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+
+  const SAVE_VARIABLE = useMutation(api.variables.index.createVariable);
+
+  const handleSave = () => {
+    SAVE_VARIABLE({
+      name,
+      value,
+      projectId: projectId,
+    }).then(() => {
+      setOpen(false);
+    });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="primary">
+          <Plus />
+          Add Variable
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="min-w-[500px] ">
+        <DialogHeader>
+          <DialogTitle>Add Variable</DialogTitle>
+          <DialogDescription>
+            Add a new variable for your project.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4 w-full">
+          <div className="flex flex-col items-start gap-4">
+            <Label htmlFor="name" className="text-right">
+              Name
+            </Label>
+            <Input
+              id="name"
+              placeholder="Enter variable name"
+              className="col-span-3"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col items-start gap-4">
+            <Label htmlFor="username" className="text-right">
+              Value
+            </Label>
+            <Input
+              id="value"
+              placeholder="Enter variable value"
+              className="col-span-3"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="primary" type="submit" onClick={handleSave}>
+            Save
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function EditVariableDialog({
+  projectId,
+  
+  data,
+}: {
+  projectId: string;
+  
+  data: Variable;
+}) {
+  const [name, setName] = React.useState(data.name);
+  const [value, setValue] = React.useState(data.value);
+  const [open, setOpen] = React.useState(false);
+
+  const SAVE_VARIABLE = useMutation(api.variables.index.updateVariable);
+
+  const handleSave = () => {
+    SAVE_VARIABLE({
+      id: data._id,
+      name,
+      value,
+    }).then(() => {
+      setOpen(false);
+    });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <TooltipProvider>
+        <DialogTrigger >
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" onClick={() => {}}>
+                <Pencil />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Edit Variable</TooltipContent>
+          </Tooltip>
+        </DialogTrigger>
+      </TooltipProvider>
+      <DialogContent className="min-w-[500px] ">
+        <DialogHeader>
+          <DialogTitle>Edit Variable</DialogTitle>
+          <DialogDescription>
+            Edit the variable for your project.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4 w-full">
+          <div className="flex flex-col items-start gap-4">
+            <Label htmlFor="name" className="text-right">
+              Name
+            </Label>
+            <Input
+              id="name"
+              placeholder="Enter variable name"
+              className="col-span-3"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col items-start gap-4">
+            <Label htmlFor="username" className="text-right">
+              Value
+            </Label>
+            <Input
+              id="value"
+              placeholder="Enter variable value"
+              className="col-span-3"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="primary" type="submit" onClick={handleSave}>
+            Save
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function DeleteVariableDialog({ variableId }: { variableId: Id<"variables"> }) {
+  const [open, setOpen] = React.useState(false);
+
+  const DELETE_VARIABLE = useMutation(api.variables.index.deleteVariable);
+  const { toast } = useToast();
+
+  const handleDelete = () => {
+    DELETE_VARIABLE({
+      id: variableId,
+    }).then(() => {
+      toast({
+        title: "Variable deleted",
+        description: "Variable deleted successfully",
+      });
+      setOpen(false);
+    }).catch(() => {
+      toast({
+        title: "Failed to delete variable",
+        description: "Failed to delete variable",
+      });
+    });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="destructive" size="icon" onClick={() => {}}>
+          <Trash />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="min-w-[500px] ">
+        <DialogHeader>
+          <DialogTitle>Delete Variable</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete this variable?
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="destructive" type="submit" onClick={handleDelete}>
+            Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 }

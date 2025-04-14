@@ -144,6 +144,14 @@ export default defineSchema(
         updatedAt: v.number(),
       }).index('by_nodeId', ['nodeId'])
         .index('by_projectId', ['projectId']),
+
+    variables: defineTable({
+      projectId: v.string(),
+      name: v.string(),
+      value: v.string(),
+      type: v.optional(v.string()),
+      isActive: v.optional(v.boolean()),
+    }).index('by_projectId', ['projectId']),
     
   },
   
