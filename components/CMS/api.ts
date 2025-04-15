@@ -81,3 +81,11 @@ export async function getLandingPage(params = {}){
     });
     return data;
 }
+
+export async function getDefaultSchema(params = {}){
+    const data = await strapiAPI('defaultschema', {
+        populate: '*',
+        ...params,
+    });
+    return data;
+}

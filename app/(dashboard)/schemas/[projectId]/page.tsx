@@ -13,6 +13,10 @@ import { ConvexNode } from "@/components/Types/Flows/convexTypes";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { ShineBorder } from "@/components/magicui/shine-border";
+
 
 export default function Page() {
   const params = useParams();
@@ -34,18 +38,22 @@ export default function Page() {
         </CardHeader>
         <CardContent>
           <motion.div 
-            className="grid grid-cols-4 gap-4"
+            className="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             {nodes.map((node) => (
-              <Link
-                key={node._id}
-                className="border border-gray-200 transition-all duration-300 rounded-xl p-4 hover:border-gray-300 cursor-pointer hover:bg-gray-100"
-                href={`/schemas/${projectId}/${node.data.ui.Name}/${node._id}`}
+              <TooltipProvider key={node._id}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      key={node._id}
+                      className=" border border-gray-200 relative transition-all duration-300 rounded-xl p-4 hover:border-gray-300 cursor-pointer hover:bg-gray-50  shadow-md hover:shadow-lg"
+                      href={`/schemas/${projectId}/${node.data.ui.Name}/${node._id}`}
               >
-                <div className="flex items-center gap-2">
+                
+                <div className="flex items-center gap-2 ">
                   <Image
                     src={node.data.ui.node_logo.url}
                     alt={node.data.ui.Name}
@@ -58,8 +66,14 @@ export default function Page() {
                       {node.data.ui.node_description}
                     </p>
                   </div>
-                </div>
-              </Link>
+                    </div>
+                  </Link> 
+                </TooltipTrigger>
+                <TooltipContent side="top" align="center">
+                  <p>Configure Schema for {node.data.ui.Name} </p>
+                </TooltipContent>
+              </Tooltip>
+              </TooltipProvider>
             ))}
           </motion.div>
           {/* AVAILABLE NODES */}

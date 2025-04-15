@@ -4,8 +4,11 @@ import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { Tooltip, TooltipTrigger, TooltipProvider, TooltipContent } from "@/components/ui/tooltip";
 
+
+
 export default function Page(){
     const { node, nodeid } = useParams();
+    
     const router = useRouter();
     return (
         <div className="flex flex-col gap-4 w-full h-full p-4">

@@ -240,7 +240,7 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
         <div className="p-1 pl-0  h-[calc(70vh-10rem)] ">
          
           <JsonViewer
-            value={VTEX_ORDER_SCHEMA}
+            value={VTEX_ORDER_SCHEMA as any}
             collapseStringsAfterLength={30}
             keyRenderer={KeyRenderer}
             displayDataTypes={false}
@@ -250,9 +250,9 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
             rootName={false}
             valueTypes={[genericType]}
            
-          >
+          />
             
-          </JsonViewer>
+          
         </div>
       
 

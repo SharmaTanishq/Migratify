@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { Timeline } from "@/components/ui/timeline";
 import { FlipWords } from "@/components/ui/flip-words";
-import { VtexCommerceNode } from "@/components/AddNodes/VtexNode";
+import  VtexCommerceNode  from "@/components/AddNodes/VtexNode";
 
 export function TimelineSection() {
   const words = ["faster", "cheaper", "visually", "better", "easier" , "smarter"];

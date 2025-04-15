@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
-
-
 @layer base {
   :root {
     --background: 220, 14%, 96%;
@@ -63,8 +58,7 @@
 
   }
   .container-grid{
-    
-    
+
     display: grid
 ;
     grid-template-columns: 1fr [content-start] minmax(0, var(--content-max-width)) [content-end] 1fr;
@@ -85,7 +79,7 @@
   }
 
   .container-grid>:before {
-    
+
     content: "";
     position: absolute;
     left: 0;
@@ -115,14 +109,14 @@
 .draggable-field:active {
   cursor: grabbing;
 }
-  
+
   .animate-gradient {
     background-size: 300%;
     -webkit-animation: animatedgradient 6s ease infinite alternate;
     -moz-animation: animatedgradient 6s ease infinite alternate;
     animation: animatedgradient 6s ease infinite alternate;
   }
-  
+
   @keyframes animatedgradient {
     0% {
       background-position: 0% 50%;
@@ -178,17 +172,15 @@
 
   /* Dark theme background */
   .dark body {
-    
-   
+
     background-attachment: fixed;
   }
 
   /* Light theme background */
+  .theme {
+    --animate-shine: shine var(--duration) infinite linear;
+  }
 }
-
-
-
-
 
 @layer base {
   * {
@@ -225,8 +217,6 @@
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -235,7 +225,6 @@
     @apply bg-background text-foreground;
   }
 }
-
 
 .drag-overlay {
   position: fixed;
@@ -253,8 +242,18 @@ body.dragging {
   overflow-x: hidden;
 }
 
-
 /* Ensure all draggable elements don't cause horizontal scrolling */
 
-
-
+@theme inline {
+  @keyframes shine {
+  0% {
+    background-position: 0% 0%;
+    }
+  50% {
+    background-position: 100% 100%;
+    }
+  to {
+    background-position: 0% 0%;
+    }
+  }
+}
