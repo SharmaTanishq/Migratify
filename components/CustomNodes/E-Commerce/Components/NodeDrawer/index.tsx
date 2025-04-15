@@ -1,12 +1,5 @@
 "use client";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
+
 
 import { DrawerTabs } from "../NodeDrawer/Drawer/Tabs";
 
@@ -15,7 +8,7 @@ import Image from "next/image";
 import { memo, useEffect, useState } from "react";
 import useStore from "@/components/Store/store";
 import { Id } from "@/convex/_generated/dataModel";
-import GenericDrawerLayout from "@/components/CustomNodes/Layouts/Drawer";
+import GenericDrawerLayout from "../../../Layouts/Drawer";
 
 interface NodeDrawerProps {
   isOpen: boolean | undefined;
