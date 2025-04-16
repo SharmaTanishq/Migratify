@@ -8,7 +8,7 @@ import Image from "next/image";
 import { memo, useEffect, useState } from "react";
 import useStore from "@/components/Store/store";
 import { Id } from "@/convex/_generated/dataModel";
-import GenericDrawerLayout from "../../../Layouts/Drawer";
+import GenericDrawerLayout from "../../../Layouts/Drawer/demo";
 
 interface NodeDrawerProps {
   isOpen: boolean | undefined;
