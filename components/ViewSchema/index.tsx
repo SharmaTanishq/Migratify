@@ -48,6 +48,11 @@ import {
 } from "../ui/card";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { getDefaultSchema } from "../CMS/api";
+
+
+
+
 
 interface DraggedItem {
   id: string;
@@ -91,11 +96,16 @@ function DroppableArea({
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [activeTab, setActiveTab] = useState("global");
+  const [defaultSchema,setDefaultSchema] = useState<any>(null)
+
+  
 
   const [savedMappings,setSavedMappings] = useState<{global:any,events:any} | null>(null)
 
   const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
   const { modalOpen } = ModalStore();
+
+
 
   const { toast } = useToast();
 
@@ -115,11 +125,15 @@ function DroppableArea({
   );
 
   useEffect(() => {
+    console.log(nodeId);
     if (getMappings) {
       console.log(getMappings);
       setSavedMappings(getMappings.mappings)
     }
-    console.log(getMappings);
+    getDefaultSchema('twilio').then((res)=>{
+      setDefaultSchema(res)
+    })
+  
   }, []);
 
   const parentEvents =

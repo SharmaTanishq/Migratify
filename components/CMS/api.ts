@@ -83,8 +83,13 @@ export async function getLandingPage(params = {}){
 }
 
 export async function getDefaultSchema(params = {}){
-    const data = await strapiAPI('defaultschema', {
+    const data = await strapiAPI('schemas', {
         populate: '*',
+        filters: {
+            name: {
+                $eqi: params
+            }
+        },
         ...params,
     });
     return data;
