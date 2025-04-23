@@ -50,119 +50,117 @@ import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { getDefaultSchema } from "../CMS/api";
 
-import Form from '@rjsf/mui';
-import { RegistryWidgetsType, WidgetProps, RJSFSchema, UiSchema } from '@rjsf/utils';
 
-import validator from '@rjsf/validator-ajv8';
 
-import { log } from "console";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 
-const schema: RJSFSchema = {
-  "title": "Twilio Global Configurations",
-  "description": "These samples are best viewed without live validation.",
-  "type": "object",
-  "properties": {
-    "Order": {
-      "title": "Order",
-      "type": "object",
-      "properties": {
-        "Order Id": {
-          "type": "string"
-        },
-        
+
+
+
+const schema = [
+ {
+    sectionName:"Order Information",
+    fields:[
+      {
+        id:"orderId",
+        label:"Order ID",
+        type:"string",                
       },
-      "required": [
-        "Order Id"
-      ]
+      {
+        id:"orderDate",
+        label:"Order Date",
+        type:"string",
+      },
       
+    ]
+ },
+ {
+  sectionName:"Items Informations",
+  fields:[
+    {
+      id:"itemId",
+      label:"Item ID",
+      type:"string",                
     },
-    "Items": {
-      "title": "Items",
-      "type": "object",
-      "properties": {
-        "Item Id": {
-          "type": "string"
-        },
-        "Item Name": {
-          "type": "number"
-        },
-        "Item Price": {
-          "type": "string"
-        },
-        "Item Quantity": {
-          "type": "string"
-        },
-        "Item Image": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "Item Id",
-        "Item Name",
-        "Item Price",
-        "Item Quantity",
-        "Item Image"
-      ],
+    {
+      id:"itemName",
+      label:"Item Name",
+      type:"string",
+    },
+    {
+      id:"itemPrice",
+      label:"Item Price",
+      type:"string",
+    },
+    {
+      id:"itemQuantity",
+      label:"Item Quantity",
+      type:"string",
+    },
+    {
+      id:"itemImage",
+      label:"Item Image",
+      type:"string",
+    },
     
+    
+    
+    
+    
+  ]
+ },
+ {
+  sectionName:"Shipping Information",
+  fields:[
+    {
+      id:"shippingAddress",
+      label:"Shipping Address",
+      type:"string",
     },
-    "Shipping Information": {
-      "title": "Shipping Information",
-      "description": "Dependencies are not bidirectional, you can, of course, define the bidirectional dependencies explicitly.",
-      "type": "object",
-      "properties": {
-        "Shipping Address": {
-          "type": "string"
-        },
-        "Billing Address": {
-          "type": "number"
-        },
-        "Shipping Method": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "Shipping Address",
-        "Billing Address",
-        "Shipping Method"
-      ],
-      "dependencies": {
-        "Shipping Address": [
-          "Billing Address"
-        ],
-        "Billing Address": [
-          "Shipping Address"
-        ]
-      }
-    }
-  }
-};
+    {
+      id:"shippingNumber",
+      label:"Shipping Number",
+      type:"string",
+    },
+    {
+      id:"shippingPrice",
+      label:"Shipping Price",
+      type:"string",
+    },
+    {
+      id:"shippingStatus",
+      label:"Shipping Status",
+      type:"string",
+    },
 
-const uiSchema: UiSchema = {
-  
-  
-  
-};
-
-
-
-const CustomText = function (props: WidgetProps) {
-  return (
-    <div className="flex flex-col items-start gap-2">
-      <Label>{props.label}</Label>
-      <Input type="text" value={props.value} onChange={(e) => props.onChange(e.target.value)} />
-    </div>
-    // <DroppableInput label={props.label} fieldId={props.id} value={props.value} onChange={(e) => props.onChange(props.value)} isDragging={false} enabled={true} onEnabledChange={()=>{} } />
-  );
-};
+    
+    
+  ]
+ },
+ {
+  sectionName:"Billing Information",
+  fields:[
+    {
+      id:"billingAddress",
+      label:"Billing Address",
+      type:"string",
+    },
+    {
+      id:"billingAmount",
+      label:"Billing Amount",
+      type:"string",
+    },
+    
+    
+    
+  ]
+ }
+]
 
 
-const widgets: RegistryWidgetsType = {
 
 
-  TextWidget: CustomText, 
-};
+
+
 
 
 interface DraggedItem {
@@ -308,7 +306,8 @@ function DroppableArea({
     (field: keyof Fields) => (enabled: boolean) => {
       onFieldEnabledChange(field, enabled);
     };
-  const log = (type:string) => console.log.bind(console, type);
+
+
 
   return (
     <div className=" relative bg-white">
@@ -343,35 +342,37 @@ function DroppableArea({
               <CardContent>
                 <ScrollArea className="h-[calc(60vh-10rem)] p-2">
                   <ScrollBar orientation="vertical" />
-                  {defaultSchema && (
-                    <div className="mb-6  ">
-                      {/* <h3 className="text-base font-medium mb-3">
-                        Order Information
-                    </h3> */}
-                    <Form
-                          schema={schema}
-                          validator={validator}
-                          onChange={log('changed')}
-                          onSubmit={log('submitted')}
-                          onError={log('errors')}
-                          widgets={widgets}
-                          uiSchema={uiSchema}
-                          // formData={defaultSchema.data[0].schema_json}
-                          />
-                    <div className="space-y-2">
-                      {/* <DroppableInput
-                        label="Order Number :"
-                        fieldId="orderId"
-                        isDragging={isDragging}
-                        value={fields.orderId.value}
-                        onChange={handleFieldChange("orderId")}
-                        enabled={fields.orderId.enabled}
-                        indented
-                        onEnabledChange={handleFieldEnabledChange("orderId")}
-                      /> */}
+                 
+                  {schema && (
+                      schema.map((schema:any)=>{
+                        return(
+                          <div className="mb-6  ">
+
+                          <h3 className="text-base font-medium mb-3">
+                            {schema.sectionName}
+                        </h3>
                        
-                    </div>
-                  </div>
+                       {schema.fields.map((field:any)=>{
+                        return(
+                          <div className="space-y-2">
+                            <DroppableInput
+                            label={field.label}
+                            fieldId={field.id}
+                            isDragging={isDragging}
+                            value={"field.value"}
+                            onChange={handleFieldChange(field.id)}
+                            enabled={true}
+                            indented
+                            onEnabledChange={handleFieldEnabledChange(field.id)}
+                          />
+                           
+                        </div>
+                        )
+                      })}
+                      </div>
+                        )
+                      })
+                   
                   )}
                   {/* Items Section */}
                   {/* <div className="mb-6">
