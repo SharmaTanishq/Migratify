@@ -50,118 +50,25 @@ import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { getDefaultSchema } from "../CMS/api";
 
+// Improved type definitions
+interface Field {
+  id: string;
+  label: string;
+  type: string;
+}
 
+interface SchemaSection {
+  sectionName: string;
+  fields: Field[];
+}
 
-
-
-
-
-const schema = [
- {
-    sectionName:"Order Information",
-    fields:[
-      {
-        id:"orderId",
-        label:"Order ID",
-        type:"string",                
-      },
-      {
-        id:"orderDate",
-        label:"Order Date",
-        type:"string",
-      },
-      
-    ]
- },
- {
-  sectionName:"Items Informations",
-  fields:[
-    {
-      id:"itemId",
-      label:"Item ID",
-      type:"string",                
-    },
-    {
-      id:"itemName",
-      label:"Item Name",
-      type:"string",
-    },
-    {
-      id:"itemPrice",
-      label:"Item Price",
-      type:"string",
-    },
-    {
-      id:"itemQuantity",
-      label:"Item Quantity",
-      type:"string",
-    },
-    {
-      id:"itemImage",
-      label:"Item Image",
-      type:"string",
-    },
-    
-    
-    
-    
-    
-  ]
- },
- {
-  sectionName:"Shipping Information",
-  fields:[
-    {
-      id:"shippingAddress",
-      label:"Shipping Address",
-      type:"string",
-    },
-    {
-      id:"shippingNumber",
-      label:"Shipping Number",
-      type:"string",
-    },
-    {
-      id:"shippingPrice",
-      label:"Shipping Price",
-      type:"string",
-    },
-    {
-      id:"shippingStatus",
-      label:"Shipping Status",
-      type:"string",
-    },
-
-    
-    
-  ]
- },
- {
-  sectionName:"Billing Information",
-  fields:[
-    {
-      id:"billingAddress",
-      label:"Billing Address",
-      type:"string",
-    },
-    {
-      id:"billingAmount",
-      label:"Billing Amount",
-      type:"string",
-    },
-    
-    
-    
-  ]
- }
-]
-
-
-
-
-
-
-
+interface FieldMapping {
+  fieldId: string;
+  value: string;
+  enabled: boolean;
+  type: string;
+  isActive: boolean;
+}
 
 interface DraggedItem {
   id: string;
@@ -170,58 +77,73 @@ interface DraggedItem {
   value: any;
 }
 
-interface FieldState {
-  value: string;
-  enabled: boolean;
+// Consolidated state interfaces
+interface ViewSchemaState {
+  mappings: {
+    [fieldId: string]: {
+      value: string;
+      enabled: boolean;
+    };
+  };
+  activeTab: 'global' | 'event';
+  isDragging: boolean;
 }
 
-interface Fields {
-  orderId: FieldState;
-  itemName: FieldState;
-  itemImage: FieldState;
-  itemQuantity: FieldState;
-  itemPrice: FieldState;
-  shippingAddress: FieldState;
-  billingAddress: FieldState;
-  subject: FieldState;
-  to: FieldState;
-  content: FieldState;
-}
-
-// Add this interface for the schema values
-interface SchemaValue {
+// Component interfaces
+interface DroppableAreaProps {
   id: string;
-  value: string;
-}
-
-function DroppableArea({
-  id,
-  items,
-  fields,
-  onFieldChange,
-  onFieldEnabledChange,
-  nodeId,
-  schemaValues,
-  onSchemaValueChange,
-}: {
-  id: string;
-  items: DraggedItem[];
-  fields: Fields;
-  onFieldChange: (field: keyof Fields, value: string) => void;
-  onFieldEnabledChange: (field: keyof Fields, enabled: boolean) => void;
+  state: ViewSchemaState;
+  setState: React.Dispatch<React.SetStateAction<ViewSchemaState>>;
   nodeId: string;
-  schemaValues: SchemaValue[];
-  onSchemaValueChange: (fieldId: string, value: string) => void;
-}) {
-  const [isDragging, setIsDragging] = useState(false);
-  const [activeTab, setActiveTab] = useState("global");
-  const [defaultSchema, setDefaultSchema] = useState<any>(null);
+}
 
+interface DataViewerProps {}
+
+// Schema definition
+const schema: SchemaSection[] = [
+  {
+    sectionName: "Order Information",
+    fields: [
+      { id: "orderId", label: "Order ID", type: "string" },
+      { id: "orderDate", label: "Order Date", type: "string" },
+    ]
+  },
+  {
+    sectionName: "Items Information",
+    fields: [
+      { id: "itemId", label: "Item ID", type: "string" },
+      { id: "itemName", label: "Item Name", type: "string" },
+      { id: "itemPrice", label: "Item Price", type: "string" },
+      { id: "itemQuantity", label: "Item Quantity", type: "string" },
+      { id: "itemImage", label: "Item Image", type: "string" },
+    ]
+  },
+  {
+    sectionName: "Shipping Information",
+    fields: [
+      { id: "shippingAddress", label: "Shipping Address", type: "string" },
+      { id: "shippingNumber", label: "Shipping Number", type: "string" },
+      { id: "shippingPrice", label: "Shipping Price", type: "string" },
+      { id: "shippingStatus", label: "Shipping Status", type: "string" },
+    ]
+  },
+  {
+    sectionName: "Billing Information",
+    fields: [
+      { id: "billingAddress", label: "Billing Address", type: "string" },
+      { id: "billingAmount", label: "Billing Amount", type: "string" },
+    ]
+  }
+];
+
+const DroppableArea: React.FC<DroppableAreaProps> = ({
+  id,
+  state,
+  setState,
+  nodeId,
+}) => {
   const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
   const { modalOpen } = ModalStore();
-
-
-
   const { toast } = useToast();
 
   // Get parent node and events
@@ -234,67 +156,33 @@ function DroppableArea({
     return null;
   });
 
-  const getMappings = useQuery(
-    api.mappings.dataMap.getDataMappings,
-    nodeId ? { nodeId: nodeId } : "skip"
-  );
-
-  useEffect(() => {
-    console.log(nodeId);
-    if (getMappings) {
-      console.log(getMappings);
-    }
-    getDefaultSchema('twilio').then((res)=>{
-      setDefaultSchema(res)
-    })
-  
-  }, []);
-
-  useEffect(()=>{
-    console.log(defaultSchema)
-  },[defaultSchema])
-
-  const parentEvents =
-    webhooksStore().getEvents(sourceNode?._id as string) || [];
+  const parentEvents = webhooksStore().getEvents(sourceNode?._id as string) || [];
 
   useDndMonitor({
-    onDragStart: () => setIsDragging(true),
-    onDragEnd: () => setIsDragging(false),
-    onDragCancel: () => setIsDragging(false),
+    onDragStart: () => setState(prev => ({ ...prev, isDragging: true })),
+    onDragEnd: () => setState(prev => ({ ...prev, isDragging: false })),
+    onDragCancel: () => setState(prev => ({ ...prev, isDragging: false })),
   });
 
+  
+
   const handleSave = () => {
-    // Helper function to find field label by id
-    const findFieldLabel = (fieldId: string) => {
-      for (const section of schema) {
-        const field = section.fields.find(f => f.id === fieldId);
-        if (field) {
-          return field.id;
-        }
-      }
-      return fieldId; // Fallback to id if label not found
-    };
+    const mappingsArray = Object.entries(state.mappings).map(([fieldId, data]) => ({
+      fieldId,
+      value: data.value,
+      enabled: data.enabled,
+      type: "string",
+      isActive: true,
+    }));
 
     saveDataMappings({
       nodeId,
       projectId: sourceNode?.projectId as string,
       mappings: {
-        global: items.map((item) => ({
-          fieldId: findFieldLabel(item.id as string),
-          value: item.path,
-          enabled: true,
-          type: "string",
-          isActive: true,
-        })),
+        global: mappingsArray,
         events: parentEvents.map((event) => ({
           eventName: event.event,
-          fields: items.map((item) => ({
-            fieldId: findFieldLabel(item.id as string),
-            value: item.path,
-            enabled: true,
-            type: "string",
-            isActive: true,
-          })),
+          fields: mappingsArray,
         })),
       },
     })
@@ -314,22 +202,38 @@ function DroppableArea({
       });
   };
 
-  const handleFieldChange = (field: keyof Fields) => (value: string) => {
-    onFieldChange(field, value);
+  const handleFieldChange = (fieldId: string, value: string) => {
+    setState(prev => ({
+      ...prev,
+      mappings: {
+        ...prev.mappings,
+        [fieldId]: {
+          ...prev.mappings[fieldId],
+          value,
+        },
+      },
+    }));
   };
 
-  const handleFieldEnabledChange =
-    (field: keyof Fields) => (enabled: boolean) => {
-      onFieldEnabledChange(field, enabled);
-    };
-
-
+  const handleFieldEnabledChange = (fieldId: string, enabled: boolean) => {
+    setState(prev => ({
+      ...prev,
+      mappings: {
+        ...prev.mappings,
+        [fieldId]: {
+          ...prev.mappings[fieldId],
+          enabled,
+        },
+      },
+    }));
+  };
 
   return (
-    <div className=" relative bg-white">
+    <div className="relative bg-white">
       <Tabs
-        value={activeTab}
-        onValueChange={setActiveTab}
+        value={state.activeTab}
+        onValueChange={(value: string) => 
+          setState(prev => ({ ...prev, activeTab: value as 'global' | 'event' }))}
         className="w-full flex-1"
       >
         <div className="px-1 pt-4">
@@ -349,71 +253,47 @@ function DroppableArea({
           </TabsList>
         </div>
 
-        <TabsContent value="global" className={ cn("max-h-[60vh] ", modalOpen && "p-0")}>
-          
-            <Card className="shadow-none border-none ">
-              <CardHeader className="text-gray-600 text-sm mb-4">
-                <CardTitle>Drag Values from Schema or JSON</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[calc(60vh-10rem)] p-2">
-                  <ScrollBar orientation="vertical" />
-                 
-                  {schema && (
-                      schema.map((schemaSection: any)=>{
-                        return(
-                          <div className="mb-6  ">
-
-                          <h3 className="text-base font-medium mb-3">
-                            {schemaSection.sectionName}
-                        </h3>
-                       
-                       {schemaSection.fields.map((field:any,index:number)=>{
-                        return(
-                          <div className="space-y-2" key={index}>
-                            <DroppableInput
-                            label={field.label}
-                            fieldId={field.id}
-                            isDragging={isDragging}
-                            value={schemaValues.find(v => v.id === field.id)?.value || ''}
-                            onChange={(value) => {
-                              handleFieldChange(field.id)(value);
-                              onSchemaValueChange(field.id, value);
-                            }}
-                            enabled={true}
-                            indented
-                            onEnabledChange={handleFieldEnabledChange(field.id)}
-                          />
-                           
-                        </div>
-                        )
-                      })}
+        <TabsContent value="global" className={cn("max-h-[60vh]", modalOpen && "p-0")}>
+          <Card className="shadow-none border-none">
+            <CardHeader className="text-gray-600 text-sm mb-4">
+              <CardTitle>Drag Values from Schema or JSON</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[calc(60vh-10rem)] p-2">
+                <ScrollBar orientation="vertical" />
+                {schema.map((schemaSection: SchemaSection) => (
+                  <div className="mb-6" key={schemaSection.sectionName}>
+                    <h3 className="text-base font-medium mb-3">
+                      {schemaSection.sectionName}
+                    </h3>
+                    {schemaSection.fields.map((field: Field) => (
+                      <div className="space-y-2" key={field.id}>
+                        <DroppableInput
+                          label={field.label}
+                          fieldId={field.id}
+                          isDragging={state.isDragging}
+                          value={state.mappings[field.id]?.value || ''}
+                          onChange={(value) => handleFieldChange(field.id, value)}
+                          enabled={state.mappings[field.id]?.enabled ?? true}
+                          indented
+                          onEnabledChange={(enabled) => 
+                            handleFieldEnabledChange(field.id, enabled)}
+                        />
                       </div>
-                        )
-                      })
-                   
-                  )}
-                  
-                </ScrollArea>
-              
-              </CardContent>
-              <CardFooter className="sticky bottom-0 w-full bg-white flex justify-end">
-                <div>
-                  <Button
-                    className="bg-purple-600 hover:bg-purple-700 text-white"
-                    onClick={() => {
-                      handleSave();
-                    }}
-                  >
-                    Save  
-                  </Button>
-                </div>
-              </CardFooter>
-            </Card>
-            {/* Order Information */}
-            
-            
-        
+                    ))}
+                  </div>
+                ))}
+              </ScrollArea>
+            </CardContent>
+            <CardFooter className="sticky bottom-0 w-full bg-white flex justify-end">
+              <Button
+                className="bg-purple-600 hover:bg-purple-700 text-white"
+                onClick={handleSave}
+              >
+                Save
+              </Button>
+            </CardFooter>
+          </Card>
         </TabsContent>
 
         <TabsContent value="event" className=" max-h-[60vh]">
@@ -451,13 +331,11 @@ function DroppableArea({
                               <DroppableInput
                                 label="Subject :"
                                 fieldId="subject"
-                                isDragging={isDragging}
-                                value={fields.subject.value}
-                                onChange={handleFieldChange("subject")}
-                                enabled={fields.subject.enabled}
-                                onEnabledChange={handleFieldEnabledChange(
-                                  "subject"
-                                )}
+                                isDragging={state.isDragging}
+                                value={state.mappings.subject?.value || ''}
+                                onChange={(value) => handleFieldChange('subject', value)}
+                                enabled={state.mappings.subject?.enabled ?? true}
+                                onEnabledChange={(enabled) => handleFieldEnabledChange('subject', enabled)}
                               />
                             </div>
 
@@ -466,11 +344,11 @@ function DroppableArea({
                               <DroppableInput
                                 label="to"
                                 fieldId="to"
-                                isDragging={isDragging}
-                                value={fields.to.value}
-                                onChange={handleFieldChange("to")}
-                                enabled={fields.to.enabled}
-                                onEnabledChange={handleFieldEnabledChange("to")}
+                                isDragging={state.isDragging}
+                                value={state.mappings.to?.value || ''}
+                                onChange={(value) => handleFieldChange('to', value)}
+                                enabled={state.mappings.to?.enabled ?? true}
+                                onEnabledChange={(enabled) => handleFieldEnabledChange('to', enabled)}
                               />
                             </div>
 
@@ -479,13 +357,11 @@ function DroppableArea({
                               <DroppableInput
                                 label="Content : HTML Markdown."
                                 fieldId="content"
-                                isDragging={isDragging}
-                                value={fields.content.value}
-                                onChange={handleFieldChange("content")}
-                                enabled={fields.content.enabled}
-                                onEnabledChange={handleFieldEnabledChange(
-                                  "content"
-                                )}
+                                isDragging={state.isDragging}
+                                value={state.mappings.content?.value || ''}
+                                onChange={(value) => handleFieldChange('content', value)}
+                                enabled={state.mappings.content?.enabled ?? true}
+                                onEnabledChange={(enabled) => handleFieldEnabledChange('content', enabled)}
                               />
                             </div>
                           </CollapsibleContent>
@@ -505,9 +381,7 @@ function DroppableArea({
                 <div>
                   <Button
                     className="bg-purple-600 hover:bg-purple-700 text-white"
-                    onClick={() => {
-                      handleSave();
-                    }}
+                    onClick={handleSave}
                   >
                     Save  
                   </Button>
@@ -519,59 +393,26 @@ function DroppableArea({
       
     </div>
   );
-}
+};
 
-export const DataViewer = () => {
+const DataViewer: React.FC<DataViewerProps> = () => {
   const schema = jsonToSchema(VTEX_ORDER_SCHEMA, "Webhook Headers");
   const { modalOpen } = ModalStore();
-  const [items, setItems] = useState<{ [key: string]: DraggedItem[] }>({
-    source: [],
-    target: [],
+  const [state, setState] = useState<ViewSchemaState>({
+    mappings: {},
+    activeTab: 'global',
+    isDragging: false,
   });
-  const [schemaValues, setSchemaValues] = useState<SchemaValue[]>([]);
-
-  const [fields, setFields] = useState<Fields>({
-    orderId: { value: "", enabled: true },
-    itemName: { value: "", enabled: true },
-    itemImage: { value: "", enabled: true },
-    itemQuantity: { value: "", enabled: true },
-    itemPrice: { value: "", enabled: true },
-    shippingAddress: { value: "", enabled: true },
-    billingAddress: { value: "", enabled: true },
-    subject: { value: "", enabled: true },
-    to: { value: "", enabled: true },
-    content: { value: "", enabled: true },
-  });
-
-  const handleFieldChange = (field: keyof Fields, value: string) => {
-    setFields((prev) => ({
-      ...prev,
-      [field]: { ...prev[field], value },
-    }));
-  };
-
-  const handleFieldEnabledChange = (field: keyof Fields, enabled: boolean) => {
-    setFields((prev) => ({
-      ...prev,
-      [field]: { ...prev[field], enabled },
-    }));
-  };
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
-      activationConstraint: {
-        distance: 1,
-      },
+      activationConstraint: { distance: 1 },
     }),
-
     useSensor(PointerSensor, {
       activationConstraint: { delay: 2, tolerance: 2 },
     }),
     useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 0,
-        tolerance: 1,
-      },
+      activationConstraint: { delay: 0, tolerance: 1 },
     })
   );
 
@@ -586,39 +427,17 @@ export const DataViewer = () => {
         value: active.data.current.value,
       } as DraggedItem;
 
-      // Update schemaValues when an item is dropped
-      setSchemaValues(prev => {
-        const exists = prev.find(v => v.id === over.id);
-        if (exists) {
-          return prev.map(v => 
-            v.id === over.id ? { ...v, value: draggedItem.path } : v
-          );
-        } else {
-          return [...prev, { id: over.id as string, value: draggedItem.path }];
-        }
-      });
-
-      // Update the items list
-      setItems((prev) => ({
+      setState(prev => ({
         ...prev,
-        target: [...prev.target, draggedItem],
+        mappings: {
+          ...prev.mappings,
+          [over.id as string]: {
+            value: draggedItem.path,
+            enabled: true,
+          },
+        },
       }));
-
-      // Update the field value directly through state
-      const fieldId = over.id as keyof Fields;
-      handleFieldChange(fieldId, draggedItem.path);
     }
-  };
-
-  const handleSchemaValueChange = (fieldId: string, value: string) => {
-    setSchemaValues(prev => {
-      const exists = prev.find(v => v.id === fieldId);
-      if (exists) {
-        return prev.map(v => v.id === fieldId ? { ...v, value } : v);
-      } else {
-        return [...prev, { id: fieldId, value }];
-      }
-    });
   };
 
   return (
@@ -630,49 +449,31 @@ export const DataViewer = () => {
         modifiers={[snapCenterToCursor]}
       >
         {modalOpen ? (
-          <ResizablePanelGroup className=" gap-3 h-full" direction="horizontal">
-            <ResizablePanel defaultSize={60} className="bg-white  shadow-md  ">
+          <ResizablePanelGroup className="gap-3 h-full" direction="horizontal">
+            <ResizablePanel defaultSize={60} className="bg-white shadow-md">
               <div className="p-2">
                 <ViewData schema={schema as ExtendedJSONSchema7} />
               </div>
             </ResizablePanel>
-
             <ResizableHandle withHandle />
-
-            <ResizablePanel className="bg-white  rounded-xl">
-              <div className="p-2 ">
+            <ResizablePanel className="bg-white rounded-xl">
+              <div className="p-2">
                 <DroppableArea
                   id="target"
-                  items={items.target}
-                  fields={fields}
-                  onFieldChange={handleFieldChange}
-                  onFieldEnabledChange={handleFieldEnabledChange}
-                  nodeId={
-                    flowStore
-                      .getState()
-                      .nodes.find((node) => node.type === "mailNode")?.id || ""
-                  }
-                  schemaValues={schemaValues}
-                  onSchemaValueChange={handleSchemaValueChange}
+                  state={state}
+                  setState={setState}
+                  nodeId={flowStore.getState().nodes.find((node) => node.type === "mailNode")?.id || ""}
                 />
               </div>
             </ResizablePanel>
           </ResizablePanelGroup>
         ) : (
-          <div className="w-full ">
+          <div className="w-full">
             <DroppableArea
               id="target"
-              items={items.target}
-              fields={fields}
-              onFieldChange={handleFieldChange}
-              onFieldEnabledChange={handleFieldEnabledChange}
-              nodeId={
-                flowStore
-                  .getState()
-                  .nodes.find((node) => node.type === "mailNode")?.id || ""
-              }
-              schemaValues={schemaValues}
-              onSchemaValueChange={handleSchemaValueChange}
+              state={state}
+              setState={setState}
+              nodeId={flowStore.getState().nodes.find((node) => node.type === "mailNode")?.id || ""}
             />
           </div>
         )}
@@ -681,4 +482,5 @@ export const DataViewer = () => {
   );
 };
 
+export { DataViewer };
 export default DataViewer;
