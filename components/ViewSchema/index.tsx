@@ -188,6 +188,12 @@ interface Fields {
   content: FieldState;
 }
 
+// Add this interface for the schema values
+interface SchemaValue {
+  id: string;
+  value: string;
+}
+
 function DroppableArea({
   id,
   items,
@@ -195,6 +201,8 @@ function DroppableArea({
   onFieldChange,
   onFieldEnabledChange,
   nodeId,
+  schemaValues,
+  onSchemaValueChange,
 }: {
   id: string;
   items: DraggedItem[];
@@ -202,14 +210,12 @@ function DroppableArea({
   onFieldChange: (field: keyof Fields, value: string) => void;
   onFieldEnabledChange: (field: keyof Fields, enabled: boolean) => void;
   nodeId: string;
+  schemaValues: SchemaValue[];
+  onSchemaValueChange: (fieldId: string, value: string) => void;
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [activeTab, setActiveTab] = useState("global");
-  const [defaultSchema,setDefaultSchema] = useState<any>(null)
-
-  
-
-  const [savedMappings,setSavedMappings] = useState<{global:any,events:any} | null>(null)
+  const [defaultSchema, setDefaultSchema] = useState<any>(null);
 
   const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
   const { modalOpen } = ModalStore();
@@ -237,7 +243,6 @@ function DroppableArea({
     console.log(nodeId);
     if (getMappings) {
       console.log(getMappings);
-      setSavedMappings(getMappings.mappings)
     }
     getDefaultSchema('twilio').then((res)=>{
       setDefaultSchema(res)
@@ -259,12 +264,23 @@ function DroppableArea({
   });
 
   const handleSave = () => {
+    // Helper function to find field label by id
+    const findFieldLabel = (fieldId: string) => {
+      for (const section of schema) {
+        const field = section.fields.find(f => f.id === fieldId);
+        if (field) {
+          return field.id;
+        }
+      }
+      return fieldId; // Fallback to id if label not found
+    };
+
     saveDataMappings({
       nodeId,
       projectId: sourceNode?.projectId as string,
       mappings: {
         global: items.map((item) => ({
-          fieldId: item.id,
+          fieldId: findFieldLabel(item.id as string),
           value: item.path,
           enabled: true,
           type: "string",
@@ -273,7 +289,7 @@ function DroppableArea({
         events: parentEvents.map((event) => ({
           eventName: event.event,
           fields: items.map((item) => ({
-            fieldId: item.id,
+            fieldId: findFieldLabel(item.id as string),
             value: item.path,
             enabled: true,
             type: "string",
@@ -344,23 +360,26 @@ function DroppableArea({
                   <ScrollBar orientation="vertical" />
                  
                   {schema && (
-                      schema.map((schema:any)=>{
+                      schema.map((schemaSection: any)=>{
                         return(
                           <div className="mb-6  ">
 
                           <h3 className="text-base font-medium mb-3">
-                            {schema.sectionName}
+                            {schemaSection.sectionName}
                         </h3>
                        
-                       {schema.fields.map((field:any)=>{
+                       {schemaSection.fields.map((field:any,index:number)=>{
                         return(
-                          <div className="space-y-2">
+                          <div className="space-y-2" key={index}>
                             <DroppableInput
                             label={field.label}
                             fieldId={field.id}
                             isDragging={isDragging}
-                            value={"field.value"}
-                            onChange={handleFieldChange(field.id)}
+                            value={schemaValues.find(v => v.id === field.id)?.value || ''}
+                            onChange={(value) => {
+                              handleFieldChange(field.id)(value);
+                              onSchemaValueChange(field.id, value);
+                            }}
                             enabled={true}
                             indented
                             onEnabledChange={handleFieldEnabledChange(field.id)}
@@ -374,91 +393,7 @@ function DroppableArea({
                       })
                    
                   )}
-                  {/* Items Section */}
-                  {/* <div className="mb-6">
-                    <h3 className="text-base font-medium mb-3">Items</h3>
-                    <div className="space-y-4">
-                      <DroppableInput
-                        label="Item Name"
-                        fieldId="itemName"
-                        isDragging={isDragging}
-                        value={fields.itemName.value}
-                        onChange={handleFieldChange("itemName")}
-                        enabled={fields.itemName.enabled}
-                        onEnabledChange={handleFieldEnabledChange("itemName")}
-                        indented
-                      />
-
-                      <DroppableInput
-                        label="Item Image"
-                        fieldId="itemImage"
-                        isDragging={isDragging}
-                        value={fields.itemImage.value}
-                        onChange={handleFieldChange("itemImage")}
-                        enabled={fields.itemImage.enabled}
-                        onEnabledChange={handleFieldEnabledChange("itemImage")}
-                        indented
-                      />
-
-                      <DroppableInput
-                        label="Item Quantity"
-                        fieldId="itemQuantity"
-                        isDragging={isDragging}
-                        value={fields.itemQuantity.value}
-                        onChange={handleFieldChange("itemQuantity")}
-                        enabled={fields.itemQuantity.enabled}
-                        onEnabledChange={handleFieldEnabledChange(
-                          "itemQuantity"
-                        )}
-                        indented
-                      />
-
-                      <DroppableInput
-                        label="Item Price"
-                        fieldId="itemPrice"
-                        isDragging={isDragging}
-                        value={fields.itemPrice.value}
-                        onChange={handleFieldChange("itemPrice")}
-                        enabled={fields.itemPrice.enabled}
-                        onEnabledChange={handleFieldEnabledChange("itemPrice")}
-                        indented
-                      />
-                    </div>
-                  </div> */}
-
-                  {/* Shipping Information */}
-                  {/* <div className="mb-6">
-                    <h3 className="text-base font-medium mb-3">
-                      Shipping Information
-                    </h3>
-                    <div className="space-y-4">
-                      <DroppableInput
-                        label="Shipping Address"
-                        fieldId="shippingAddress"
-                        isDragging={isDragging}
-                        value={fields.shippingAddress.value}
-                        onChange={handleFieldChange("shippingAddress")}
-                        enabled={fields.shippingAddress.enabled}
-                        onEnabledChange={handleFieldEnabledChange(
-                          "shippingAddress"
-                        )}
-                        indented
-                      />
-
-                      <DroppableInput
-                        label="Billing Address"
-                        fieldId="billingAddress"
-                        isDragging={isDragging}
-                        value={fields.billingAddress.value}
-                        onChange={handleFieldChange("billingAddress")}
-                        enabled={fields.billingAddress.enabled}
-                        onEnabledChange={handleFieldEnabledChange(
-                          "billingAddress"
-                        )}
-                        indented
-                      />
-                    </div>
-                  </div> */}
+                  
                 </ScrollArea>
               
               </CardContent>
@@ -593,6 +528,7 @@ export const DataViewer = () => {
     source: [],
     target: [],
   });
+  const [schemaValues, setSchemaValues] = useState<SchemaValue[]>([]);
 
   const [fields, setFields] = useState<Fields>({
     orderId: { value: "", enabled: true },
@@ -650,6 +586,18 @@ export const DataViewer = () => {
         value: active.data.current.value,
       } as DraggedItem;
 
+      // Update schemaValues when an item is dropped
+      setSchemaValues(prev => {
+        const exists = prev.find(v => v.id === over.id);
+        if (exists) {
+          return prev.map(v => 
+            v.id === over.id ? { ...v, value: draggedItem.path } : v
+          );
+        } else {
+          return [...prev, { id: over.id as string, value: draggedItem.path }];
+        }
+      });
+
       // Update the items list
       setItems((prev) => ({
         ...prev,
@@ -658,11 +606,19 @@ export const DataViewer = () => {
 
       // Update the field value directly through state
       const fieldId = over.id as keyof Fields;
-      setFields((prev) => ({
-        ...prev,
-        [fieldId]: { ...prev[fieldId], value: draggedItem.path },
-      }));
+      handleFieldChange(fieldId, draggedItem.path);
     }
+  };
+
+  const handleSchemaValueChange = (fieldId: string, value: string) => {
+    setSchemaValues(prev => {
+      const exists = prev.find(v => v.id === fieldId);
+      if (exists) {
+        return prev.map(v => v.id === fieldId ? { ...v, value } : v);
+      } else {
+        return [...prev, { id: fieldId, value }];
+      }
+    });
   };
 
   return (
@@ -696,6 +652,8 @@ export const DataViewer = () => {
                       .getState()
                       .nodes.find((node) => node.type === "mailNode")?.id || ""
                   }
+                  schemaValues={schemaValues}
+                  onSchemaValueChange={handleSchemaValueChange}
                 />
               </div>
             </ResizablePanel>
@@ -713,6 +671,8 @@ export const DataViewer = () => {
                   .getState()
                   .nodes.find((node) => node.type === "mailNode")?.id || ""
               }
+              schemaValues={schemaValues}
+              onSchemaValueChange={handleSchemaValueChange}
             />
           </div>
         )}
