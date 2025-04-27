@@ -1,30 +1,18 @@
 import flowStore from "@/components/Store/store";
 
-import {
-  Card,
-  
-  CardContent,
-  
-} from "@/components/ui/card"; 
 import { ModalStore } from "@/components/Store/modal";
-
-import { cn } from "@/lib/utils";
-
 
 import DataViewer from "@/components/ViewSchema";
 
-import { useState } from "react";
 import GenericDrawerLayout from "../../Layouts/Drawer";
 
 function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
   const node = flowStore((state) => state.getNode(id));
-  const { modalOpen } = ModalStore();
-
 
   return (
     <GenericDrawerLayout isOpen={isOpen} node={node} id={id}>
       <div className="w-full ">
-        <DataViewer  />
+        <DataViewer />
       </div>
     </GenericDrawerLayout>
   );

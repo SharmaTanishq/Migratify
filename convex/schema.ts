@@ -115,35 +115,57 @@ export default defineSchema(
     dataMappings: defineTable({
         nodeId: v.string(),
         projectId: v.string(),
-        mappings: v.object({
-          global: v.array(
-            v.object({
-              fieldId: v.string(),
-              value: v.string(),
-              enabled: v.boolean(),
-              type: v.string(),
-              isActive: v.boolean(),
-            })
-          ),
-          events: v.array(
-            v.object({
-              eventName: v.string(),
-              fields: v.array(
-                v.object({
-                  fieldId: v.string(),
-                  value: v.string(),
-                  enabled: v.boolean(),
-                  type: v.string(),
-                  isActive: v.boolean(),
-                })
-              ),
-            })
-          ),
-        }),
+        globalFields: v.array(
+          v.object({
+            fieldId: v.string(),
+            value: v.string(),
+            enabled: v.boolean(),
+            type: v.string(),
+            isActive: v.boolean(),
+            validation: v.optional(v.object({
+              required: v.optional(v.boolean()),
+              pattern: v.optional(v.string()),
+              min: v.optional(v.number()),
+              max: v.optional(v.number())
+            })),
+            metadata: v.optional(v.object({
+              lastModifiedBy: v.optional(v.string()),
+              description: v.optional(v.string()),
+              tags: v.optional(v.array(v.string()))
+            }))
+          })
+        ),
+        eventFields: v.array(
+          v.object({
+            eventName: v.string(),
+            fields: v.array(
+              v.object({
+                fieldId: v.string(),
+                value: v.string(),
+                enabled: v.boolean(),
+                type: v.string(),
+                isActive: v.boolean(),
+                validation: v.optional(v.object({
+                  required: v.optional(v.boolean()),
+                  pattern: v.optional(v.string()),
+                  min: v.optional(v.number()),
+                  max: v.optional(v.number())
+                })),
+                metadata: v.optional(v.object({
+                  lastModifiedBy: v.optional(v.string()),
+                  description: v.optional(v.string()),
+                  tags: v.optional(v.array(v.string()))
+                }))
+              })
+            )
+          })
+        ),
+        version: v.number(),
         createdAt: v.number(),
         updatedAt: v.number(),
-      }).index('by_nodeId', ['nodeId'])
-        .index('by_projectId', ['projectId']),
+      })
+      .index('by_nodeId', ['nodeId'])
+      .index('by_projectId', ['projectId']),
 
     variables: defineTable({
       projectId: v.string(),

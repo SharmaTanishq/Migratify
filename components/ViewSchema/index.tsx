@@ -57,6 +57,11 @@ interface Field {
   type: string;
 }
 
+interface Schema {
+  globalFields: SchemaSection[];
+  eventFields: SchemaSection[];
+}
+
 interface SchemaSection {
   sectionName: string;
   fields: Field[];
@@ -143,8 +148,14 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
   nodeId,
 }) => {
   const saveDataMappings = useMutation(api.mappings.dataMap.saveDataMappings);
+  const getMappings = useQuery(
+    api.mappings.dataMap.getMappings,
+    nodeId ? { nodeId: nodeId } : "skip"
+  );
   const { modalOpen } = ModalStore();
   const { toast } = useToast();
+
+  
 
   // Get parent node and events
   const sourceNode = flowStore((state) => {
@@ -156,6 +167,18 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
     return null;
   });
 
+  const [fieldSchema, setFieldSchema] = useState<SchemaSection[]>([])
+
+  
+
+  useEffect(() => {
+    
+   getDefaultSchema('Twilio').then((res) => {
+    console.log(res.data)
+    setFieldSchema(res.data[0].schema_json)
+   })
+  }, [sourceNode])
+
   const parentEvents = webhooksStore().getEvents(sourceNode?._id as string) || [];
 
   useDndMonitor({
@@ -164,9 +187,41 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
     onDragCancel: () => setState(prev => ({ ...prev, isDragging: false })),
   });
 
-  
+  useEffect(() => {
+    if (getMappings) {
+      const formattedMappings: { [fieldId: string]: { value: string; enabled: boolean } } = {};
+      
+      if (state.activeTab === 'global' && getMappings.globalFields) {
+        // Load global fields
+        getMappings.globalFields.forEach((field: FieldMapping) => {
+          formattedMappings[field.fieldId] = {
+            value: field.value,
+            enabled: field.enabled
+          };
+        });
+      } else if (state.activeTab === 'event' && getMappings.eventFields) {
+        // Load event fields for the current event
+        const currentEvent = parentEvents[0]; // You might want to track the current event in state
+        if (currentEvent) {
+          const eventMapping = getMappings.eventFields.find(
+            ef => ef.eventName === currentEvent.event
+          );
+          if (eventMapping) {
+            eventMapping.fields.forEach((field: FieldMapping) => {
+              formattedMappings[field.fieldId] = {
+                value: field.value,
+                enabled: field.enabled
+              };
+            });
+          }
+        }
+      }
+      
+      setState(prev => ({ ...prev, mappings: formattedMappings }));
+    }
+  }, [getMappings, state.activeTab]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const mappingsArray = Object.entries(state.mappings).map(([fieldId, data]) => ({
       fieldId,
       value: data.value,
@@ -175,31 +230,39 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
       isActive: true,
     }));
 
-    saveDataMappings({
-      nodeId,
-      projectId: sourceNode?.projectId as string,
-      mappings: {
-        global: mappingsArray,
-        events: parentEvents.map((event) => ({
-          eventName: event.event,
-          fields: mappingsArray,
-        })),
-      },
-    })
-      .then(() => {
-        toast({
-          title: "Saved successfully",
-          description: "Values saved successfully",
-          duration: 1500,
+    try {
+      if (state.activeTab === 'global') {
+        // Save global mappings
+        await saveDataMappings({
+          nodeId,
+          projectId: sourceNode?.projectId as string,
+          globalFields: mappingsArray,
         });
-      })
-      .catch((error) => {
-        toast({
-          title: "Error",
-          description: "Error saving values",
-          duration: 1500,
+      } else {
+        // Save event-specific mappings
+        await saveDataMappings({
+          nodeId,
+          projectId: sourceNode?.projectId as string,
+          eventFields: parentEvents.map(event => ({
+            eventName: event.event,
+            fields: mappingsArray,
+          })),
         });
+      }
+
+      toast({
+        title: "Saved successfully",
+        description: `${state.activeTab === 'global' ? 'Global' : 'Event'} mappings saved successfully`,
+        duration: 1500,
       });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Error saving mappings",
+        duration: 1500,
+        variant: "destructive",
+      });
+    }
   };
 
   const handleFieldChange = (fieldId: string, value: string) => {
@@ -261,7 +324,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
             <CardContent>
               <ScrollArea className="h-[calc(60vh-10rem)] p-2">
                 <ScrollBar orientation="vertical" />
-                {schema.map((schemaSection: SchemaSection) => (
+                {fieldSchema?.map((schemaSection: SchemaSection) => (
                   <div className="mb-6" key={schemaSection.sectionName}>
                     <h3 className="text-base font-medium mb-3">
                       {schemaSection.sectionName}
