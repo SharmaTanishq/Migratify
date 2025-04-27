@@ -22,10 +22,12 @@ import { cn } from "@/lib/utils";
 import { DEFAULT_HANDLE_STYLE_SOURCE } from "@/components/Constants/HandleStyles";
 import NodeDrawer from "./Components/NodeDrawer";
 import GenericCardLayout from "../Layouts/Card/CardHolder";
+import FloatingBar from "../Layouts/FloatingBar";
 
 const MemoizedNodeIcon = memo(NodeIcon);
 const MemoizedNodeName = memo(NodeName);
 const MemoizedNodeDescription = memo(NodeDescription);
+const MemoizedFloatingBar = memo(FloatingBar);
 
 const ECOMMERCE_HANDLE_STYLES = {
   ...DEFAULT_HANDLE_STYLE_SOURCE,
@@ -98,6 +100,9 @@ function ECommerceNode({
     );
   }, [data?.type, data?.node?.icon, data?.node?.flow]);
 
+
+
+
   const MemoizedNodeDrawer = useMemo(() => {
     return (
       selected && <NodeDrawer isOpen={true} nodeData={componentData} nodeId={id} />
@@ -110,13 +115,19 @@ function ECommerceNode({
   };
 
   return (
-    <>
+    <div className="relative">
+      <div className="absolute -top-24 left-0 min-h-full min-w-full">
+        <MemoizedFloatingBar isOpen={selected} node={data} id={id} />
+      </div>
+
       <GenericCardLayout
         id={id}
         selected={selected}       
       >
+        
         {/* Header Section */}
         <CardHeader className="">
+          
         <CardTitle className="flex items-center justify-between w-full ">
             <div className="flex items-center gap-2 ">
               {renderNodeIcon()}
@@ -246,9 +257,9 @@ function ECommerceNode({
           </Button>
         </CardFooter>
       </GenericCardLayout>
-
+      
       {MemoizedNodeDrawer}
-    </>
+    </div>
   );
 }
 

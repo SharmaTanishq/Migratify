@@ -65,7 +65,9 @@ const nodeTypes = {
 
 export default function Page() {
   const params = useParams();
+  
   const { setOpen } = useSidebar();
+
   useEffect(() => {
     setOpen(false);
   }, []);
