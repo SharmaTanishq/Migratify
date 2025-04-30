@@ -39,6 +39,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { ChevronsUpDown } from "lucide-react";
 import GenericCardLayout from "../Layouts/Card/CardHolder";
 import MailDrawer from "./Drawer";
+import { FloatingBar } from "../Layouts/FloatingBar";
 
 
 
@@ -110,11 +111,21 @@ function mailNode({
 
   //const sendMailQuery = useAction(api.mail.index.sendMailAction);
 
+  const triggerMail = useAction(api.Integrations.Mail.index.TriggerMail);
+
   useEffect(() => {
     if (webhookEvents !== null && webhookEvents !== undefined) {
       //ON EVENT RECIEVE DO SOMETHING.
 
       console.log(webhookEvents, "here is webhook events");
+
+      triggerMail({
+        event: "event",
+        platform: {
+          target: "vtex",
+          source: "resend",
+        },
+      });
 
       // const response = sendMailQuery({
       //   //This to will come from order details..
@@ -142,8 +153,12 @@ function mailNode({
 
   const MEMOIZED_MAIL_DRAWER = useMemo(() => {
     return (
-      selected && <MailDrawer isOpen={true} id={id} />
+      selected && <MailDrawer isOpen={true} id={id} size="full" />
     )
+  }, [selected, id]);
+
+  const MemoizedFloatingBar = useMemo(() => {
+    return <FloatingBar isOpen={selected} node={data} id={id} />
   }, [selected, id]);
 
   return (
@@ -153,6 +168,10 @@ function mailNode({
       selected={selected}
       
     >
+      <div className="absolute -top-24 left-0 min-h-full min-w-full ">
+            {MemoizedFloatingBar}
+        </div>
+
       <CardHeader>
         <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
           <div className="flex items-center justify-start gap-2">

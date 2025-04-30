@@ -19,7 +19,7 @@ const sizeClasses = {
   full: "w-[90vw]",
 };
 
-function ModalLayout({
+ const ModalLayout = ({
   children,
   isOpen,
   onClose,
@@ -31,7 +31,7 @@ function ModalLayout({
   data: any;
   onClose: () => void;
   size?: "sm" | "default" | "lg" | "content" | "full";
-}) {
+}) => {
     const {setModalOpen} = ModalStore();
     useEffect(()=>{
         setModalOpen(isOpen);
@@ -56,4 +56,5 @@ function ModalLayout({
     </Dialog>
   );
 }
+
 export default ModalLayout;

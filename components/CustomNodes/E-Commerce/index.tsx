@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import { DEFAULT_HANDLE_STYLE_SOURCE } from "@/components/Constants/HandleStyles";
 import NodeDrawer from "./Components/NodeDrawer";
 import GenericCardLayout from "../Layouts/Card/CardHolder";
-import FloatingBar from "../Layouts/FloatingBar";
+import  {FloatingBar} from "../Layouts/FloatingBar";
 
 const MemoizedNodeIcon = memo(NodeIcon);
 const MemoizedNodeName = memo(NodeName);
@@ -38,10 +38,12 @@ function ECommerceNode({
   data,
   selected,
   id,
+  
 }: {
   data: NodeDataType;
   selected?: boolean;
   id: string;
+  
 }): JSX.Element {
   const instance = useReactFlow();
 
@@ -100,12 +102,16 @@ function ECommerceNode({
     );
   }, [data?.type, data?.node?.icon, data?.node?.flow]);
 
+  const MemoizedFloatingBar = useMemo(() => {
+    return <FloatingBar isOpen={selected} node={data} id={id} />;
+  }, [selected, id]);
+
 
 
 
   const MemoizedNodeDrawer = useMemo(() => {
     return (
-      selected && <NodeDrawer isOpen={true} nodeData={componentData} nodeId={id} />
+       selected && <NodeDrawer isOpen={true} nodeData={componentData} nodeId={id} size="default" />
     );
   }, [selected, id]);
 
@@ -116,9 +122,10 @@ function ECommerceNode({
 
   return (
     <div className="relative">
-      <div className="absolute -top-24 left-0 min-h-full min-w-full">
-        <MemoizedFloatingBar isOpen={selected} node={data} id={id} />
-      </div>
+      
+        <div className="absolute -top-24 left-0  min-w-full ">
+            {MemoizedFloatingBar}
+        </div>
 
       <GenericCardLayout
         id={id}

@@ -13,7 +13,9 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as Integrations_Twilio_index from "../Integrations/Twilio/index.js";
+import type * as Integrations_Mail_Resend_index from "../Integrations/Mail/Resend/index.js";
+import type * as Integrations_Mail_Twilio_index from "../Integrations/Mail/Twilio/index.js";
+import type * as Integrations_Mail_index from "../Integrations/Mail/index.js";
 import type * as Types_node from "../Types/node.js";
 import type * as flows_edge_onEdgeDelete from "../flows/edge/onEdgeDelete.js";
 import type * as flows_edges from "../flows/edges.js";
@@ -40,7 +42,9 @@ import type * as webhooks_index from "../webhooks/index.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  "Integrations/Twilio/index": typeof Integrations_Twilio_index;
+  "Integrations/Mail/Resend/index": typeof Integrations_Mail_Resend_index;
+  "Integrations/Mail/Twilio/index": typeof Integrations_Mail_Twilio_index;
+  "Integrations/Mail/index": typeof Integrations_Mail_index;
   "Types/node": typeof Types_node;
   "flows/edge/onEdgeDelete": typeof flows_edge_onEdgeDelete;
   "flows/edges": typeof flows_edges;

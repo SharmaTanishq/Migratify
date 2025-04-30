@@ -5,12 +5,13 @@ import { ModalStore } from "@/components/Store/modal";
 import DataViewer from "@/components/ViewSchema";
 
 import GenericDrawerLayout from "../../Layouts/Drawer";
+import { ModalSize } from "@/components/Types/ui/Modal";
 
-function MailDrawer({ isOpen, id }: { isOpen: boolean; id: string }) {
+function MailDrawer({ isOpen, id, size="full" }: { isOpen: boolean; id: string, size: ModalSize }) {
   const node = flowStore((state) => state.getNode(id));
 
   return (
-    <GenericDrawerLayout isOpen={isOpen} node={node} id={id}>
+    <GenericDrawerLayout isOpen={isOpen} node={node} id={id} size={size}>
       <div className="w-full ">
         <DataViewer />
       </div>

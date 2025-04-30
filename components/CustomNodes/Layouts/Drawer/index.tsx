@@ -18,28 +18,32 @@ import { Expand } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import ModalLayout from "../Modal";
+import { ModalStore } from "@/components/Store/modal";
+import { ModalSize } from "@/components/Types/ui/Modal";
 
 function GenericDrawerLayout({
   children,
   isOpen,
   node,
   id,
+  size,
 }: {
   children: React.ReactNode;
   isOpen: boolean | undefined;
   node: any;
   id: string;
+  size: ModalSize;
 }) {
   const reactFlow = useReactFlow();
   const [isExpanded, setExpanded] = useState(false);
   const [open, setOpen] = useState(isOpen); //Workaround but it works.
-
+  const {modalOpen, setModalOpen} = ModalStore();
   const handleExpand = () => {
     setExpanded(!isExpanded);
   };
   return (
     <>
-      <Sheet open={isExpanded?false:open} modal={false}>
+      {/* <Sheet open={isExpanded?false:open} modal={false}>
         <SheetContent
           handleExpand={handleExpand}
           side={"flow"}
@@ -103,12 +107,15 @@ function GenericDrawerLayout({
             {children}
           </div>
         </SheetContent>
-      </Sheet>
+      </Sheet> */}
       <ModalLayout
-        isOpen={isExpanded}
-        onClose={() => reactFlow.updateNode(id, { selected: false })}
+        isOpen={modalOpen}
+        onClose={() => {
+          setModalOpen(false);
+          reactFlow.updateNode(id, { selected: false });
+        }}
         data={node}
-        size="content"
+        size={size}
       >
         <div className="w-full overflow-hidden">
           {children}
