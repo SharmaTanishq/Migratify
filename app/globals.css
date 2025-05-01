@@ -242,6 +242,10 @@ body.dragging {
   overflow-x: hidden;
 }
 
+.overflow-guard{
+  border-radius: 10px;
+}
+
 /* Ensure all draggable elements don't cause horizontal scrolling */
 
 @theme inline {

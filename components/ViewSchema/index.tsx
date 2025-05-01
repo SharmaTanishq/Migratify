@@ -49,6 +49,9 @@ import {
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { getDefaultSchema } from "../CMS/api";
+import HTMLEditor from "../monaco/html";
+import HTMLPreview from "../monaco/html/preview";
+
 
 // Improved type definitions
 interface Field {
@@ -169,6 +172,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
 
   const [fieldSchema, setFieldSchema] = useState<SchemaSection[]>([])
 
+  const [htmlContent, setHtmlContent] = useState<string>("")
   
 
   useEffect(() => {
@@ -300,7 +304,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
         className="w-full flex-1"
       >
         <div className="px-1 pt-4">
-          <TabsList className="grid w-[180px] grid-cols-2 bg-gray-100 rounded-md">
+          <TabsList className="grid w-[350px] grid-cols-3 bg-gray-100 rounded-md">
             <TabsTrigger
               value="global"
               className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-none"
@@ -313,18 +317,24 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
             >
               Event
             </TabsTrigger>
+            <TabsTrigger
+              value="preview"
+              className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-none"
+            >
+              Preview
+            </TabsTrigger>
           </TabsList>
         </div>
 
         <TabsContent value="global" className={cn("max-h-[60vh]", modalOpen && "p-0")}>
           <Card className="shadow-none border-none">
-            <CardHeader className="text-gray-600 text-sm mb-4">
+            <CardHeader className="text-gray-600 text-sm ">
               <CardTitle>Drag Values from Schema or JSON</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className = "p-0">
               <ScrollArea className="h-[calc(60vh-10rem)] p-2">
                 <ScrollBar orientation="vertical" />
-                {fieldSchema?.map((schemaSection: SchemaSection) => (
+                {/* {fieldSchema?.map((schemaSection: SchemaSection) => (
                   <div className="mb-6" key={schemaSection.sectionName}>
                     <h3 className="text-base font-medium mb-3">
                       {schemaSection.sectionName}
@@ -345,7 +355,17 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                       </div>
                     ))}
                   </div>
-                ))}
+                ))} */}
+              <div className="flex w-full h-[500px] p-1 shadow-sm">
+              <HTMLEditor
+                  value={htmlContent}
+                  onChange={(newValue) => {
+                    setHtmlContent(newValue || "")
+                  }}
+                  height={"100%"}
+                  jsonSchema={VTEX_ORDER_SCHEMA}
+                  />
+                  </div>
               </ScrollArea>
             </CardContent>
             <CardFooter className="sticky bottom-0 w-full bg-white flex justify-end">
@@ -451,6 +471,14 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                 </div>
               </CardFooter>
           </Card>
+        </TabsContent>
+        <TabsContent value="preview" className=" max-h-[60vh]">
+          <ScrollArea className="h-[60vh]">
+          <HTMLPreview
+            content={htmlContent}
+            jsonData={VTEX_ORDER_SCHEMA}
+          />
+          </ScrollArea>
         </TabsContent>
       </Tabs>
       

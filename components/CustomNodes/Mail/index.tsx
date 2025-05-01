@@ -125,15 +125,7 @@ function mailNode({
           target: "vtex",
           source: "resend",
         },
-      });
-
-      // const response = sendMailQuery({
-      //   //This to will come from order details..
-      //   to: "k.rakshit2001@gmail.com",
-      //   //This text should be customizable from the node UI.
-      //   text: "Test Mail",
-      // });
-      // setCode(JSON.stringify(response, null, 2));
+      }); 
     }
   }, [webhookEvents]);
 
