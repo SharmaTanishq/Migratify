@@ -8,15 +8,11 @@
  * @module
  */
 
-import type {
-  ApiFromModules,
-  FilterApi,
-  FunctionReference,
-} from "convex/server";
 import type * as Integrations_Mail_Resend_index from "../Integrations/Mail/Resend/index.js";
 import type * as Integrations_Mail_Twilio_index from "../Integrations/Mail/Twilio/index.js";
 import type * as Integrations_Mail_index from "../Integrations/Mail/index.js";
 import type * as Types_node from "../Types/node.js";
+import type * as ai_generateHtml from "../ai/generateHtml.js";
 import type * as flows_edge_onEdgeDelete from "../flows/edge/onEdgeDelete.js";
 import type * as flows_edges from "../flows/edges.js";
 import type * as flows_node_data from "../flows/node/data.js";
@@ -33,6 +29,12 @@ import type * as webhooks_events from "../webhooks/events.js";
 import type * as webhooks_handlers from "../webhooks/handlers.js";
 import type * as webhooks_index from "../webhooks/index.js";
 
+import type {
+  ApiFromModules,
+  FilterApi,
+  FunctionReference,
+} from "convex/server";
+
 /**
  * A utility for referencing Convex functions in your app's API.
  *
@@ -46,6 +48,7 @@ declare const fullApi: ApiFromModules<{
   "Integrations/Mail/Twilio/index": typeof Integrations_Mail_Twilio_index;
   "Integrations/Mail/index": typeof Integrations_Mail_index;
   "Types/node": typeof Types_node;
+  "ai/generateHtml": typeof ai_generateHtml;
   "flows/edge/onEdgeDelete": typeof flows_edge_onEdgeDelete;
   "flows/edges": typeof flows_edges;
   "flows/node/data": typeof flows_node_data;
@@ -62,11 +65,51 @@ declare const fullApi: ApiFromModules<{
   "webhooks/handlers": typeof webhooks_handlers;
   "webhooks/index": typeof webhooks_index;
 }>;
+declare const fullApiWithMounts: typeof fullApi;
+
 export declare const api: FilterApi<
-  typeof fullApi,
+  typeof fullApiWithMounts,
   FunctionReference<any, "public">
 >;
 export declare const internal: FilterApi<
-  typeof fullApi,
+  typeof fullApiWithMounts,
   FunctionReference<any, "internal">
 >;
+
+export declare const components: {
+  persistentTextStreaming: {
+    lib: {
+      addChunk: FunctionReference<
+        "mutation",
+        "internal",
+        { final: boolean; streamId: string; text: string },
+        any
+      >;
+      createStream: FunctionReference<"mutation", "internal", {}, any>;
+      getStreamStatus: FunctionReference<
+        "query",
+        "internal",
+        { streamId: string },
+        "pending" | "streaming" | "done" | "error" | "timeout"
+      >;
+      getStreamText: FunctionReference<
+        "query",
+        "internal",
+        { streamId: string },
+        {
+          status: "pending" | "streaming" | "done" | "error" | "timeout";
+          text: string;
+        }
+      >;
+      setStreamStatus: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          status: "pending" | "streaming" | "done" | "error" | "timeout";
+          streamId: string;
+        },
+        any
+      >;
+    };
+  };
+};

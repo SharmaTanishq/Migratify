@@ -6,6 +6,9 @@ interface HTMLPreviewProps {
   jsonData: any;
 }
 
+
+
+
 const HTMLPreview: React.FC<HTMLPreviewProps> = ({ content, jsonData }) => {
   
   const renderedContent = renderTemplate(content, jsonData);

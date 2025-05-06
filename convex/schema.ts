@@ -2,6 +2,7 @@
 // of the database is entirely optional in Convex.
 // See https://docs.convex.dev/database/schemas.
 
+import { StreamIdValidator } from "@convex-dev/persistent-text-streaming";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -175,7 +176,22 @@ export default defineSchema(
       isActive: v.optional(v.boolean()),
     }).index('by_projectId', ['projectId']),
     
+    chats: defineTable({
+      title: v.string(),
+      prompt: v.string(),
+      stream: StreamIdValidator,
+    }).index("by_stream", ["stream"]),
+
+    generationStreams: defineTable({
+   
+      html: v.string(),
+      isDone: v.boolean(),
+      templateId: v.string(),
+    }).index("by_templateId", ["templateId"]),
+
+    
   },
+  
   
   // If you ever get an error about schema mismatch
   // between your data and your schema, and you cannot

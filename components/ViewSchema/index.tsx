@@ -33,7 +33,7 @@ import { ChevronsUpDown } from "lucide-react";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/convex/_generated/api";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 import flowStore from "@/components/Store/store";
@@ -51,7 +51,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { getDefaultSchema } from "../CMS/api";
 import HTMLEditor from "../monaco/html";
 import HTMLPreview from "../monaco/html/preview";
-
+import { IconWand } from "@tabler/icons-react";
 
 // Improved type definitions
 interface Field {
@@ -93,7 +93,7 @@ interface ViewSchemaState {
       enabled: boolean;
     };
   };
-  activeTab: 'global' | 'event';
+  activeTab: "global" | "event";
   isDragging: boolean;
 }
 
@@ -114,7 +114,7 @@ const schema: SchemaSection[] = [
     fields: [
       { id: "orderId", label: "Order ID", type: "string" },
       { id: "orderDate", label: "Order Date", type: "string" },
-    ]
+    ],
   },
   {
     sectionName: "Items Information",
@@ -124,7 +124,7 @@ const schema: SchemaSection[] = [
       { id: "itemPrice", label: "Item Price", type: "string" },
       { id: "itemQuantity", label: "Item Quantity", type: "string" },
       { id: "itemImage", label: "Item Image", type: "string" },
-    ]
+    ],
   },
   {
     sectionName: "Shipping Information",
@@ -133,15 +133,15 @@ const schema: SchemaSection[] = [
       { id: "shippingNumber", label: "Shipping Number", type: "string" },
       { id: "shippingPrice", label: "Shipping Price", type: "string" },
       { id: "shippingStatus", label: "Shipping Status", type: "string" },
-    ]
+    ],
   },
   {
     sectionName: "Billing Information",
     fields: [
       { id: "billingAddress", label: "Billing Address", type: "string" },
       { id: "billingAmount", label: "Billing Amount", type: "string" },
-    ]
-  }
+    ],
+  },
 ];
 
 const DroppableArea: React.FC<DroppableAreaProps> = ({
@@ -158,8 +158,6 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
   const { modalOpen } = ModalStore();
   const { toast } = useToast();
 
-  
-
   // Get parent node and events
   const sourceNode = flowStore((state) => {
     const edges = state.edges.filter((edge) => edge.target === nodeId);
@@ -170,72 +168,117 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
     return null;
   });
 
-  const [fieldSchema, setFieldSchema] = useState<SchemaSection[]>([])
+  const [fieldSchema, setFieldSchema] = useState<SchemaSection[]>([]);
 
-  const [htmlContent, setHtmlContent] = useState<string>("")
+  const [htmlContent, setHtmlContent] = useState<string>("");
   
 
-  useEffect(() => {
-    
-   getDefaultSchema('Twilio').then((res) => {
-    console.log(res.data)
-    setFieldSchema(res.data[0].schema_json)
-   })
-  }, [sourceNode])
 
-  const parentEvents = webhooksStore().getEvents(sourceNode?._id as string) || [];
+  const generate = useAction(api.ai.generateHtml.generate);
+  const stream = useQuery(api.ai.generateHtml.getLatestStream);
+
+  console.log(stream);
+  
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  useEffect(() => {
+    getDefaultSchema("Twilio").then((res) => {
+      console.log(res.data);
+      setFieldSchema(res.data[0].schema_json);
+    });
+  }, [sourceNode]);
+
+  const parentEvents =
+    webhooksStore().getEvents(sourceNode?._id as string) || [];
 
   useDndMonitor({
-    onDragStart: () => setState(prev => ({ ...prev, isDragging: true })),
-    onDragEnd: () => setState(prev => ({ ...prev, isDragging: false })),
-    onDragCancel: () => setState(prev => ({ ...prev, isDragging: false })),
+    onDragStart: () => setState((prev) => ({ ...prev, isDragging: true })),
+    onDragEnd: () => setState((prev) => ({ ...prev, isDragging: false })),
+    onDragCancel: () => setState((prev) => ({ ...prev, isDragging: false })),
   });
+  
+  const jsonSchema = JSON.parse(JSON.stringify({
+    "orderId": "1234567890",
+    "orderDate": "2021-01-01",
+    "items": [
+      {
+        "itemId": "1234567890",
+        "itemName": "Item 1",
+      },
+    ],
+  }));
+
+  
+  const handleGenerate = async () => {
+    setIsGenerating(true);
+    try {
+      
+      await generate({ jsonSchema })
+      toast({
+        title: "Started generating email",
+        description: "Please wait while we generate the email",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Invalid JSON schema",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+
 
   useEffect(() => {
     if (getMappings) {
-      const formattedMappings: { [fieldId: string]: { value: string; enabled: boolean } } = {};
-      
-      if (state.activeTab === 'global' && getMappings.globalFields) {
+      const formattedMappings: {
+        [fieldId: string]: { value: string; enabled: boolean };
+      } = {};
+
+      if (state.activeTab === "global" && getMappings.globalFields) {
         // Load global fields
         getMappings.globalFields.forEach((field: FieldMapping) => {
           formattedMappings[field.fieldId] = {
             value: field.value,
-            enabled: field.enabled
+            enabled: field.enabled,
           };
         });
-      } else if (state.activeTab === 'event' && getMappings.eventFields) {
+      } else if (state.activeTab === "event" && getMappings.eventFields) {
         // Load event fields for the current event
         const currentEvent = parentEvents[0]; // You might want to track the current event in state
         if (currentEvent) {
           const eventMapping = getMappings.eventFields.find(
-            ef => ef.eventName === currentEvent.event
+            (ef) => ef.eventName === currentEvent.event
           );
           if (eventMapping) {
             eventMapping.fields.forEach((field: FieldMapping) => {
               formattedMappings[field.fieldId] = {
                 value: field.value,
-                enabled: field.enabled
+                enabled: field.enabled,
               };
             });
           }
         }
       }
-      
-      setState(prev => ({ ...prev, mappings: formattedMappings }));
+
+      setState((prev) => ({ ...prev, mappings: formattedMappings }));
     }
   }, [getMappings, state.activeTab]);
 
   const handleSave = async () => {
-    const mappingsArray = Object.entries(state.mappings).map(([fieldId, data]) => ({
-      fieldId,
-      value: data.value,
-      enabled: data.enabled,
-      type: "string",
-      isActive: true,
-    }));
+    const mappingsArray = Object.entries(state.mappings).map(
+      ([fieldId, data]) => ({
+        fieldId,
+        value: data.value,
+        enabled: data.enabled,
+        type: "string",
+        isActive: true,
+      })
+    );
 
     try {
-      if (state.activeTab === 'global') {
+      if (state.activeTab === "global") {
         // Save global mappings
         await saveDataMappings({
           nodeId,
@@ -247,7 +290,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
         await saveDataMappings({
           nodeId,
           projectId: sourceNode?.projectId as string,
-          eventFields: parentEvents.map(event => ({
+          eventFields: parentEvents.map((event) => ({
             eventName: event.event,
             fields: mappingsArray,
           })),
@@ -256,7 +299,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
 
       toast({
         title: "Saved successfully",
-        description: `${state.activeTab === 'global' ? 'Global' : 'Event'} mappings saved successfully`,
+        description: `${state.activeTab === "global" ? "Global" : "Event"} mappings saved successfully`,
         duration: 1500,
       });
     } catch (error) {
@@ -270,7 +313,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
   };
 
   const handleFieldChange = (fieldId: string, value: string) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       mappings: {
         ...prev.mappings,
@@ -283,7 +326,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
   };
 
   const handleFieldEnabledChange = (fieldId: string, enabled: boolean) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       mappings: {
         ...prev.mappings,
@@ -299,8 +342,12 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
     <div className="relative bg-white">
       <Tabs
         value={state.activeTab}
-        onValueChange={(value: string) => 
-          setState(prev => ({ ...prev, activeTab: value as 'global' | 'event' }))}
+        onValueChange={(value: string) =>
+          setState((prev) => ({
+            ...prev,
+            activeTab: value as "global" | "event",
+          }))
+        }
         className="w-full flex-1"
       >
         <div className="px-1 pt-4">
@@ -326,12 +373,23 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
           </TabsList>
         </div>
 
-        <TabsContent value="global" className={cn("max-h-[60vh]", modalOpen && "p-0")}>
+        <TabsContent
+          value="global"
+          className={cn("max-h-[60vh]", modalOpen && "p-0")}
+        >
           <Card className="shadow-none border-none">
             <CardHeader className="text-gray-600 text-sm ">
               <CardTitle>Drag Values from Schema or JSON</CardTitle>
             </CardHeader>
-            <CardContent className = "p-0">
+            <CardContent className="p-0">
+              <div>
+                <Button variant="primary" onClick={() => {
+                    handleGenerate()
+                }}>
+                  <IconWand className="h-4 w-4 mr-2" />
+                    Generate with AI
+                </Button>
+              </div>
               <ScrollArea className="h-[calc(60vh-10rem)] p-2">
                 <ScrollBar orientation="vertical" />
                 {/* {fieldSchema?.map((schemaSection: SchemaSection) => (
@@ -356,16 +414,16 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                     ))}
                   </div>
                 ))} */}
-              <div className="flex w-full h-[500px] p-1 shadow-sm">
-              <HTMLEditor
-                  value={htmlContent}
-                  onChange={(newValue) => {
-                    setHtmlContent(newValue || "")
-                  }}
-                  height={"100%"}
-                  jsonSchema={VTEX_ORDER_SCHEMA}
+                <div className="flex w-full h-[500px] p-1 shadow-sm">
+                  <HTMLEditor
+                    value={ stream?.html || ""}
+                    onChange={(newValue) => {
+                      setHtmlContent(newValue || "");
+                    }}
+                    height={"100%"}
+                    jsonSchema={VTEX_ORDER_SCHEMA}
                   />
-                  </div>
+                </div>
               </ScrollArea>
             </CardContent>
             <CardFooter className="sticky bottom-0 w-full bg-white flex justify-end">
@@ -384,7 +442,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
             <CardHeader className="text-gray-600 text-sm mb-4">
               <CardTitle>Configure event-specific values here.</CardTitle>
             </CardHeader>
-            <CardContent >
+            <CardContent>
               {parentEvents.length > 0 ? (
                 <div className="space-y-4">
                   <ScrollArea className="h-[calc(60vh-10rem)] pr-4">
@@ -400,12 +458,12 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                               {event.event}
                             </span>
                             <Tooltip>
-                            <TooltipTrigger asChild>
-                            <ChevronsUpDown className="h-4 w-4 text-gray-500" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Expand</p>
-                            </TooltipContent>
+                              <TooltipTrigger asChild>
+                                <ChevronsUpDown className="h-4 w-4 text-gray-500" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Expand</p>
+                              </TooltipContent>
                             </Tooltip>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="p-3 pt-0 border-t">
@@ -415,10 +473,16 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                                 label="Subject :"
                                 fieldId="subject"
                                 isDragging={state.isDragging}
-                                value={state.mappings.subject?.value || ''}
-                                onChange={(value) => handleFieldChange('subject', value)}
-                                enabled={state.mappings.subject?.enabled ?? true}
-                                onEnabledChange={(enabled) => handleFieldEnabledChange('subject', enabled)}
+                                value={state.mappings.subject?.value || ""}
+                                onChange={(value) =>
+                                  handleFieldChange("subject", value)
+                                }
+                                enabled={
+                                  state.mappings.subject?.enabled ?? true
+                                }
+                                onEnabledChange={(enabled) =>
+                                  handleFieldEnabledChange("subject", enabled)
+                                }
                               />
                             </div>
 
@@ -428,10 +492,14 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                                 label="to"
                                 fieldId="to"
                                 isDragging={state.isDragging}
-                                value={state.mappings.to?.value || ''}
-                                onChange={(value) => handleFieldChange('to', value)}
+                                value={state.mappings.to?.value || ""}
+                                onChange={(value) =>
+                                  handleFieldChange("to", value)
+                                }
                                 enabled={state.mappings.to?.enabled ?? true}
-                                onEnabledChange={(enabled) => handleFieldEnabledChange('to', enabled)}
+                                onEnabledChange={(enabled) =>
+                                  handleFieldEnabledChange("to", enabled)
+                                }
                               />
                             </div>
 
@@ -441,10 +509,16 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                                 label="Content : HTML Markdown."
                                 fieldId="content"
                                 isDragging={state.isDragging}
-                                value={state.mappings.content?.value || ''}
-                                onChange={(value) => handleFieldChange('content', value)}
-                                enabled={state.mappings.content?.enabled ?? true}
-                                onEnabledChange={(enabled) => handleFieldEnabledChange('content', enabled)}
+                                value={state.mappings.content?.value || ""}
+                                onChange={(value) =>
+                                  handleFieldChange("content", value)
+                                }
+                                enabled={
+                                  state.mappings.content?.enabled ?? true
+                                }
+                                onEnabledChange={(enabled) =>
+                                  handleFieldEnabledChange("content", enabled)
+                                }
                               />
                             </div>
                           </CollapsibleContent>
@@ -461,27 +535,23 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
               )}
             </CardContent>
             <CardFooter className="sticky bottom-0 w-full bg-white flex justify-end">
-                <div>
-                  <Button
-                    className="bg-purple-600 hover:bg-purple-700 text-white"
-                    onClick={handleSave}
-                  >
-                    Save  
-                  </Button>
-                </div>
-              </CardFooter>
+              <div>
+                <Button
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  onClick={handleSave}
+                >
+                  Save
+                </Button>
+              </div>
+            </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="preview" className=" max-h-[60vh]">
           <ScrollArea className="h-[60vh]">
-          <HTMLPreview
-            content={htmlContent}
-            jsonData={VTEX_ORDER_SCHEMA}
-          />
+            <HTMLPreview content={htmlContent} jsonData={VTEX_ORDER_SCHEMA} />
           </ScrollArea>
         </TabsContent>
       </Tabs>
-      
     </div>
   );
 };
@@ -491,7 +561,7 @@ const DataViewer: React.FC<DataViewerProps> = () => {
   const { modalOpen } = ModalStore();
   const [state, setState] = useState<ViewSchemaState>({
     mappings: {},
-    activeTab: 'global',
+    activeTab: "global",
     isDragging: false,
   });
 
@@ -518,7 +588,7 @@ const DataViewer: React.FC<DataViewerProps> = () => {
         value: active.data.current.value,
       } as DraggedItem;
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         mappings: {
           ...prev.mappings,
@@ -553,7 +623,11 @@ const DataViewer: React.FC<DataViewerProps> = () => {
                   id="target"
                   state={state}
                   setState={setState}
-                  nodeId={flowStore.getState().nodes.find((node) => node.type === "mailNode")?.id || ""}
+                  nodeId={
+                    flowStore
+                      .getState()
+                      .nodes.find((node) => node.type === "mailNode")?.id || ""
+                  }
                 />
               </div>
             </ResizablePanel>
@@ -564,7 +638,11 @@ const DataViewer: React.FC<DataViewerProps> = () => {
               id="target"
               state={state}
               setState={setState}
-              nodeId={flowStore.getState().nodes.find((node) => node.type === "mailNode")?.id || ""}
+              nodeId={
+                flowStore
+                  .getState()
+                  .nodes.find((node) => node.type === "mailNode")?.id || ""
+              }
             />
           </div>
         )}
