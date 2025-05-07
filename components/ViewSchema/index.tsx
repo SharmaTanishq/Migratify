@@ -52,6 +52,8 @@ import { getDefaultSchema } from "../CMS/api";
 import HTMLEditor from "../monaco/html";
 import HTMLPreview from "../monaco/html/preview";
 import { IconWand } from "@tabler/icons-react";
+import { Label } from "../ui/label";
+import { Separator } from "../ui/separator";
 
 // Improved type definitions
 interface Field {
@@ -93,7 +95,7 @@ interface ViewSchemaState {
       enabled: boolean;
     };
   };
-  activeTab: "global" | "event";
+  activeTab: "preview" | "configuration";
   isDragging: boolean;
 }
 
@@ -171,14 +173,12 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
   const [fieldSchema, setFieldSchema] = useState<SchemaSection[]>([]);
 
   const [htmlContent, setHtmlContent] = useState<string>("");
-  
-
 
   const generate = useAction(api.ai.generateHtml.generate);
   const stream = useQuery(api.ai.generateHtml.getLatestStream);
 
   console.log(stream);
-  
+
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
@@ -196,24 +196,24 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
     onDragEnd: () => setState((prev) => ({ ...prev, isDragging: false })),
     onDragCancel: () => setState((prev) => ({ ...prev, isDragging: false })),
   });
-  
-  const jsonSchema = JSON.parse(JSON.stringify({
-    "orderId": "1234567890",
-    "orderDate": "2021-01-01",
-    "items": [
-      {
-        "itemId": "1234567890",
-        "itemName": "Item 1",
-      },
-    ],
-  }));
 
-  
+  const jsonSchema = JSON.parse(
+    JSON.stringify({
+      orderId: "1234567890",
+      orderDate: "2021-01-01",
+      items: [
+        {
+          itemId: "1234567890",
+          itemName: "Item 1",
+        },
+      ],
+    })
+  );
+
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
-      
-      await generate({ jsonSchema })
+      await generate({ jsonSchema });
       toast({
         title: "Started generating email",
         description: "Please wait while we generate the email",
@@ -228,15 +228,13 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
     }
   };
 
-
-
   useEffect(() => {
     if (getMappings) {
       const formattedMappings: {
         [fieldId: string]: { value: string; enabled: boolean };
       } = {};
 
-      if (state.activeTab === "global" && getMappings.globalFields) {
+      if (state.activeTab === "configuration" && getMappings.globalFields) {
         // Load global fields
         getMappings.globalFields.forEach((field: FieldMapping) => {
           formattedMappings[field.fieldId] = {
@@ -244,7 +242,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
             enabled: field.enabled,
           };
         });
-      } else if (state.activeTab === "event" && getMappings.eventFields) {
+      } else if (state.activeTab === "preview" && getMappings.eventFields) {
         // Load event fields for the current event
         const currentEvent = parentEvents[0]; // You might want to track the current event in state
         if (currentEvent) {
@@ -278,7 +276,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
     );
 
     try {
-      if (state.activeTab === "global") {
+      if (state.activeTab === "configuration") {
         // Save global mappings
         await saveDataMappings({
           nodeId,
@@ -299,7 +297,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
 
       toast({
         title: "Saved successfully",
-        description: `${state.activeTab === "global" ? "Global" : "Event"} mappings saved successfully`,
+        description: `${state.activeTab === "configuration" ? "Configuration" : "Preview"} mappings saved successfully`,
         duration: 1500,
       });
     } catch (error) {
@@ -345,24 +343,24 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
         onValueChange={(value: string) =>
           setState((prev) => ({
             ...prev,
-            activeTab: value as "global" | "event",
+            activeTab: value as "preview" | "configuration",
           }))
         }
         className="w-full flex-1"
       >
         <div className="px-1 pt-4">
           <TabsList className="grid w-[350px] grid-cols-3 bg-gray-100 rounded-md">
-            <TabsTrigger
+            {/* <TabsTrigger
               value="global"
               className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-none"
             >
               Global
-            </TabsTrigger>
+            </TabsTrigger> */}
             <TabsTrigger
-              value="event"
+              value="configuration"
               className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-none"
             >
-              Event
+              Configure
             </TabsTrigger>
             <TabsTrigger
               value="preview"
@@ -383,11 +381,14 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
             </CardHeader>
             <CardContent className="p-0">
               <div>
-                <Button variant="primary" onClick={() => {
-                    handleGenerate()
-                }}>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    handleGenerate();
+                  }}
+                >
                   <IconWand className="h-4 w-4 mr-2" />
-                    Generate with AI
+                  Generate with AI
                 </Button>
               </div>
               <ScrollArea className="h-[calc(60vh-10rem)] p-2">
@@ -416,7 +417,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                 ))} */}
                 <div className="flex w-full h-[500px] p-1 shadow-sm">
                   <HTMLEditor
-                    value={ stream?.html || ""}
+                    value={stream?.html || ""}
                     onChange={(newValue) => {
                       setHtmlContent(newValue || "");
                     }}
@@ -437,7 +438,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
           </Card>
         </TabsContent>
 
-        <TabsContent value="event" className=" max-h-[60vh]">
+        <TabsContent value="configuration" className=" max-h-[60vh]">
           <Card className=" shadow-none border-none">
             <CardHeader className="text-gray-600 text-sm mb-4">
               <CardTitle>Configure event-specific values here.</CardTitle>
@@ -504,8 +505,32 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                             </div>
 
                             {/* Content Field */}
+                            <Separator className="my-4" />
                             <div className="space-y-3">
-                              <DroppableInput
+                              <div className="flex justify-between items-center">
+                                <Label>Add Custom HTML</Label>
+                                <Button
+                                  variant="primary"
+                                  size="sm"
+                                  onClick={() => {
+                                    handleGenerate();
+                                  }}
+                                >
+                                  <IconWand className="h-4 w-4 mr-2" />
+                                  Generate with AI
+                                </Button>
+                              </div>
+                              <div className="flex w-full h-[500px] p-1 shadow-sm">
+                                <HTMLEditor
+                                  value={stream?.html || ""}
+                                  onChange={(newValue) => {
+                                    setHtmlContent(newValue || "");
+                                  }}
+                                  height={"100%"}
+                                  jsonSchema={VTEX_ORDER_SCHEMA}
+                                />
+                              </div>
+                              {/* <DroppableInput
                                 label="Content : HTML Markdown."
                                 fieldId="content"
                                 isDragging={state.isDragging}
@@ -519,7 +544,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                                 onEnabledChange={(enabled) =>
                                   handleFieldEnabledChange("content", enabled)
                                 }
-                              />
+                              /> */}
                             </div>
                           </CollapsibleContent>
                         </Collapsible>
@@ -548,7 +573,10 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
         </TabsContent>
         <TabsContent value="preview" className=" max-h-[60vh]">
           <ScrollArea className="h-[60vh]">
-            <HTMLPreview content={htmlContent} jsonData={VTEX_ORDER_SCHEMA} />
+            <HTMLPreview
+              content={stream?.html || ""}
+              jsonData={VTEX_ORDER_SCHEMA}
+            />
           </ScrollArea>
         </TabsContent>
       </Tabs>
@@ -561,7 +589,7 @@ const DataViewer: React.FC<DataViewerProps> = () => {
   const { modalOpen } = ModalStore();
   const [state, setState] = useState<ViewSchemaState>({
     mappings: {},
-    activeTab: "global",
+    activeTab: "configuration",
     isDragging: false,
   });
 
