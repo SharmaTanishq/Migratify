@@ -6,7 +6,6 @@ import { DraggableField } from "./DraggableField";
 import { JsonViewer,JsonViewerKeyRenderer,defineDataType} from "@textea/json-viewer";
 
 import { VTEX_ORDER_SCHEMA } from "../CustomNodes/Mail/Drawer";
-import { CSS } from '@dnd-kit/utilities';
 import { DropAnimation } from '@dnd-kit/core';
 import { nanoid } from "nanoid";
 import getFieldIcon from "../Utils/getFieldIcon";
@@ -176,13 +175,13 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
   });
 
   const genericType = defineDataType<any>({
-    is: (value) => typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean',
+    is: (value) => typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' ,
     Component: (props) => {
       
       return (
         <div className="inline-block my-2">
           <p
-            className="text-[11px] font-mono font-semibold text-gray-500"
+            className="text-[9px] font-mono font-normal text-gray-400 md:text-[11px]"
             
         >
           {props.value}
@@ -241,13 +240,16 @@ const SchemaViewer: React.FC<SchemaViewerProps> = ({
          
           <JsonViewer
             value={VTEX_ORDER_SCHEMA as any}
-            collapseStringsAfterLength={30}
+            collapseStringsAfterLength={20}
             keyRenderer={KeyRenderer}
+            
             displayDataTypes={false}
             enableClipboard={false}
+            
             quotesOnKeys={false}
-            indentWidth={5}
+            indentWidth={3}
             rootName={false}
+            
             valueTypes={[genericType]}
            
           />

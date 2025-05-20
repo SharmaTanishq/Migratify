@@ -22,7 +22,8 @@ interface NodeDrawerProps {
 }
 
 import { NodesTypeCMS } from "../CMS/types";
-import { FadeInDiv, Tabs } from "../ui/tabs";
+import {  Tabs } from "../ui/tabs";
+import { Spinner } from "@heroui/spinner";
 
 export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
 
@@ -83,7 +84,14 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
         </div>
       </div>
       <div className="flex flex-col gap-2">
+
+        {availableNodes.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <Spinner />
+          </div>
+        ) : (
           <Tabs 
+            
             tabs={
               availableNodes.map((node) => ({
                 title: node.Name,
@@ -113,56 +121,13 @@ export function AddNodeDrawer({ isOpen, onClose, nodeData }: NodeDrawerProps) {
                 ),
               }))
             } 
-            activeTabClassName="bg-purple-100 text-purple-200 shadow-sm  rounded-md"
-            tabClassName="inline-flex items-center justify-center whitespace-nowrap rounded-md  py-1.5 text-sm font-medium ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-900 data-[state=active]:shadow-sm hover:bg-purple-50" 
-            containerClassName="inline-flex h-full items-center justify-center rounded-lg bg-gray-100 p-1 text-slate-500 w-full overflow-x-auto" 
+            activeTabClassName="bg-gray-200 text-purple-200 shadow-sm  rounded-md"
+            tabClassName="inline-flex items-center justify-center whitespace-nowrap rounded-md   text-sm font-medium ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-gray-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm hover:bg-gray-200" 
+            containerClassName="inline-flex h-full items-center justify-center rounded-lg bg-gray-100 p-1 text-slate-500  " 
             contentClassName="mt-4  ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2"
           />
-          {/* <FadeInDiv tabs={tabs} active={tabs[0]}></FadeInDiv> */}
-      {/* <ScrollArea className="w-96 h-[calc(100vh-15rem)] whitespace-nowrap rounded-md p-2">
-          <ScrollBar orientation="horizontal" />
-      </ScrollArea> */}
-
-      {/* <ScrollArea className="h-[calc(100vh-15rem)] mt-6 pr-4">
-        {availableNodes.map((node)=>{
-          return(
-            <div className="space-y-6">
-          <Collapsible className="w-full space-y-2">
-            <div className="flex items-center justify-between space-x-4 px-4">
-              <h4 className="text-sm font-semibold">{node.Name}</h4>
-              <CollapsibleTrigger asChild>
-                <Button variant="ghost" size="sm" className="hover:bg-white/50">
-                  <ChevronsUpDown className="h-4 w-4" />
-                  <span className="sr-only">Toggle</span>
-                </Button>
-              </CollapsibleTrigger>
-            </div>
-
-            <div className="space-y-2 mt-2">
-              {node.nodes.map((node)=>{
-                return(
-                  <CollapsibleContent className="space-y-2 ">
-                  <NodeCard
-                    icon={node.Node.node_logo.url}
-                    title={node.Name}
-                    description={node.Node.node_description}
-                    nodeType={node.Node.node_type}
-                    variant={node.Node.active ? "default" : "disabled"}
-                  />
-                </CollapsibleContent>
-                )
-              })}
-             
-             
-             
-            </div>
-          </Collapsible>
-        </div>
-          )
-        })}
-      
-      </ScrollArea>
-       */}
+        )}
+          
       </div>
     </div>
   );

@@ -33,6 +33,7 @@ import { useEdgeDelete } from "@/components/hooks/useEdgeDelete";
 import CustomEdge from "@/components/CustomEdge";
 import Output from "@/components/CustomNodes/Output";
 import Mail from "@/components/CustomNodes/Mail";
+import VoiceAgentNode from "@/components/CustomNodes/VoiceAgents";
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -54,6 +55,7 @@ const nodeTypes = {
   // crmNode: CRM,
   // erpNode: ERP,
   mailNode: Mail,
+  voiceAgentNode: VoiceAgentNode,
   // paymentNode: Payment,
   // shippingNode: Shipping,
   // socialNode: Social,

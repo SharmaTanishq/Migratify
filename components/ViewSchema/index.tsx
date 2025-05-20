@@ -349,13 +349,8 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
         className="w-full flex-1"
       >
         <div className="px-1 pt-4">
-          <TabsList className="grid w-[350px] grid-cols-3 bg-gray-100 rounded-md">
-            {/* <TabsTrigger
-              value="global"
-              className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-none"
-            >
-              Global
-            </TabsTrigger> */}
+          <TabsList className="grid w-[350px] grid-cols-2 bg-gray-100 rounded-md">
+            
             <TabsTrigger
               value="configuration"
               className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-none"
@@ -371,74 +366,9 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
           </TabsList>
         </div>
 
-        <TabsContent
-          value="global"
-          className={cn("max-h-[60vh]", modalOpen && "p-0")}
-        >
-          <Card className="shadow-none border-none">
-            <CardHeader className="text-gray-600 text-sm ">
-              <CardTitle>Drag Values from Schema or JSON</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div>
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    handleGenerate();
-                  }}
-                >
-                  <IconWand className="h-4 w-4 mr-2" />
-                  Generate with AI
-                </Button>
-              </div>
-              <ScrollArea className="h-[calc(60vh-10rem)] p-2">
-                <ScrollBar orientation="vertical" />
-                {/* {fieldSchema?.map((schemaSection: SchemaSection) => (
-                  <div className="mb-6" key={schemaSection.sectionName}>
-                    <h3 className="text-base font-medium mb-3">
-                      {schemaSection.sectionName}
-                    </h3>
-                    {schemaSection.fields.map((field: Field) => (
-                      <div className="space-y-2" key={field.id}>
-                        <DroppableInput
-                          label={field.label}
-                          fieldId={field.id}
-                          isDragging={state.isDragging}
-                          value={state.mappings[field.id]?.value || ''}
-                          onChange={(value) => handleFieldChange(field.id, value)}
-                          enabled={state.mappings[field.id]?.enabled ?? true}
-                          indented
-                          onEnabledChange={(enabled) => 
-                            handleFieldEnabledChange(field.id, enabled)}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ))} */}
-                <div className="flex w-full h-[500px] p-1 shadow-sm">
-                  <HTMLEditor
-                    value={stream?.html || ""}
-                    onChange={(newValue) => {
-                      setHtmlContent(newValue || "");
-                    }}
-                    height={"100%"}
-                    jsonSchema={VTEX_ORDER_SCHEMA}
-                  />
-                </div>
-              </ScrollArea>
-            </CardContent>
-            <CardFooter className="sticky bottom-0 w-full bg-white flex justify-end">
-              <Button
-                className="bg-purple-600 hover:bg-purple-700 text-white"
-                onClick={handleSave}
-              >
-                Save
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
+    
 
-        <TabsContent value="configuration" className=" max-h-[60vh]">
+        <TabsContent value="configuration" className="h-full">
           <Card className=" shadow-none border-none">
             <CardHeader className="text-gray-600 text-sm mb-4">
               <CardTitle>Configure event-specific values here.</CardTitle>
@@ -446,7 +376,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
             <CardContent>
               {parentEvents.length > 0 ? (
                 <div className="space-y-4">
-                  <ScrollArea className="h-[calc(60vh-10rem)] pr-4">
+                  <ScrollArea className="h-[calc(80vh-10rem)] pr-4 pb-10">
                     <ScrollBar orientation="vertical" />
                     <div className="space-y-4">
                       {parentEvents.map((event) => (
@@ -467,7 +397,7 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                               </TooltipContent>
                             </Tooltip>
                           </CollapsibleTrigger>
-                          <CollapsibleContent className="p-3 pt-0 border-t">
+                          <CollapsibleContent className="p-3  border-t">
                             {/* Subject Field */}
                             <div className="space-y-3 mb-4">
                               <DroppableInput
@@ -530,21 +460,6 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
                                   jsonSchema={VTEX_ORDER_SCHEMA}
                                 />
                               </div>
-                              {/* <DroppableInput
-                                label="Content : HTML Markdown."
-                                fieldId="content"
-                                isDragging={state.isDragging}
-                                value={state.mappings.content?.value || ""}
-                                onChange={(value) =>
-                                  handleFieldChange("content", value)
-                                }
-                                enabled={
-                                  state.mappings.content?.enabled ?? true
-                                }
-                                onEnabledChange={(enabled) =>
-                                  handleFieldEnabledChange("content", enabled)
-                                }
-                              /> */}
                             </div>
                           </CollapsibleContent>
                         </Collapsible>
@@ -572,12 +487,46 @@ const DroppableArea: React.FC<DroppableAreaProps> = ({
           </Card>
         </TabsContent>
         <TabsContent value="preview" className=" max-h-[60vh]">
-          <ScrollArea className="h-[60vh]">
-            <HTMLPreview
-              content={stream?.html || ""}
-              jsonData={VTEX_ORDER_SCHEMA}
-            />
-          </ScrollArea>
+          <Card className=" shadow-none border-none">
+            <CardHeader className="text-gray-600 text-sm mb-4">
+              <CardTitle>Preview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[calc(80vh-10rem)] pr-4 pb-10">
+              {parentEvents.length > 0 && (
+                <div className="space-y-4">
+                    <ScrollBar orientation="vertical" />
+                    {parentEvents.map((event) => (
+                      <Collapsible
+                        key={event.event}
+                      className="border rounded-md"
+                    >
+                      <CollapsibleTrigger className="flex w-full items-center justify-between p-3 hover:bg-gray-50">
+                        <span className="font-medium text-sm">
+                          {event.event}
+                        </span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <ChevronsUpDown className="h-4 w-4 text-gray-500" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Expand</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="p-3 border-t">
+                        <HTMLPreview
+                          content={stream?.html || ""}
+                          jsonData={VTEX_ORDER_SCHEMA}
+                        />
+                      </CollapsibleContent>
+                    </Collapsible>
+                    ))}
+                </div>
+              )}
+              </ScrollArea>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
@@ -639,14 +588,14 @@ const DataViewer: React.FC<DataViewerProps> = () => {
       >
         {modalOpen ? (
           <ResizablePanelGroup className="gap-3 h-full" direction="horizontal">
-            <ResizablePanel defaultSize={60} className="bg-white shadow-md">
-              <div className="p-2">
+            <ResizablePanel defaultSize={35} className="bg-white shadow-md">
+              <div className="p-2 h-[80vh]">
                 <ViewData schema={schema as ExtendedJSONSchema7} />
               </div>
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel className="bg-white rounded-xl">
-              <div className="p-2">
+              <div className="p-2 h-[80vh]">
                 <DroppableArea
                   id="target"
                   state={state}

@@ -12,9 +12,9 @@ import Image from "next/image";
 import { Button } from "../../ui/button";
 
 import { memo, useCallback,  useMemo, useState } from "react";
-import NodeIcon from "./Components/NodeIcon";
-import NodeName from "./Components/GenericNodeUtils/NodeName";
-import NodeDescription from "./Components/GenericNodeUtils/NodeDescription";
+import NodeIcon from "../Layouts/NodeIcon";
+import NodeName from "../Layouts/GenericNodeUtils/NodeName";
+import NodeDescription from "../Layouts/GenericNodeUtils/NodeDescription";
 import { NodeData } from "@/components/CMS/types";
 import { NodeDataType } from "@/components/Types/Flows";
 import { Separator } from "@/components/ui/separator";
@@ -141,43 +141,7 @@ function ECommerceNode({
               {renderNodeName()}
               {/* <h3 className="font-medium">{UIData.Name}</h3> */}
             </div>
-            <Popover>
-              <PopoverTrigger onClick={handleButtonClick} asChild>
-                <button className="text-gray-600 border-none  hover:bg-gray-200 p-1.5 transition-all duration-500 rounded-md group">
-                  <MoreVertical className="w-6 h-6 group-hover:text-black transition-all duration-300" />
-                </button>
-              </PopoverTrigger>
-
-              <PopoverContent
-                className="w-32 "
-                align="start"
-                side="right"
-                sideOffset={17}
-                alignOffset={-10}
-              >
-                <div className="flex flex-col gap-2 ">
-                  <button className="flex items-center gap-2 w-full px-1 py-1.5 text-sm hover:bg-gray-100 rounded-md">
-                    <Pencil className="w-4 h-4" />
-                    <span>Rename</span>
-                  </button>
-                  <Image
-                    src={
-                      "https://res.cloudinary.com/dzi0wmfo3/image/upload/v1738843377/Trash_2_92934cce1a.svg"
-                    }
-                    alt="Delete"
-                    width={16}
-                    height={16}
-                    className="w-4 h-4 "
-                  />
-                  <button
-                    className="flex items-center gap-2 w-full px-1 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-md"
-                    onClick={handleDelete}
-                  >
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </PopoverContent>
-            </Popover>
+            
           </CardTitle>
           <CardDescription>            
               {renderNodeDescription()}                          

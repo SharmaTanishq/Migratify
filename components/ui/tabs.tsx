@@ -3,6 +3,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./carousel"
+import { Separator } from "./separator";
+
+
 
 type Tab = {
   title: string;
@@ -38,13 +48,25 @@ export const Tabs = ({
 
   return (
     <>
-      <div
+    <Carousel 
+     opts={{
+      align: "start",
+      loop: false,
+      
+      slidesToScroll: 4,
+      
+    }}
+    >
+      <CarouselContent className="" >
+      {/* <div
         className={cn(
-          "flex flex-row items-center justify-start [perspective:1000px] relative overflow-auto sm:overflow-visible no-visible-scrollbar max-w-full w-full",
+          "flex flex-row bg-black items-center justify-start [perspective:1000px] relative overflow-x-auto sm:overflow-visible no-visible-scrollbar max-w-full w-full",
           containerClassName
         )}
-      >
+      > */}
+        
         {propTabs.map((tab, idx) => (
+          <CarouselItem key={tab.title} className="  flex justify-center items-center pl-0  lg:basis-1/4 m-1 ">
           <button
             key={tab.title}
             onClick={() => {
@@ -52,7 +74,7 @@ export const Tabs = ({
             }}
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
-            className={cn("relative px-4 py-2 rounded-full", tabClassName)}
+            className={cn(" min-w-[90px] p-2 rounded-full text-center", tabClassName)}
             style={{
               transformStyle: "preserve-3d",
             }}
@@ -72,8 +94,14 @@ export const Tabs = ({
               {tab.title}
             </span>
           </button>
+          <Separator className="my-4   bg-gray-200"  orientation="vertical" />
+          </CarouselItem>
         ))}
-      </div>
+      {/* </div> */}
+      </CarouselContent>
+      <CarouselPrevious />
+  <CarouselNext />
+      </Carousel>
       <FadeInDiv
         tabs={tabs}
         active={active}

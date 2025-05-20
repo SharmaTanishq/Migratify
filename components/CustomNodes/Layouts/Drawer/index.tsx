@@ -43,71 +43,7 @@ function GenericDrawerLayout({
   };
   return (
     <>
-      {/* <Sheet open={isExpanded?false:open} modal={false}>
-        <SheetContent
-          handleExpand={handleExpand}
-          side={"flow"}
-          className=" mt-10   bg-white pointer-events-auto"
-        >
-          <SheetHeader className="flex justify-center w-full items-start rounded-t-xl mb-5 p-4 pb-0">
-            <div className="flex w-full h-full  justify-between items-center">
-              <SheetTitle>
-                <div className="flex flex-col items-start gap-2">
-                  <div className="flex h-9 w-9 items-center rounded gap-2">
-                    <Image
-                      src={node?.data?.ui?.node_logo?.url}
-                      alt={node?.data?.ui?.Name}
-                      width={30}
-                      height={30}
-                    />
-                    {node?.data?.ui?.Name}
-                  </div>
-                </div>
-              </SheetTitle>
-              <div className="flex justify-end items-end gap-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div
-                      className="absolute top-4 right-12"
-                      onClick={handleExpand}
-                    >
-                      <Expand className="h-7 w-7 border border-gray-200 rounded-md mt-1 p-1 shadow-sm" />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{isExpanded ? "Collapse" : "Expand"}</p>
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <X
-                      className="w-7 h-7 cursor-pointer border border-gray-200 rounded-md  p-1 shadow-sm"
-                      onClick={() => {
-                        reactFlow.updateNode(id, { selected: false });
-                      }}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Close</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-            </div>
-
-            <SheetDescription>
-              {node?.data?.ui?.node_description}
-            </SheetDescription>
-          </SheetHeader>
-          <Separator orientation="horizontal" className="w-full bg-gray-300 " />
-          <div
-            className={cn(
-              "flex flex-col gap-4  rounded-xl overflow-hidden p-2"
-            )}
-          >
-            {children}
-          </div>
-        </SheetContent>
-      </Sheet> */}
+      
       <ModalLayout
         isOpen={modalOpen}
         onClose={() => {

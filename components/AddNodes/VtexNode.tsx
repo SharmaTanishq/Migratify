@@ -13,9 +13,9 @@ import { Button } from "@/components/ui/button";
 
 
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import NodeIcon from "@/components/CustomNodes/E-Commerce/Components/NodeIcon";
-import NodeName from "@/components/CustomNodes/E-Commerce/Components/GenericNodeUtils/NodeName";
-import NodeDescription from "@/components/CustomNodes/E-Commerce/Components/GenericNodeUtils/NodeDescription";
+import NodeIcon from "@/components/CustomNodes/Layouts/NodeIcon";
+import NodeName from "@/components/CustomNodes/Layouts/GenericNodeUtils/NodeName";
+import NodeDescription from "@/components/CustomNodes/Layouts/GenericNodeUtils/NodeDescription";
 import { NodeData } from "@/components/CMS/types";
 import { NodeDataType } from "@/components/Types/Flows";
 import { Separator } from "@/components/ui/separator";

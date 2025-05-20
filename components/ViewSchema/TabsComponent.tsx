@@ -48,7 +48,7 @@ export function ViewData({ schema }: { schema: ExtendedJSONSchema7 }) {
       <Separator orientation="horizontal" className=" w-full" />
         
       
-      <TabsContent value="schema" className="pl-7 overflow-x-hidden">
+      <TabsContent value="schema" className="pl-4 overflow-x-hidden">
         <SchemaViewer
           schema={schema as ExtendedJSONSchema7}
           searchTerm={searchTerm}

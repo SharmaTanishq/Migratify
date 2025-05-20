@@ -41,7 +41,7 @@ const sizeClasses = {
       <DialogContent  className={cn(
         "flex flex-col  transition-all duration-200",
         sizeClasses[size],
-        "min-h-[200px] max-h-[90vh] pb-5",
+        "min-h-[200px]  ",
         // Center content when smaller than max width
         "mx-auto"
       )}>
