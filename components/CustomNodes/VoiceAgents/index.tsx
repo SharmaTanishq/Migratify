@@ -102,9 +102,11 @@ function VoiceAgentNode({
     
       const MemoizedModal = useMemo(() => {
         return (
-           selected && <Modal isOpen={true} nodeData={componentData} nodeId={id} size="default" />
+           selected && <Modal isOpen={true} nodeData={componentData} nodeId={id} size="default" availableAgents={availableAgents} />
         );
       }, [selected, id]);
+
+      
 
 
 
