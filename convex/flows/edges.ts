@@ -6,13 +6,14 @@ export const addEdge = mutation({
   args: {
     projectId: v.string(),
     source:v.string(),
+    type:v.string(),
       sourceHandle:v.string(),
       target:v.string(),
       targetHandle:v.string(),
     
   },
-  handler: async (ctx, { projectId, source, sourceHandle, target, targetHandle }) => {
-    const edgeId = await ctx.db.insert('edges', { projectId, source, sourceHandle, target, targetHandle });
+  handler: async (ctx, { projectId, source, type, sourceHandle, target, targetHandle }) => {
+    const edgeId = await ctx.db.insert('edges', { projectId, source, type, sourceHandle, target, targetHandle });
     return {
       success:true,
       edgeId: edgeId

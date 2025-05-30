@@ -18,39 +18,61 @@ export const getAgents = action({
         const agents = await elevenlabs.conversationalAi.agents.list();
         return agents;
     }
-})
+});
 
-export const createAgent = action({
-    args: {
-        apiKey: v.string(),
-        name: v.string(),
-    },
+// export const createAgent = action({
+//     args: {
+//         apiKey: v.string(),
+//         name: v.string(),
+//     },
 
-    handler: async (ctx, args) => {
-        const elevenlabs = new ElevenLabsClient({
-            apiKey: args.apiKey,
-        });
+//     handler: async (ctx, args) => {
+//         const elevenlabs = new ElevenLabsClient({
+//             apiKey: args.apiKey,
+//         });
+
+//         const agent = await elevenlabs.conversationalAi.agents.create({
+//             name: args.name,
+//             conversationConfig:{
+//                 languagePresets:"",
+//                 temperature: 0.5,
+//                 topP: 0.9,
+//                 topK: 40,
+//                 repetitionPenalty: 1.18,
+//                 maxTokens: 1000,
+//                 responseFormat: "text",
+//                 seed: 42,
+//             }
+//         });
+//         return agent;
         
-    }
-})
+//     }
+// })
 
 
 
 export const getAgent = action({
     args: {
-        apiKey: v.string(),
+        nodeId: v.id("nodes"),
         agentId: v.string(),
     },
 
     handler: async (ctx, args) => {
+        const configurations = await ctx.runQuery(api.flows.node.data.getNodeConfigurations, {
+            nodeId: args.nodeId,
+        }) as any;
+
+        const apiKey = configurations?.configurations?.apiKey;
+
         const elevenlabs = new ElevenLabsClient({
-            apiKey: args.apiKey,
+            apiKey: apiKey!,
         });
+
 
         const agent = await elevenlabs.conversationalAi.agents.get(args.agentId);
         return agent;
     }
-})
+});
 
 export const voices = action({
     args: {
@@ -69,7 +91,7 @@ export const voices = action({
         
         //return voices;
     }
-})
+});
 
 export const getKnowledgeBase = action({
     args: {
@@ -83,13 +105,36 @@ export const getKnowledgeBase = action({
         }) as any;
 
         const apiKey = configurations?.configurations?.apiKey;
-        console.log(apiKey);
+        
         const elevenlabs = new ElevenLabsClient({
             apiKey: apiKey!,
         });
 
         const knowledgeBase = await elevenlabs.conversationalAi.knowledgeBase.list();
-        console.log(knowledgeBase);
+        
         return knowledgeBase;
     }
-})
+});
+
+export const getDocument = action({
+    args: {
+        nodeId: v.id("nodes"),
+        documentId: v.string(),
+    },
+
+    handler: async (ctx, args) => {
+
+        const configurations = await ctx.runQuery(api.flows.node.data.getNodeConfigurations, {
+            nodeId: args.nodeId,
+        }) as any;
+
+        const apiKey = configurations?.configurations?.apiKey;
+        
+        const elevenlabs = new ElevenLabsClient({
+            apiKey: apiKey!,
+        });
+
+        const document = await elevenlabs.conversationalAi.knowledgeBase.documents.get(args.documentId);
+        return document;
+    }
+});

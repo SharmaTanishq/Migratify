@@ -17,11 +17,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ModalStore } from "@/components/Store/modal";
 import { Spinner } from "@heroui/spinner";
+import { Position } from "@xyflow/react";
+import { Handle } from "@xyflow/react";
+import { DEFAULT_HANDLE_STYLE_SOURCE } from "@/components/Constants/HandleStyles";
+import { DEFAULT_HANDLE_STYLE_TARGET } from "@/components/Constants/HandleStyles";
 
 const MemoizedNodeIcon = memo(NodeIcon);
 const MemoizedNodeName = memo(NodeName);
 const MemoizedNodeDescription = memo(NodeDescription);
-const MemoizedFloatingBar = memo(FloatingBar);
+
 
 function VoiceAgentNode({
     data,
@@ -32,7 +36,7 @@ function VoiceAgentNode({
     selected?: boolean;
     id: string;
 }) {
-    const {node} = data;
+    
     const [componentData,setComponentData] = useState<NodeData>(data.ui || {});
     const [availableAgents, setAvailableAgents] = useState<any[]>([]);
     const {modalOpen, setModalOpen} = ModalStore();
@@ -52,49 +56,6 @@ function VoiceAgentNode({
       }
     },[getNodeConfigurations])
 
-    const renderNodeIcon = useCallback(() => {
-        return (
-          <MemoizedNodeIcon
-            dataType={componentData?.Name}
-            showNode={true}
-            icon={componentData?.node_logo?.url || ""}
-            isGroup={!!data?.node?.flow}
-            hasToolMode={false}
-          />
-        );
-      }, [data?.type, data?.node?.icon, data?.node?.flow]);
-    
-      const renderNodeName = useCallback(() => {
-        return (
-          <MemoizedNodeName
-            display_name={componentData?.Name || ""}
-            selected={selected}
-            nodeId={id}
-            showNode={true}
-            isOutdated={false}
-            beta={false}
-            editNameDescription={false}
-            toggleEditNameDescription={() => {}}
-            setHasChangedNodeDescription={() => {}}
-          />
-        );
-      }, [data?.type, data?.node?.icon, data?.node?.flow]);
-    
-      const renderNodeDescription = useCallback(() => {
-        return (
-          <MemoizedNodeDescription
-            description={componentData?.node_description || ""}
-            selected={selected}
-            nodeId={id}
-            emptyPlaceholder={""}
-            placeholderClassName={""}
-            charLimit={0}
-            inputClassName={""}
-            mdClassName={""}
-            editNameDescription={false}
-          />
-        );
-      }, [data?.type, data?.node?.icon, data?.node?.flow]);
     
       const MemoizedFloatingBar = useMemo(() => {
         return <FloatingBar isOpen={selected} node={data} id={id} />;
@@ -116,21 +77,9 @@ function VoiceAgentNode({
         <div className="absolute -top-24 left-0  min-w-full ">
             {MemoizedFloatingBar}
         </div>
-
-        <GenericCardLayout id={id} selected={selected}>
-            <CardHeader>
-            <CardTitle className="flex items-center justify-between w-full ">
-            <div className="flex items-center gap-2 ">
-              {renderNodeIcon()}
-              {renderNodeName()}
-              {/* <h3 className="font-medium">{UIData.Name}</h3> */}
-            </div>
-            
-          </CardTitle>
-          <CardDescription>            
-              {renderNodeDescription()}                          
-          </CardDescription>
-            </CardHeader>
+        <Handle type="target" position={Position.Left} id={"voice-target"} style={{...DEFAULT_HANDLE_STYLE_TARGET,left:"1px"}}  />
+        <Handle type="source" position={Position.Right} id={"voice-source"} style={DEFAULT_HANDLE_STYLE_SOURCE} />
+        <GenericCardLayout id={id} selected={selected} node = {data}>            
             
            
             {/* <Separator /> */}

@@ -5,6 +5,7 @@ const edges = defineTable({
     projectId:v.string(),
     source:v.string(),
     sourceHandle:v.string(),
+    type:v.string(),
     target:v.string(),
     targetHandle:v.string(),
    

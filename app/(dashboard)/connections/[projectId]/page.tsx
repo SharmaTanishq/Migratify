@@ -30,10 +30,11 @@ import ECommerce from "@/components/CustomNodes/E-Commerce";
 import Bridges from "@/components/CustomNodes/Bridges";
 import { Id } from "@/convex/_generated/dataModel";
 import { useEdgeDelete } from "@/components/hooks/useEdgeDelete";
-import CustomEdge from "@/components/CustomEdge";
+import {DefaultEdge} from "@/components/CustomEdge";
 import Output from "@/components/CustomNodes/Output";
 import Mail from "@/components/CustomNodes/Mail";
 import VoiceAgentNode from "@/components/CustomNodes/VoiceAgents";
+import CallProviderNode from "@/components/CustomNodes/CallProvider";
 
 const selector = (state: any) => ({
   nodes: state.nodes,
@@ -56,14 +57,15 @@ const nodeTypes = {
   // erpNode: ERP,
   mailNode: Mail,
   voiceAgentNode: VoiceAgentNode,
+  callProviderNode: CallProviderNode,
   // paymentNode: Payment,
   // shippingNode: Shipping,
   // socialNode: Social,
 };
 
-// const edgeType = {
-//   customEdge:CustomEdge
-// }
+const edgeType = {
+  customEdge:DefaultEdge
+}
 
 export default function Page() {
   const params = useParams();
@@ -198,12 +200,14 @@ export default function Page() {
         projectId: projectId,
         source: event.source,
         target: event.target,
+        type: "",
         sourceHandle: event.sourceHandle,
         targetHandle: event.targetHandle,
       }).then((res) => {
         addEdge({
           id: res.edgeId,
           projectId: projectId,
+          //type: "customEdge",
           source: event.source,
           target: event.target,
           sourceHandle: event.sourceHandle,

@@ -57,6 +57,7 @@ import { Switch } from "@mui/material";
 import { AgentDetails } from "./AgentDetails";
 import { Spinner } from "@heroui/spinner";
 import { IconBrowser } from "@tabler/icons-react";
+import { KnowledgeBaseDetails } from "./KnowledgeBaseDetails";
 
 const data = {
   nav: [
@@ -100,12 +101,19 @@ const Modal = ({
   const [activeAgent, setActiveAgent] = useState<string | null>(null);
   const [activeAgentData, setActiveAgentData] = useState<any>(null);
 
-  const getAgent = useAction(api.Integrations.Voice.elevenlabs.getAgent)
+  
 
   const getKnowledgeBase = useAction(api.Integrations.Voice.elevenlabs.getKnowledgeBase)
 
   const [knowledgeBase, setKnowledgeBase] = useState<any>(null);
   const [selectedKnowledgeBase, setSelectedKnowledgeBase] = useState<any>(null);
+
+  const [viewAddDocument, setViewAddDocument] = useState(false);
+
+  const renderAddDocument=()=>{
+    setViewAddDocument(true);
+    setSelectedKnowledgeBase(null);
+  }
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -140,7 +148,7 @@ const Modal = ({
     getKnowledgeBase({
       nodeId: nodeId as Id<"nodes">,
     }).then((res) => {
-      console.log(res.documents);
+      
       setKnowledgeBase(res.documents);
     });
   }, [node]);
@@ -154,13 +162,7 @@ const Modal = ({
 
   const getSetAgent = (agentId: string) => {
     setActiveAgent(agentId);
-    getAgent({
-      apiKey: apiKey,
-      agentId: agentId,
-    }).then((res) => {
-      console.log(res);
-      setActiveAgentData(res);
-    });
+    
     
   }
 
@@ -293,7 +295,7 @@ const Modal = ({
                 {/* Main Content Area for Agent Details */}
                 <div className="flex-1  overflow-y-auto max-w-[80vh]  m-1 mb-3 bg-gray-200 p-2 rounded-lg ">
                   {activeAgent ? (
-                    <AgentDetails agentData={activeAgentData} onClose={() => setModalOpen(false)} />
+                    <AgentDetails agentId={activeAgent} onClose={() => setModalOpen(false)} nodeId={nodeId as Id<"nodes">} />
                   ) : (
                     <div className="flex items-center justify-center h-full text-gray-400 text-lg">
                       Select an agent to view details.
@@ -360,7 +362,7 @@ const Modal = ({
                         size="sm"
                         className="ml-2"
                         aria-label="Add Document"
-                        onClick={() => {/* handle add document logic here */}}
+                        onClick={() => renderAddDocument()}
                       >
                         + Add document
                       </Button>
@@ -373,6 +375,7 @@ const Modal = ({
                   <SidebarContent className="list-none p-2">
                     <SidebarGroup className="px-0">
                       <SidebarGroupContent>
+                        
                         {knowledgeBase ? (
                           knowledgeBase?.map((item: any) => (
                             <Button
@@ -380,7 +383,7 @@ const Modal = ({
                               tabIndex={0}
                               key={item.id}
                               variant={selectedKnowledgeBase === item.id ? "default" : "outline"}
-                              onClick={() => setSelectedKnowledgeBase(item.id)}
+                              onClick={() => {setSelectedKnowledgeBase(item.id); setViewAddDocument(false)}}
                               aria-label={`Select document Luxury Apartments in Sector 85, Gurgaon`}
                             >
                               <div className="flex w-full items-center gap-2">
@@ -399,23 +402,30 @@ const Modal = ({
                   </SidebarContent>
                 </Sidebar>
                 {/* Main Content Area for Knowledge Base Details */}
-                <div className="flex-1 overflow-y-auto max-w-[80vh] m-1 mb-3 bg-gray-200 p-2 rounded-lg">
-                  {/* Render selected knowledge base document details here */}
-                  <Card className="w-full h-full mx-auto">
-                    <CardHeader>
-                      <CardTitle>Luxury Apartments in Sector 85, Gurgaon</CardTitle>
-                      <CardDescription>Type: URL</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="mb-2 text-sm text-gray-600">
-                        Usage Mode: auto
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-end gap-2">
-                      <Button variant="outline">Delete</Button>
-                    </CardFooter>
-                  </Card>
-                </div>
+                {viewAddDocument ? (
+                          <div className="flex flex-col gap-2">
+                            <h1>URL</h1>
+                            <Input
+                              placeholder="URL"
+                              value={"url"}
+                              onChange={ (e) => {
+                                console.log(e.target.value);
+                              }}
+                            />
+                            <Button variant="primary" onClick={() => {}}>Add</Button>
+                          </div>
+                        ) : (<></>)}
+                {selectedKnowledgeBase ? (
+                <KnowledgeBaseDetails
+                  nodeId={nodeId as Id<"nodes">}
+                  selectedDocument={selectedKnowledgeBase}
+                  onDelete={(docId) => {/* handle delete logic here */}}
+                />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-gray-400 text-lg">
+                    Select a document to view details.
+                  </div>
+                )}
               </div>
             )}
             {activeSection === "Advanced" && (

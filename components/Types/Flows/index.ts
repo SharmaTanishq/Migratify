@@ -92,8 +92,9 @@ export type ShippingNodeType = Node<NodeDataType,"shippingNode">;
 export type SocialNodeType = Node<NodeDataType,"socialNode">;
 export type OutputNodeType = Node<NodeDataType,"outputNode">;
 export type VoiceAgentNodeType = Node<NodeDataType,"voiceAgentNode">;
+export type CallProviderNodeType = Node<NodeDataType,"callProviderNode">;
 
-export type AllNodeType = EcommerceNodeType | BridgesNodeType | PIMNodeType | CRMNodeType | ERPNodeType | MailNodeType | PaymentNodeType | ShippingNodeType | SocialNodeType | OutputNodeType | VoiceAgentNodeType;
+export type AllNodeType = EcommerceNodeType | BridgesNodeType | PIMNodeType | CRMNodeType | ERPNodeType | MailNodeType | PaymentNodeType | ShippingNodeType | SocialNodeType | OutputNodeType | VoiceAgentNodeType | CallProviderNodeType;
 
 
 // FlowStyleType is the type of the style object that is used to style the

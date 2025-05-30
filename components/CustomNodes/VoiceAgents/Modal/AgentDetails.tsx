@@ -1,17 +1,47 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
+import { useAction } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { Spinner } from "@heroui/spinner";
 
 interface AgentDetailsProps {
-  agentData: any;
+  agentId: any;
   onClose: () => void;
+  nodeId: Id<"nodes">;
 }
 
-export const AgentDetails: FC<AgentDetailsProps> = ({ agentData, onClose }) => {
+export const AgentDetails: FC<AgentDetailsProps> = ({ agentId, onClose, nodeId }) => {
+
+  const [isLoading, setIsLoading] = useState(false);
+  const getAgent = useAction(api.Integrations.Voice.elevenlabs.getAgent);
+  const [agentData, setAgentData] = useState<any>(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getAgent({      
+      agentId: agentId,
+      nodeId: nodeId as Id<"nodes">,
+    }).then((res) => {
+      
+      setAgentData(res);
+      setIsLoading(false);
+    });
+  }, [agentId]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full text-gray-400 text-lg">
+        <Spinner />
+      </div>
+    );
+  }
+
   if (!agentData) {
     return (
       <div className="flex items-center justify-center h-full text-gray-400 text-lg">
@@ -23,7 +53,7 @@ export const AgentDetails: FC<AgentDetailsProps> = ({ agentData, onClose }) => {
   // Extract relevant fields from agentData
   const {
     name,
-    agentId,
+    
     conversationConfig,
     metadata,
     tags,
@@ -40,6 +70,8 @@ export const AgentDetails: FC<AgentDetailsProps> = ({ agentData, onClose }) => {
   return (
     <div className="w-full h-full flex flex-col gap-4 overflow-y-auto max-h-[80vh]">
       {/* Header */}
+
+
       <div className="flex items-center gap-4 justify-between">
         <div className="flex items-center gap-3">
           <Avatar className="h-12 w-12">
