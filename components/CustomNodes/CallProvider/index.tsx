@@ -2,7 +2,7 @@ import { NodeDataType } from "@/components/Types/Flows";
 import { CardContent } from "@/components/ui/card";
 import GenericCardLayout from "../Layouts/Card/CardHolder";
 import { Position, Handle } from "@xyflow/react";
-import { memo, useState, useCallback, useEffect, useRef } from "react";
+import { memo, useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { CopyIcon } from "@radix-ui/react-icons";
 import { debounce } from "@mui/material";
+import { FloatingBar } from "../Layouts/FloatingBar";
 
 interface NodeConfigurations {
   apiKey: string;
@@ -41,14 +42,18 @@ function CallProviderNode({
     id ? { nodeId: id as Id<"nodes"> } : "skip"
   );
 
-  const [configurations, setConfigurations] = useState<NodeConfigurations>(
-    getNodeConfigurations?.configurations || {
+  const [configurations, setConfigurations] = useState<NodeConfigurations>({
     apiKey: "",
-    phoneNumber: "", 
+    phoneNumber: "",
     outboundUrl: "",
     inboundUrl: ""
   });
 
+    useEffect(() => {
+      if (getNodeConfigurations?.configurations) {
+        setConfigurations(getNodeConfigurations?.configurations);
+      }
+    }, [getNodeConfigurations?.configurations,id]);
   
 
    
@@ -67,10 +72,17 @@ function CallProviderNode({
       if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
     };
   }, [configurations, id]);
+
+  const MemoizedFloatingBar = useMemo(() => {
+    return <FloatingBar isOpen={selected} node={data} id={id} />;
+  }, [selected, id]);
   
 
   return (
     <div className="relative">
+        <div className="absolute -top-24 left-0  min-w-full ">
+            {MemoizedFloatingBar}
+        </div>
       <Handle
         type="target"
         position={Position.Left}

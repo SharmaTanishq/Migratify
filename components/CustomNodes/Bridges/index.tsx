@@ -114,9 +114,10 @@ function BridgesNode({
     <GenericCardLayout
       id={id}
       selected={selected}
+      node={data}
       
     >
-      <CardHeader >
+      {/* <CardHeader >
         <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
           <div className="flex items-center justify-start gap-2">
             <Image
@@ -170,7 +171,7 @@ function BridgesNode({
         <CardDescription className="text-xs text-gray-600 ">
           {componentData?.node_description || ""}
         </CardDescription>
-      </CardHeader>
+      </CardHeader> */}
       <Separator />
       <CardContent className="flex flex-col p-0 w-full justify-center items-center h-full">
         {/* TODO: Check if the user has configured the hook in the platform or not */}

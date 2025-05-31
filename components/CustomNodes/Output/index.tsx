@@ -76,54 +76,10 @@ function OutputNode({
       id={id}
       selected={selected}
       className="w-[400px]"
+      node={data}
       
     >
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
-          <div className="flex items-center justify-start gap-2">
-            <Image
-              src={componentData?.node_logo?.url}
-              alt={componentData?.Name}
-              width={20}
-              height={20}
-              className="rounded-sm bg-gray-100 p-1"
-            />
-            <span className="text-sm font-regular text-gray-600">
-              {componentData?.Name}
-            </span>
-          </div>
-
-          <Tooltip>
-            <TooltipTrigger>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  console.log("Wil be adding notifications here");
-                }}
-                asChild
-                className="transition-colors duration-200 w-6 h-6 "
-              >
-                <Image
-                  src={
-                    "https://res.cloudinary.com/dzi0wmfo3/image/upload/v1738867032/Notification_2_3918f34af3.svg"
-                  }
-                  alt="Notifications"
-                  width={8}
-                  height={8}
-                  className="w-4 h-4 text-gray-500 scale-[0.8] "
-                />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>See Notifications</p>
-            </TooltipContent>
-          </Tooltip>
-        </CardTitle>
-        <CardDescription className="text-xs text-gray-600 ">
-          {componentData.node_description}
-        </CardDescription>
-      </CardHeader>
+     
       <Separator />
       <CardContent className="flex flex-col  w-full justify-center items-center h-full p-2">
         
