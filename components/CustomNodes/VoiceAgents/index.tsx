@@ -44,11 +44,14 @@ function VoiceAgentNode({
     const getNodeConfigurations = useQuery(api.flows.node.data.getNodeConfigurations,{
       nodeId: id as Id<"nodes">,
     })
+
+    
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(()=>{
       if(getNodeConfigurations?.configurations?.apiKey){
         getAgents({apiKey:getNodeConfigurations?.configurations?.apiKey as string}).then((res)=>{
+          console.log(res)
           setAvailableAgents(res.agents);
         }).finally(()=>{
           setIsLoading(false);
@@ -79,7 +82,7 @@ function VoiceAgentNode({
             {MemoizedFloatingBar}
         </div>
         <Handle type="target" position={Position.Left} id={"voice-target"} style={{...DEFAULT_HANDLE_STYLE_TARGET,left:"1px"}}  />
-        <Handle type="source" position={Position.Right} id={"voice-source"} style={DEFAULT_HANDLE_STYLE_SOURCE} />
+        
         <GenericCardLayout id={id} selected={selected} node = {data}>            
             
            
@@ -92,6 +95,7 @@ function VoiceAgentNode({
               ) : availableAgents.length > 0 ? (
                 availableAgents.map((agent,index)=>(
                   <div key={index} className="flex w-full justify-start items-center gap-10 p-1 bg-neutral-50 rounded-lg border border-gray-100 shadow-sm">
+                    <Handle type="source" position={Position.Right} id={agent.agentId} style={DEFAULT_HANDLE_STYLE_SOURCE} />
                     <Avatar>
                     
                     <AvatarFallback className="bg-white border border-black-100">

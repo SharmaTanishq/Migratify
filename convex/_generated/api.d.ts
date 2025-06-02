@@ -13,6 +13,7 @@ import type * as Integrations_Mail_Twilio_index from "../Integrations/Mail/Twili
 import type * as Integrations_Mail_index from "../Integrations/Mail/index.js";
 import type * as Integrations_Voice_elevenlabs from "../Integrations/Voice/elevenlabs.js";
 import type * as Integrations_factories_ElevenLabs from "../Integrations/factories/ElevenLabs.js";
+import type * as Integrations_relay_index from "../Integrations/relay/index.js";
 import type * as Schemas_Edges_index from "../Schemas/Edges/index.js";
 import type * as Schemas_Nodes_index from "../Schemas/Nodes/index.js";
 import type * as Schemas_Project_index from "../Schemas/Project/index.js";
@@ -55,6 +56,7 @@ declare const fullApi: ApiFromModules<{
   "Integrations/Mail/index": typeof Integrations_Mail_index;
   "Integrations/Voice/elevenlabs": typeof Integrations_Voice_elevenlabs;
   "Integrations/factories/ElevenLabs": typeof Integrations_factories_ElevenLabs;
+  "Integrations/relay/index": typeof Integrations_relay_index;
   "Schemas/Edges/index": typeof Schemas_Edges_index;
   "Schemas/Nodes/index": typeof Schemas_Nodes_index;
   "Schemas/Project/index": typeof Schemas_Project_index;

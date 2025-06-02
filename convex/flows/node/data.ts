@@ -43,7 +43,7 @@ export const getNodeConfigurations = query({
         nodeId:v.id('nodes')
     },
     handler:async(ctx, {nodeId}:{nodeId:Id<'nodes'>})=>{
-        const configurations = await ctx.db.query('nodeConfigurations').withIndex('by_node', (q)=>q.eq('nodeId', nodeId)).first();
+        const configurations = await ctx.db.query('nodeConfigurations').withIndex('by_node', (q)=>q.eq('nodeId', nodeId)).first();        
         return configurations;
     }
 })

@@ -8,18 +8,22 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_HANDLE_STYLE_SOURCE } from "@/components/Constants/HandleStyles";
 import { DEFAULT_HANDLE_STYLE_TARGET } from "@/components/Constants/HandleStyles";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { CopyIcon } from "@radix-ui/react-icons";
 import { debounce } from "@mui/material";
 import { FloatingBar } from "../Layouts/FloatingBar";
+import { Separator } from "@/components/ui/separator";
+import flowStore from "@/components/Store/store";
 
 interface NodeConfigurations {
-  apiKey: string;
+  authToken: string;
+  sid: string;
   phoneNumber: string;
   outboundUrl: string;
   inboundUrl: string;
+  testPhoneNumber?: string;
 }
 
 function CallProviderNode({
@@ -32,27 +36,33 @@ function CallProviderNode({
   id: string;
 }) {
 
-
+    const [configurations, setConfigurations] = useState<NodeConfigurations>({
+        authToken: "",
+        sid:"",
+        phoneNumber: "",
+        outboundUrl: "",
+        inboundUrl: "",
+        testPhoneNumber: ""
+      });
+    
   
   const saveNodeConfigurations = useMutation(
     api.flows.node.data.saveNodeConfigurations
   );
+
   const getNodeConfigurations = useQuery(
     api.flows.node.data.getNodeConfigurations,
     id ? { nodeId: id as Id<"nodes"> } : "skip"
   );
 
-  const [configurations, setConfigurations] = useState<NodeConfigurations>({
-    apiKey: "",
-    phoneNumber: "",
-    outboundUrl: "",
-    inboundUrl: ""
-  });
-
+  const {getSourceNode} = flowStore();
+  
+  
     useEffect(() => {
       if (getNodeConfigurations?.configurations) {
         setConfigurations(getNodeConfigurations?.configurations);
       }
+      
     }, [getNodeConfigurations?.configurations,id]);
   
 
@@ -76,7 +86,19 @@ function CallProviderNode({
   const MemoizedFloatingBar = useMemo(() => {
     return <FloatingBar isOpen={selected} node={data} id={id} />;
   }, [selected, id]);
-  
+
+  const makeTestCall = useAction(api.Integrations.relay.index.InitiateCall);
+
+  const handleTestCall = ()=>{
+    console.log(getSourceNode(id))
+    makeTestCall({
+      sourceNodeId: getSourceNode(id),
+      sourcePlatform: "elevenlabs",
+      targetNodeId: id,
+      targetPlatform: "twilio",
+      phoneNumber: configurations.testPhoneNumber || ""
+    });
+  };
 
   return (
     <div className="relative">
@@ -90,13 +112,19 @@ function CallProviderNode({
         style={{ ...DEFAULT_HANDLE_STYLE_TARGET, left: "1px" }}
       />
 
-      {/* <Handle type="source" position={Position.Right} id={"call-source"} style={DEFAULT_HANDLE_STYLE_SOURCE} /> */}
+    
       <GenericCardLayout id={id} selected={selected} node={data}>
+
         <CardContent className="flex flex-col gap-2">
           <div className="flex flex-col gap-4">
             <div className="space-y-2">
-              <Label className="text-sm font-medium">API Key</Label>
-              <Input type="password" placeholder="Enter API key" value={configurations.apiKey} onChange={(e) => setConfigurations({ ...configurations, apiKey: e.target.value })} />
+              <Label className="text-sm font-medium">Auth Token</Label>
+              <Input type="password" placeholder="Enter Auth Token" value={configurations.authToken} onChange={(e) => setConfigurations({ ...configurations, authToken: e.target.value })} />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">SID</Label>
+              <Input type="text" placeholder="Enter SID" value={configurations.sid} onChange={(e) => setConfigurations({ ...configurations, sid: e.target.value })} />
             </div>
 
             <div className="space-y-2">
@@ -148,6 +176,16 @@ function CallProviderNode({
                   <CopyIcon className="w-4 h-4"/>
                 </Button>
               </div>
+            </div>
+
+            <Separator/>
+
+            <div className="flex flex-col gap-2 justify-end items-end w-full">
+                <div className="flex flex-col items-start gap-2 w-full">
+                    <Label className="text-sm text-gray-400 font-medium">Add Phone Number to Test</Label>
+                    <Input type="text" placeholder="Test Phone Number" value={configurations.testPhoneNumber} onChange={(e) => setConfigurations({ ...configurations, testPhoneNumber: e.target.value })} />
+                </div>
+                <Button className="w-full" variant="primary" onClick={()=>handleTestCall()}>Test Call</Button>                
             </div>
           </div>
         </CardContent>

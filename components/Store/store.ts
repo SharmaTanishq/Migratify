@@ -34,7 +34,9 @@ const flowStore = create<AppState>()(devtools((set, get) => ({
     return get().nodes.find((node:any)=>node.id === nodeId)
 
   },
-
+  getParentNode: (nodeId:string)=>{
+    return get().nodes.find((node:any)=>node.id === nodeId)
+  },
   setInitialNodes: (nodes) => {
     
     set({nodes});   
@@ -61,11 +63,13 @@ const flowStore = create<AppState>()(devtools((set, get) => ({
   },
 
   addNode:(nodes)=>{
-    
     set({ nodes: [...get().nodes, nodes ] });    
-   
-    
   },
+
+  getSourceNode: (nodeId:string)=>{
+    return get().edges.find((edge: Edge) => edge.target === nodeId)?.source
+  },
+
   updateNodeColor: (nodeId: string, color: string) => {
     set({
       nodes: get().nodes.map((node) => {
