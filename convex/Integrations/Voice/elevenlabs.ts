@@ -13,12 +13,36 @@ export const getAgents = action({
     handler: async (ctx, args) => {
         const elevenlabs = new ElevenLabsClient({
             apiKey: args.apiKey,
+
         });
 
+
+
+        
         const agents = await elevenlabs.conversationalAi.agents.list();
         return agents;
     }
 });
+
+export const addTool = action({
+    args: {
+        apiKey: v.string(),
+        agentId: v.string(),
+        toolId: v.string(),
+    },
+
+    handler: async (ctx, args) => {
+        const elevenlabs = new ElevenLabsClient({
+            apiKey: args.apiKey,
+        });
+
+        const tool = await elevenlabs.conversationalAi.agents.update(args.agentId,{
+            
+        })
+
+        return tool;
+    }
+})
 
 // export const createAgent = action({
 //     args: {
@@ -33,16 +57,8 @@ export const getAgents = action({
 
 //         const agent = await elevenlabs.conversationalAi.agents.create({
 //             name: args.name,
-//             conversationConfig:{
-//                 languagePresets:"",
-//                 temperature: 0.5,
-//                 topP: 0.9,
-//                 topK: 40,
-//                 repetitionPenalty: 1.18,
-//                 maxTokens: 1000,
-//                 responseFormat: "text",
-//                 seed: 42,
-//             }
+        
+            
 //         });
 //         return agent;
         
@@ -108,11 +124,13 @@ export const getKnowledgeBase = action({
         
         const elevenlabs = new ElevenLabsClient({
             apiKey: apiKey!,
+            
+            
         });
 
-        const knowledgeBase = await elevenlabs.conversationalAi.knowledgeBase.list();
+        //const knowledgeBase = await elevenlabs.conversationalAi.knowledgeBase.list({pageSize:10});
         
-        return knowledgeBase;
+        return [];
     }
 });
 

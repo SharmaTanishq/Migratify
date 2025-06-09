@@ -40,6 +40,9 @@ import { ScriptCopyBtn } from "@/components/ui/script-copy-btn";
 import { Spinner } from "@heroui/spinner";
 import { Id } from "@/convex/_generated/dataModel";
 import GenericCardLayout from "../Layouts/Card/CardHolder";
+import { WeatherLayout } from "./Layouts/weather";
+import { WebhookLayout } from "./Layouts/webhook";
+import { GenericToolLayout } from "./Layouts/genericTool";
 
 function BridgesNode({
   data,
@@ -110,6 +113,20 @@ function BridgesNode({
 
   const isEcommerceSource = sourceNode?.type === "ecommerceNode";
 
+  
+  
+
+  const getCardContent = () =>{
+    switch(node.data.ui.node_data.type){
+      case "weather":
+        return <WeatherLayout />;
+      case "webhook":
+        return <WebhookLayout />;
+      default:
+        return <GenericToolLayout />;
+    }
+  }
+
   return (
     <GenericCardLayout
       id={id}
@@ -117,140 +134,10 @@ function BridgesNode({
       node={data}
       
     >
-      {/* <CardHeader >
-        <CardTitle className="flex items-center justify-between gap-2 font-medium text-gray-900">
-          <div className="flex items-center justify-start gap-2">
-            <Image
-              src={componentData?.node_logo?.url || ""}  
-              alt={componentData?.Name || ""}
-              width={20}
-              height={20}
-              className="rounded-sm bg-gray-100 p-1"
-            />
-            <span className="text-sm font-regular text-gray-600">
-              {componentData?.Name || ""}
-            </span>
-          </div>
-
-          <Tooltip>
-            <TooltipTrigger>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  console.log("clicked"),
-                    toast.info("Component is Running", {
-                      description: "Waiting for an Event to be received",
-                      //duration: Infinity,
-                      action: {
-                        label: "View",
-                        onClick: () => {},
-                      },
-                    });
-                }}
-                asChild
-                className="transition-colors duration-200 w-6 h-6 "
-              >
-                <Image
-                  src={
-                    "https://res.cloudinary.com/dzi0wmfo3/image/upload/v1738843377/Play_6216faf3bb.svg"
-                  }
-                  alt="Play"
-                  width={8}
-                  height={8}
-                  className="w-4 h-4 text-gray-500 scale-[0.7] "
-                />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Run Component</p>
-            </TooltipContent>
-          </Tooltip>
-        </CardTitle>
-
-        <CardDescription className="text-xs text-gray-600 ">
-          {componentData?.node_description || ""}
-        </CardDescription>
-      </CardHeader> */}
+    
       <Separator />
       <CardContent className="flex flex-col p-0 w-full justify-center items-center h-full">
-        {/* TODO: Check if the user has configured the hook in the platform or not */}
-        {/* {!isHookConfigured && (
-          <div className="w-full h-full flex items-center justify-center p-4">
-            <Card className="text-gray-500 text-center">
-              <CardHeader>Is your {platform} hook configured?</CardHeader>
-              <CardFooter className="flex items-center justify-center gap-2">
-                <Button variant={"outline"} onClick={()=>setIsHookConfigured(true)}>Yes</Button>
-                <Button onClick={()=>setIsHookConfigured(false)}>No</Button>
-              </CardFooter>
-            </Card>
-          </div>
-        )} */}
-        {isEcommerceSource && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="w-full h-full p-2 pb-0 pt-0 transition-all duration-300"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3, duration: 0.2 }}
-            >
-              <EventsConfig
-                platform={platform as PlatformType}
-                selectedEvents={selectedEvents}
-                onEventsChange={setSelectedEvents}
-                webhookId={getWebhookUrl?._id}
-                webhook={getWebhookUrl}
-                source={edgeSource?.sourceHandle!}
-                nodeId={id}
-              />
-            </motion.div>
-          </motion.div>
-        )}
-        {!isEcommerceSource && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="p-6 flex w-full h-full items-center justify-center "
-          >
-            <p className="text-[11px] text-gray-500 text-center">
-              Connect to an e-commerce node to configure platform and events
-            </p>
-          </motion.div>
-        )}
-        <Separator className="my-2 mb-0" />
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="p-2 w-full pt-0"
-        >
-          {getWebhookUrl?.url ? (
-            <motion.div 
-            initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: "easeIn" }}>
-            <ScriptCopyBtn
-              codeLanguage="http"
-              showMultiplePackageOptions={false}
-              className="w-full "
-              lightTheme="nord"
-              darkTheme="vitesse-dark"
-              commandMap={{
-                curl: `${getWebhookUrl?.url}`,
-              }}
-            />
-            </motion.div>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center py-2 gap-2">
-              <p className="text-[11px] text-gray-500 text-center">Waiting for Source</p> <Spinner size="sm" />
-            </div>
-          )}
-        </motion.div>
+        {getCardContent()}        
       </CardContent>
 
       <CardFooter className="p-4 bg-gray-100 rounded-b-xl">
@@ -263,7 +150,8 @@ function BridgesNode({
                   type="target"
                   position={Position.Left}
                   isConnectable={true}
-                  id="source"
+                  id="tool"
+                  
                   style={{
                     width: 10,
                     height: 10,

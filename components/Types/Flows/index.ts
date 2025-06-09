@@ -81,6 +81,8 @@ export type NodeDataType = {
     buildStatus?: boolean;
   };
 
+
+
 export type EcommerceNodeType = Node<NodeDataType,"ecommerceNode">;
 export type BridgesNodeType = Node<NodeDataType,"bridgeNode">;
 export type PIMNodeType = Node<NodeDataType,"pimNode">;

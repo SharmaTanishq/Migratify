@@ -118,7 +118,7 @@ function mailNode({
       //ON EVENT RECIEVE DO SOMETHING.
 
       console.log(webhookEvents, "here is webhook events");
-
+      setCode(JSON.stringify({ Status: "Mail sent" }, null, 2));  
       triggerMail({
         event: "event",
         platform: {
@@ -127,6 +127,7 @@ function mailNode({
         },
       }); 
     }
+  
   }, [webhookEvents]);
 
   // const sendMail = async () => {
@@ -158,6 +159,8 @@ function mailNode({
     <GenericCardLayout
       id={id}
       selected={selected}
+      node={data}
+      defaultHeader={false}
       
     >
       <div className="absolute -top-24 left-0 min-h-full min-w-full ">

@@ -18,6 +18,7 @@ const GenericCardLayout = ({
     children,
     className,
     node,
+    defaultHeader = true,
 }: {
 
     id: string;
@@ -25,6 +26,7 @@ const GenericCardLayout = ({
     children: React.ReactNode;
     node?: NodeDataType;
     className?: string;
+    defaultHeader?: boolean;
 }) => {
 
     if(!node) {
@@ -83,6 +85,7 @@ const GenericCardLayout = ({
             selected && "transition-all duration-200 border border-borderSelected",
             className
         )}>
+          {defaultHeader && (
             <CardHeader>
             <CardTitle className="flex items-center justify-between w-full ">
             <div className="flex items-center gap-2 ">
@@ -96,6 +99,7 @@ const GenericCardLayout = ({
               {renderNodeDescription()}                          
           </CardDescription>
             </CardHeader>   
+            )}
             {children}
         </Card>
     )

@@ -39,7 +39,7 @@ export function NavMain({
       <SidebarGroupLabel className="text-white">Platform</SidebarGroupLabel>
       <SidebarMenu className="space-y-2">       
         <SidebarMenuItem>
-            <Link href={`/projects`}>
+            <Link href={`/projects`} replace scroll={false}>
             <SidebarMenuButton tooltip="Projects"> 
                 <Folder />
                 Projects

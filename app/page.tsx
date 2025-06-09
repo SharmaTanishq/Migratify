@@ -22,7 +22,7 @@ import Image from "next/image";
 
 
 export default function Home() {
-  //const bridgesData = await getBridges();
+  
   return (
     <>
       <StickyHeader className="px-4 py-2">

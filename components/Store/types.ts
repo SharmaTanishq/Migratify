@@ -24,7 +24,8 @@ import {
     addNode:(type:string,x:number,y:number)=>void;
     deleteEdge:(edgeId: Id<'edges'>) => void; 
     getSourceNode: (nodeId:string)=>any;
-    
+    hasDataLoaded:boolean;
+    setHasDataLoaded:(hasDataLoaded:boolean)=>void;
     data:any[];
   };
 

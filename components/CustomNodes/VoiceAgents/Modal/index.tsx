@@ -147,9 +147,8 @@ const Modal = ({
     setId(node?._id);
     getKnowledgeBase({
       nodeId: nodeId as Id<"nodes">,
-    }).then((res) => {
-      
-      setKnowledgeBase(res.documents);
+    }).then((res) => {      
+      setKnowledgeBase(res);
     });
   }, [node]);
 
@@ -376,7 +375,7 @@ const Modal = ({
                     <SidebarGroup className="px-0">
                       <SidebarGroupContent>
                         
-                        {knowledgeBase ? (
+                        {knowledgeBase && knowledgeBase.length > 0 ? (
                           knowledgeBase?.map((item: any) => (
                             <Button
                               className={`w-full`}

@@ -18,6 +18,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ShineBorder } from "@/components/magicui/shine-border";
 
 
+
+
+
 export default function Page() {
   const params = useParams();
   const projectId = params.projectId as string;

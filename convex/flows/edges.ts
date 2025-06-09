@@ -7,9 +7,10 @@ export const addEdge = mutation({
     projectId: v.string(),
     source:v.string(),
     type:v.string(),
-      sourceHandle:v.string(),
-      target:v.string(),
-      targetHandle:v.string(),
+    
+    sourceHandle:v.string(),
+    target:v.string(),
+    targetHandle:v.string(),
     
   },
   handler: async (ctx, { projectId, source, type, sourceHandle, target, targetHandle }) => {

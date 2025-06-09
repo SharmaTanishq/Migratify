@@ -17,10 +17,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ModalStore } from "@/components/Store/modal";
 import { Spinner } from "@heroui/spinner";
-import { Position } from "@xyflow/react";
+import { Position, useUpdateNodeInternals,useConnection, useNodeConnections } from "@xyflow/react";
 import { Handle } from "@xyflow/react";
 import { DEFAULT_HANDLE_STYLE_SOURCE } from "@/components/Constants/HandleStyles";
 import { DEFAULT_HANDLE_STYLE_TARGET } from "@/components/Constants/HandleStyles";
+
 
 const MemoizedNodeIcon = memo(NodeIcon);
 const MemoizedNodeName = memo(NodeName);
@@ -36,7 +37,8 @@ function VoiceAgentNode({
     selected?: boolean;
     id: string;
 }) {
-    
+    const updateNodeInternals = useUpdateNodeInternals();
+
     const [componentData,setComponentData] = useState<NodeData>(data.ui || {});
     const [availableAgents, setAvailableAgents] = useState<any[]>([]);
     const {modalOpen, setModalOpen} = ModalStore();
@@ -48,12 +50,22 @@ function VoiceAgentNode({
     
     const [isLoading, setIsLoading] = useState(true);
 
+    
+
+    const connections = useNodeConnections(
+      {handleType:'source'}
+    )
+
+    console.log("connections",connections);
+
     useEffect(()=>{
       if(getNodeConfigurations?.configurations?.apiKey){
         getAgents({apiKey:getNodeConfigurations?.configurations?.apiKey as string}).then((res)=>{
           console.log(res)
           setAvailableAgents(res.agents);
+          
         }).finally(()=>{
+          updateNodeInternals(id);
           setIsLoading(false);
         })
       }
@@ -71,7 +83,9 @@ function VoiceAgentNode({
       }, [selected, id]);
 
       
-      
+      const handleConnect = (event:any)=>{
+        console.log("event",event);
+      }
 
 
 
@@ -95,7 +109,7 @@ function VoiceAgentNode({
               ) : availableAgents.length > 0 ? (
                 availableAgents.map((agent,index)=>(
                   <div key={index} className="flex w-full justify-start items-center gap-10 p-1 bg-neutral-50 rounded-lg border border-gray-100 shadow-sm">
-                    <Handle type="source" position={Position.Right} id={agent.agentId} style={DEFAULT_HANDLE_STYLE_SOURCE} />
+                    <Handle type="source" position={Position.Right} id={`handle-${agent.agentId}`} style={DEFAULT_HANDLE_STYLE_SOURCE} onConnect={handleConnect} />
                     <Avatar>
                     
                     <AvatarFallback className="bg-white border border-black-100">

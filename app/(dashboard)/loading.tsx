@@ -1,6 +1,7 @@
 "use client"
 import { texts } from "@/components/helpers/constants";
 import { MorphingText } from "@/components/magicui/morphing-text";
+import { Spinner } from "@heroui/spinner";
 import { motion } from "framer-motion";
 export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.   
@@ -12,7 +13,7 @@ export default function Loading() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
     >
-      <MorphingText texts={texts} className="text-4xl font-bold text-black" />
+      <Spinner />
     </motion.div>
   );
 }

@@ -11,6 +11,7 @@
 import type * as Integrations_Mail_Resend_index from "../Integrations/Mail/Resend/index.js";
 import type * as Integrations_Mail_Twilio_index from "../Integrations/Mail/Twilio/index.js";
 import type * as Integrations_Mail_index from "../Integrations/Mail/index.js";
+import type * as Integrations_Voice_chatgpt from "../Integrations/Voice/chatgpt.js";
 import type * as Integrations_Voice_elevenlabs from "../Integrations/Voice/elevenlabs.js";
 import type * as Integrations_factories_ElevenLabs from "../Integrations/factories/ElevenLabs.js";
 import type * as Integrations_relay_index from "../Integrations/relay/index.js";
@@ -54,6 +55,7 @@ declare const fullApi: ApiFromModules<{
   "Integrations/Mail/Resend/index": typeof Integrations_Mail_Resend_index;
   "Integrations/Mail/Twilio/index": typeof Integrations_Mail_Twilio_index;
   "Integrations/Mail/index": typeof Integrations_Mail_index;
+  "Integrations/Voice/chatgpt": typeof Integrations_Voice_chatgpt;
   "Integrations/Voice/elevenlabs": typeof Integrations_Voice_elevenlabs;
   "Integrations/factories/ElevenLabs": typeof Integrations_factories_ElevenLabs;
   "Integrations/relay/index": typeof Integrations_relay_index;

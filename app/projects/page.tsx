@@ -2,7 +2,7 @@
 
 import DialogComponent from "./dialog";
 import { api } from "@/convex/_generated/api";
-import { Unauthenticated, Authenticated, useQuery } from "convex/react";
+import { Unauthenticated, Authenticated, useQuery, useMutation } from "convex/react";
 import {
   Card,
   CardDescription,
@@ -57,6 +57,7 @@ import {
   AlertDialogContent,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Id } from "@/convex/_generated/dataModel";
 
 export default function Page() {
   const data = useQuery(api.projects.listProjects, {});
@@ -68,6 +69,14 @@ export default function Page() {
     }
   }, [data]);
   const router = useRouter();
+
+
+  const  deleteProject  = useMutation(api.projects.deleteProject);
+
+  const handleDeleteProject = async (projectId: Id<"projects">) => {
+    await deleteProject({ projectId });
+  };
+
 
   return (
     <div className=" w-full min-h-screen  flex flex-col justify-start   ">
@@ -249,7 +258,7 @@ export default function Page() {
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction className="destructive" >Continue</AlertDialogAction>
+                                <AlertDialogAction className="destructive" onClick={() => handleDeleteProject(project._id)} >Continue</AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
                           </AlertDialog>                          
@@ -280,7 +289,11 @@ export default function Page() {
                     <div className="flex h-full w-full items-center justify-end">
                       <InteractiveHoverButton
                         onClick={() => {
-                          router.push(`/connections/${project._id}`);
+                          // Use replace instead of push for faster navigation
+                          // since we don't need browser history for this
+                          router.replace(`/connections/${project._id}`, { 
+                            scroll: false // Prevent scrolling to top
+                          });
                         }}
                         text="Go to flow"
                         className="w-32 "

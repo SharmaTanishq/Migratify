@@ -130,6 +130,8 @@ function ECommerceNode({
       <GenericCardLayout
         id={id}
         selected={selected}       
+        node={data}
+        defaultHeader={false}
       >
         
         {/* Header Section */}

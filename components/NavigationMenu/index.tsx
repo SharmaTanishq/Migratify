@@ -72,7 +72,7 @@ export function NavigationMenuLinks() {
           </Unauthenticated>
           <Authenticated>
           <NavigationMenuItem>
-                <Link href="/projects" legacyBehavior passHref>
+                <Link href="/projects" replace scroll={false}>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Projects
                   </NavigationMenuLink>

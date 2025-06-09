@@ -58,6 +58,7 @@ const nodeTypes = {
   mailNode: Mail,
   voiceAgentNode: VoiceAgentNode,
   callProviderNode: CallProviderNode,
+  
   // paymentNode: Payment,
   // shippingNode: Shipping,
   // socialNode: Social,
@@ -102,7 +103,7 @@ export default function Page() {
 
 
 
-
+  
 
 
   const { screenToFlowPosition } = useReactFlow();
@@ -196,11 +197,13 @@ export default function Page() {
 
   const onEdgeConnect = useCallback(
     (event: any) => {
+      console.log("event",event);
       addEdgeMutation({
         projectId: projectId,
         source: event.source,
         target: event.target,
         type: "",
+        
         sourceHandle: event.sourceHandle,
         targetHandle: event.targetHandle,
       }).then((res) => {
@@ -210,6 +213,7 @@ export default function Page() {
           //type: "customEdge",
           source: event.source,
           target: event.target,
+        
           sourceHandle: event.sourceHandle,
           targetHandle: event.targetHandle,
         });
@@ -254,12 +258,14 @@ export default function Page() {
           onConnect={onEdgeConnect}
           onEdgesDelete={onEdgeDelete}
           nodeTypes={nodeTypes}
+
+        
           //edgeTypes={edgeType}
           onDrop={onDrop}
           onDragOver={onDragOver}
           minZoom={0.5}
           maxZoom={8}
-          fitView={false}
+          fitView={true}
           style={{ borderRadius: "10px" }}
         >
           <Controls />

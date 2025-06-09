@@ -33,6 +33,7 @@ import Loading from "./loading";
   import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { Spinner } from "@heroui/spinner";
 
 const selector = (state: any) => ({
   setInitialNodes: state.setInitialNodes,
@@ -54,11 +55,11 @@ function AuthenticatedContent({ children }: { children: React.ReactNode }) {
   const params = useParams();
   const projectId = params.projectId as string;
   
-  // Get the current pathname to determine active page
+  
   const pathname = usePathname();
   
   
-  // For debugging purposes
+  
   
   
   if (!projectId) return <div>No project id or Incorrect Project Id</div>;
@@ -69,15 +70,26 @@ function AuthenticatedContent({ children }: { children: React.ReactNode }) {
     isLoading: edgesLoading,
     error: edgesError,
   } = useGetEdges(projectId);
+  
 
   useEffect(() => {
+
     setInitialNodes(nodes);
+  }, [nodes, setInitialNodes]);
+  
+  useEffect(() => {
+
     setInitialEdges(edges);
-  }, [nodes, edges]);
+    
+  }, [edges, setInitialEdges]);
 
   if (isLoading || edgesLoading) {
     // Add a delay of 500ms before showing loading state
-    return <Loading />;
+    return (
+    <div className="flex justify-center items-center w-full min-h-screen">
+      <Spinner size="lg" />
+    </div>
+    );
   }
 
   const currentPage = pathname.split('/')[1] || 'dashboard';
