@@ -51,7 +51,7 @@ const connections = useNodeConnections({
      handleType: "target",
       });
 
-  console.log("connections", connections);
+
   
   const saveNodeConfigurations = useMutation(
     api.flows.node.data.saveNodeConfigurations

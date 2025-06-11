@@ -1,9 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import GenericCardLayout from "../Layouts/Card/CardHolder";
-import {
-  CardContent,
-  
-} from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 
 import { NodeDataType } from "@/components/Types/Flows";
 import NodeDescription from "../Layouts/GenericNodeUtils/NodeDescription";
@@ -33,21 +30,22 @@ import { DEFAULT_HANDLE_STYLE_TARGET } from "@/components/Constants/HandleStyles
 import flowStore from "@/components/Store/store";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
-
-
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function VoiceAgentNode({
   data,
   selected,
   id,
-  
-  
 }: {
   data: NodeDataType;
   selected?: boolean;
   id: string;
-  configurations?:Record<string,any>;
+  configurations?: Record<string, any>;
 }) {
   const updateNodeInternals = useUpdateNodeInternals();
 
@@ -62,7 +60,7 @@ function VoiceAgentNode({
       nodeId: id as Id<"nodes">,
     }
   );
-  
+
   const [isLoading, setIsLoading] = useState(true);
 
   const connections = useNodeConnections({ handleType: "source" });
@@ -109,16 +107,25 @@ function VoiceAgentNode({
     }
   }, []);
 
-  
+  const handleConnectTarget = useCallback((event: any) => {
+    console.log("event", event.targetHandle);
+    if (event.targetHandle === "tool") {
+      console.log("event", event.sourceHandle);
+    }
+  }, []);
 
   const isValidConnection = useCallback((connection: any) => {
-    if (
-      connection.targetHandle === "tool" ||
-      connection.targetHandle === "call-target"
-    ) {
-      return true;
+    if (connection.targetHandle === connection.sourceHandle) {
+      return false;
     }
-    return false;
+    // if (
+    //   connection.targetHandle === "tool" ||
+    //   connection.targetHandle === "call-target" ||
+    //   connection.targetHandle === "voice-target"
+    // ) {
+    //   return true;
+    // }
+    return true;
   }, []);
 
   return (
@@ -140,24 +147,55 @@ function VoiceAgentNode({
                 key={index}
                 className="relative w-full  p-1 bg-neutral-50 rounded-lg border border-gray-100 shadow-sm"
               >
-                <Handle
-                  type={"target"}
-                  position={Position.Left}
-                  id={"voice-target"}
-                  style={{ ...DEFAULT_HANDLE_STYLE_TARGET, left: "-25px" }}
-                />
-                {data.configurations.isHandleReversed !== true && (
-                   <Handle
-                   type="source"
-                   position={Position.Right}
-                   id={`${agent.agentId}`}
-                   style={{ ...DEFAULT_HANDLE_STYLE_SOURCE, right: "-25px" }}
-                   onConnect={handleConnect}
-                   isConnectableStart={true}
-                   isValidConnection={isValidConnection}
-                 />
-                )}
-               
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Handle
+                        type={"target"}
+                        position={Position.Left}
+                        id={data.configurations.isHandleReversed ? `handoff-${agent.agentId}` : `${agent.agentId}`}
+                        style={{
+                          ...DEFAULT_HANDLE_STYLE_TARGET,
+                          left: "-25px",
+                        }}
+                        isConnectableStart={
+                          data.configurations.isHandleReversed !== true
+                        }
+                        onConnect={handleConnectTarget}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Connect {agent.name} with batch of calls <br/> or use as a handoff from other agents</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
+                <TooltipProvider>
+                  <Tooltip >
+                    <TooltipTrigger asChild>
+                      {data.configurations.isHandleReversed !== true && (
+                        <Handle
+                          type="source"
+                          position={Position.Right}
+                          id={`${agent.agentId}`}
+                          style={{
+                            ...DEFAULT_HANDLE_STYLE_SOURCE,
+                            right: "-25px",
+                          }}
+                          onConnect={handleConnect}
+                          isConnectableStart={true}
+                          isValidConnection={isValidConnection}
+                        />
+                      )}
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="right-10">
+                      <p>Connect {agent.name} with Integrations <br/> or for handoff to other agents</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
+
                 <div className="flex justify-start items-center gap-10">
                   <Avatar>
                     <AvatarFallback className="bg-white border border-black-100">

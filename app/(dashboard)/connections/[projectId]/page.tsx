@@ -24,7 +24,7 @@ import { AddNodeDrawer } from "@/components/Connections/LeftDrawer";
 
 import AddNodeFAB from "@/components/Connections/Fab";
 import { useNodeDelete } from "@/components/hooks/useNodeDelete";
-import { AllNodeType } from "@/components/Types/Flows";
+import { AllNodeType, EdgeType } from "@/components/Types/Flows";
 import ECommerce from "@/components/CustomNodes/E-Commerce";
 
 import Bridges from "@/components/CustomNodes/Bridges";
@@ -195,12 +195,13 @@ export default function Page() {
 
   const onEdgeConnect = useCallback(
     (event: any) => {
+      console.log("event", event);
       addEdgeMutation({
         projectId: projectId,
         source: event.source,
         target: event.target,
         type: "",
-
+        data:{configuration:{"isTool":true,"handoff":true}},
         sourceHandle: event.sourceHandle,
         targetHandle: event.targetHandle,
       }).then((res) => {
@@ -213,6 +214,7 @@ export default function Page() {
 
           sourceHandle: event.sourceHandle,
           targetHandle: event.targetHandle,
+          data:{configuration:{"isTool":true,"handoff":true}},
         });
       });
     },
@@ -220,8 +222,18 @@ export default function Page() {
   );
 
   const onEdgeDelete = useCallback(
+
+    
     (edges: Edge[]) => {
       edges.forEach((edge) => {
+        console.log("edge", edge);
+        if(edge.targetHandle === "tool"){
+          //remove tool from the node with agent id.
+          //edge.sourceHandle will have the agent id. 
+          //edge.targetWill have the tool id.
+
+
+        }
         deleteEdge(edge.id);
       });
     },
@@ -242,7 +254,7 @@ export default function Page() {
   return (
     <div className="w-full h-full">
       <div className="flex w-full h-full justify-center items-center  rounded-xl">
-        <ReactFlow<AllNodeType>
+        <ReactFlow<AllNodeType,EdgeType>
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}

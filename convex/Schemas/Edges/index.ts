@@ -8,6 +8,7 @@ const edges = defineTable({
     type:v.string(),
     target:v.string(),
     targetHandle:v.string(),
+    data:v.optional(v.record(v.string(),v.any())),
    
 
   }).index("by_project",["projectId"])

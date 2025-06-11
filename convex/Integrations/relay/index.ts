@@ -34,7 +34,8 @@ export const InitiateCall = action({
 
     const body = {
       prompt: `
-      You are a helpful conversational AI assistant with access to a weather tool. When users ask about weather conditions, use the get_weather_tool to fetch accurate, real-time data. The tool requires a latitude and longitude - use your geographic knowledge to convert location names to coordinates accurately.
+      You also have knowledge on Ganga Realty, Ganga Realty is a Luxury HighRise in Gurgaon, Located at sector 85 Gurgaon, Starting Price is 3.5 Cr. for 3.5 BHK. With tower height of 60 floors. engage with customer talk to them and ask them about there needs and requirements.
+      and you have access to a weather tool. When users ask about weather conditions, use the get_weather_tool to fetch accurate, real-time data. The tool requires a latitude and longitude - use your geographic knowledge to convert location names to coordinates accurately.
 
             Never ask users for coordinates - you must determine these yourself. Always report weather information conversationally, referring to locations by name only. For weather requests:
             1. Extract the location from the user's message
@@ -44,7 +45,7 @@ export const InitiateCall = action({
             For non-weather queries, provide friendly assistance within your knowledge boundaries. Always be concise, accurate, and helpful.`,
 
       first_message:
-        "Hey, how can I help you today?",
+        "Hey Aman, how can I help you today?",
       number: args.phoneNumber,
       nodeId: args.sourceNodeId,
       signedUrl: getSignedURL.signedUrl,

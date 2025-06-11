@@ -34,6 +34,7 @@ export type EdgeType = Edge<EdgeDataType, "default">;
 export type EdgeDataType = {
     sourceHandle: sourceHandleType;
     targetHandle: targetHandleType;
+    data:any;
   };
 
 export type PlatformType = 'vtex' | 'shopify' | 'woocommerce';

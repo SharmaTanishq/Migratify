@@ -44,6 +44,7 @@ import { WeatherLayout } from "./Layouts/weather";
 import { WebhookLayout } from "./Layouts/webhook";
 import { GenericToolLayout } from "./Layouts/genericTool";
 import flowStore from "@/components/Store/store";
+import AgentToAgentLayout from "./Layouts/agenttoagent";
 
 function BridgesNode({
   data,
@@ -67,14 +68,12 @@ function BridgesNode({
 
   const node = useStore((state) => state.getNode(id));
 
-  const createWebhook = useMutation(api.webhooks.index.createWebhook);
+  
   const addTool = useAction(api.Integrations.Voice.elevenlabs.addTool);
   
 
-  const getWebhookUrl = useQuery(
-    api.webhooks.index.getWebhookUrl,
-    node?._id ? { nodeId: node._id } : "skip"
-  );
+  
+  
   
   const sourceNode = edges
   .filter((edge) => edge.target === id)
@@ -84,22 +83,22 @@ function BridgesNode({
 
   const {getNode} = flowStore()
 
-  useEffect(() => {
-    if (getWebhookUrl === null && sourceNode !== undefined) {
-      createWebhook({
-        nodeId: node._id,
-        connectedSource:{
-          nodeId:sourceNode?.id as Id<"nodes">,
-          platform:sourceNodeData.Name.toLowerCase() as PlatformType,
-        },
-        events: selectedEvents.map((event) => ({
-          event: event,
-          isActive: true,
-        })),
-        projectId: node.projectId,
-      });
-    }
-  }, [getWebhookUrl, sourceNode]);
+
+  //   if (getWebhookUrl === null && sourceNode !== undefined) {
+  //     createWebhook({
+  //       nodeId: node._id,
+  //       connectedSource:{
+  //         nodeId:sourceNode?.id as Id<"nodes">,
+  //         platform:sourceNodeData.Name.toLowerCase() as PlatformType,
+  //       },
+  //       events: selectedEvents.map((event) => ({
+  //         event: event,
+  //         isActive: true,
+  //       })),
+  //       projectId: node.projectId,
+  //     });
+  //   }
+  // }, [getWebhookUrl, sourceNode]);
 
   // Get the source node that's connected to this bridge
   
@@ -112,9 +111,9 @@ function BridgesNode({
 
   // Check if source node is an e-commerce node
   // Get the edge that connects to this bridge
-  const edgeSource = edges.find((edge) => edge.target === id);
+  
 
-  const isEcommerceSource = sourceNode?.type === "ecommerceNode";
+
 
   const handleConnect = useCallback((event:any)=>{
     
@@ -138,6 +137,8 @@ function BridgesNode({
         return <WeatherLayout />;
       case "webhook":
         return <WebhookLayout />;
+      case "agent-to-agent":
+        return <AgentToAgentLayout />;
       default:
         return <GenericToolLayout />;
     }
@@ -152,11 +153,11 @@ function BridgesNode({
     >
     
       <Separator />
-      <CardContent className="flex flex-col p-0 w-full justify-center items-center h-full">
+      
         {getCardContent()}        
-      </CardContent>
+      
 
-      <CardFooter className="p-4 bg-gray-100 rounded-b-xl">
+      {/* <CardFooter className="p-4 bg-gray-100 rounded-b-xl">
         <div className="w-full flex items-center justify-between">
           <span className="text-[8px] text-gray-500">Source</span>
           <div className="absolute left-0 ">
@@ -221,7 +222,7 @@ function BridgesNode({
             </div>
           </div>
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </GenericCardLayout>
   );
 }

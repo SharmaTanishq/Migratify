@@ -75,9 +75,11 @@ const flowStore = create<AppState>()(devtools((set, get) => ({
   },
 
   setInitialEdges:(edges)=>{
+    console.log("edges", edges);
     const edgesWithId = edges.map((edge:any)=>({
       ...edge,
-      id:edge._id
+      id:edge._id,
+      data:edge.data || {}
     }))
     set({edges:edgesWithId})
   },
