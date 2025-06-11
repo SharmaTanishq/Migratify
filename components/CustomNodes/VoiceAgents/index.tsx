@@ -154,7 +154,7 @@ function VoiceAgentNode({
                       <Handle
                         type={"target"}
                         position={Position.Left}
-                        id={data.configurations.isHandleReversed ? `handoff-${agent.agentId}` : `${agent.agentId}`}
+                        id={`${agent.agentId}` }
                         style={{
                           ...DEFAULT_HANDLE_STYLE_TARGET,
                           left: "-25px",

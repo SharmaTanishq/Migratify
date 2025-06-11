@@ -45,6 +45,7 @@ import { WebhookLayout } from "./Layouts/webhook";
 import { GenericToolLayout } from "./Layouts/genericTool";
 import flowStore from "@/components/Store/store";
 import AgentToAgentLayout from "./Layouts/agenttoagent";
+import { TOOLS } from "@/components/Types/constants";
 
 function BridgesNode({
   data,
@@ -133,12 +134,12 @@ function BridgesNode({
 
   const getCardContent = () =>{
     switch(node?.data?.ui?.node_data?.type){
-      case "weather":
-        return <WeatherLayout />;
-      case "webhook":
-        return <WebhookLayout />;
-      case "agent-to-agent":
-        return <AgentToAgentLayout />;
+      case TOOLS.WEATHER:
+        return <WeatherLayout id={id} data={data} />;
+      case TOOLS.WEBHOOK:
+        return <WebhookLayout id={id} data={data} />;
+      case TOOLS.AGENT_TO_AGENT:
+        return <AgentToAgentLayout id={id as Id<"nodes">} data={data} />;
       default:
         return <GenericToolLayout />;
     }

@@ -1,4 +1,4 @@
-export const WebhookLayout = () => {
+export const WebhookLayout = ({id,data}:{id:string,data:any}) => {
     return (<>
     {/* {isEcommerceSource && (
           <motion.div
