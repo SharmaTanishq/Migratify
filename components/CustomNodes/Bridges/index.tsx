@@ -23,7 +23,7 @@ import {
 import { motion } from "framer-motion";
 
 import Image from "next/image";
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -34,7 +34,7 @@ import useStore from "@/components/Store/store";
 import { toast } from "sonner";
 
 import { EventsConfig } from "@/components/helpers/EventsConfig";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ScriptCopyBtn } from "@/components/ui/script-copy-btn";
 import { Spinner } from "@heroui/spinner";
@@ -43,6 +43,7 @@ import GenericCardLayout from "../Layouts/Card/CardHolder";
 import { WeatherLayout } from "./Layouts/weather";
 import { WebhookLayout } from "./Layouts/webhook";
 import { GenericToolLayout } from "./Layouts/genericTool";
+import flowStore from "@/components/Store/store";
 
 function BridgesNode({
   data,
@@ -67,7 +68,7 @@ function BridgesNode({
   const node = useStore((state) => state.getNode(id));
 
   const createWebhook = useMutation(api.webhooks.index.createWebhook);
-
+  const addTool = useAction(api.Integrations.Voice.elevenlabs.addTool);
   
 
   const getWebhookUrl = useQuery(
@@ -80,6 +81,8 @@ function BridgesNode({
   .map((edge) => nodes.find((node) => node.id === edge.source))[0];
   
   const sourceNodeData: NodeData = sourceNode?.data?.ui as NodeData;
+
+  const {getNode} = flowStore()
 
   useEffect(() => {
     if (getWebhookUrl === null && sourceNode !== undefined) {
@@ -113,11 +116,24 @@ function BridgesNode({
 
   const isEcommerceSource = sourceNode?.type === "ecommerceNode";
 
-  
+  const handleConnect = useCallback((event:any)=>{
+    
+    if(event.targetHandle === "tool"){
+      const sourceNode = getNode(event.source);
+      if(sourceNode?.type === "voiceAgentNode"){
+        console.log("node",sourceNode);
+        addTool({
+          sourceId:event.source as Id<"nodes">,
+          agentId:event.sourceHandle,
+          toolId:node.data.ui.node_data.type,
+        })
+      }
+    }
+  },[])
   
 
   const getCardContent = () =>{
-    switch(node.data.ui.node_data.type){
+    switch(node?.data?.ui?.node_data?.type){
       case "weather":
         return <WeatherLayout />;
       case "webhook":
@@ -149,7 +165,10 @@ function BridgesNode({
                 <Handle
                   type="target"
                   position={Position.Left}
-                  isConnectable={true}
+                 
+                  onConnect={handleConnect}
+                  
+                  isConnectableEnd={true}
                   id="tool"
                   
                   style={{

@@ -30,7 +30,7 @@ import ECommerce from "@/components/CustomNodes/E-Commerce";
 import Bridges from "@/components/CustomNodes/Bridges";
 import { Id } from "@/convex/_generated/dataModel";
 import { useEdgeDelete } from "@/components/hooks/useEdgeDelete";
-import {DefaultEdge} from "@/components/CustomEdge";
+import { DefaultEdge } from "@/components/CustomEdge";
 import Output from "@/components/CustomNodes/Output";
 import Mail from "@/components/CustomNodes/Mail";
 import VoiceAgentNode from "@/components/CustomNodes/VoiceAgents";
@@ -58,19 +58,19 @@ const nodeTypes = {
   mailNode: Mail,
   voiceAgentNode: VoiceAgentNode,
   callProviderNode: CallProviderNode,
-  
+
   // paymentNode: Payment,
   // shippingNode: Shipping,
   // socialNode: Social,
 };
 
 const edgeType = {
-  customEdge:DefaultEdge
-}
+  customEdge: DefaultEdge,
+};
 
 export default function Page() {
   const params = useParams();
-  
+
   const { setOpen } = useSidebar();
 
   useEffect(() => {
@@ -78,14 +78,12 @@ export default function Page() {
   }, []);
   const projectId = params.projectId as string;
 
-  const {
-    nodes,
-    edges,
-    onNodesChange,
-    onEdgesChange,
-    addNode,
-    addEdge,
-  } = flowStore(useShallow(selector));
+  const { nodes, edges, onNodesChange, onEdgesChange, addNode, addEdge } =
+    flowStore(useShallow(selector));
+
+
+
+    
 
   const addNodeMutation = useMutation(api.flows.nodes.addNode);
   const addEdgeMutation = useMutation(api.flows.edges.addEdge);
@@ -101,11 +99,6 @@ export default function Page() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-
-
-  
-
-
   const { screenToFlowPosition } = useReactFlow();
 
   const [type] = useDnD();
@@ -119,7 +112,8 @@ export default function Page() {
     (event: any) => {
       event.preventDefault();
       const data = event.dataTransfer.getData("flow");
-      
+      const configurations = event.dataTransfer.getData("flowConfigurations");
+
       // check if the dropped element is valid
       if (!type) {
         return;
@@ -149,8 +143,11 @@ export default function Page() {
 
       addNodeMutation({
         projectId: projectId,
-        data: { ui: JSON.parse(data), secrets: {}, configurations: {} },
-
+        data: { 
+          ui: JSON.parse(data), 
+          secrets: {},                     
+        },
+        configurations:JSON.parse(configurations),
         measured: { height: position.y, width: position.x },
         position: position,
         //@ts-ignore
@@ -160,7 +157,8 @@ export default function Page() {
           id: res,
           type,
           position,
-          data: { ui: JSON.parse(data), secrets: {}, configurations: {} },
+          data: { ui: JSON.parse(data), secrets: {}, configurations: JSON.parse(configurations) },
+          
         });
       });
 
@@ -197,13 +195,12 @@ export default function Page() {
 
   const onEdgeConnect = useCallback(
     (event: any) => {
-      console.log("event",event);
       addEdgeMutation({
         projectId: projectId,
         source: event.source,
         target: event.target,
         type: "",
-        
+
         sourceHandle: event.sourceHandle,
         targetHandle: event.targetHandle,
       }).then((res) => {
@@ -213,7 +210,7 @@ export default function Page() {
           //type: "customEdge",
           source: event.source,
           target: event.target,
-        
+
           sourceHandle: event.sourceHandle,
           targetHandle: event.targetHandle,
         });
@@ -224,7 +221,6 @@ export default function Page() {
 
   const onEdgeDelete = useCallback(
     (edges: Edge[]) => {
-      console.log(edges);
       edges.forEach((edge) => {
         deleteEdge(edge.id);
       });
@@ -237,11 +233,12 @@ export default function Page() {
   }, []);
 
   const handleNodeDelete = useCallback((node: any) => {
-    deleteNode(node[0]._id);
+    
+    deleteNode(node[0].id);
   }, []);
 
   const handleNodeMouseEnter = useCallback((event: any, node: any) => {}, []);
-
+  
   return (
     <div className="w-full h-full">
       <div className="flex w-full h-full justify-center items-center  rounded-xl">
@@ -258,14 +255,12 @@ export default function Page() {
           onConnect={onEdgeConnect}
           onEdgesDelete={onEdgeDelete}
           nodeTypes={nodeTypes}
-
-        
           //edgeTypes={edgeType}
           onDrop={onDrop}
           onDragOver={onDragOver}
           minZoom={0.5}
-          maxZoom={8}
-          fitView={true}
+          maxZoom={100}
+          
           style={{ borderRadius: "10px" }}
         >
           <Controls />

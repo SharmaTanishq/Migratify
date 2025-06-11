@@ -6,6 +6,7 @@ export type FlowType = {
     name: string;
     id: string;
     data: ReactFlowJsonObject<AllNodeType, EdgeType> | null;    
+    configurations:Record<string,any>;
     description: string;
     endpoint_name?: string | null;
     style?: FlowStyleType;
@@ -14,6 +15,7 @@ export type FlowType = {
     updatedAt?: string;
     createdAt?: string;
     publishedAt?: string;
+    isHandleReversed?: boolean;
     documentId?: string;
     parent?: string;
     folder?: string;
@@ -70,12 +72,13 @@ export type NodeDataType = {
     type: string;
     node: APIClassType;
     subProperty?:NodeSubProperty;
-    _id:string;
+    id:string;
     ui:NodeData;
+    isHandleReversed?:boolean;
     configurations:any;
     secrets:any;
     selected:boolean,
-    id: string;
+    _id:string;
     output_types?: string[];
     selected_output_type?: string;
     buildStatus?: boolean;

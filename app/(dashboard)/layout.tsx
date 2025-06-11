@@ -73,14 +73,14 @@ function AuthenticatedContent({ children }: { children: React.ReactNode }) {
   
 
   useEffect(() => {
-
     setInitialNodes(nodes);
+
   }, [nodes, setInitialNodes]);
   
   useEffect(() => {
 
     setInitialEdges(edges);
-    
+
   }, [edges, setInitialEdges]);
 
   if (isLoading || edgesLoading) {
@@ -95,9 +95,7 @@ function AuthenticatedContent({ children }: { children: React.ReactNode }) {
   const currentPage = pathname.split('/')[1] || 'dashboard';
 
 
-  if (error || edgesError) {
-    return <div>Error: {error?.message || edgesError?.message}</div>;
-  }
+  
 
   return (
     <ReactFlowProvider>

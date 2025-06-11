@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useOnSelectionChange, useReactFlow } from "@xyflow/react";
+import { useNodeConnections, useOnSelectionChange, useReactFlow } from "@xyflow/react";
 
 import { useCallback, useEffect, useState } from "react";
 import ModalLayout from "../Modal";
@@ -33,6 +33,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useNodeDelete } from "@/components/hooks/useNodeDelete";
 import { ModalStore } from "@/components/Store/modal";
+import { api } from "@/convex/_generated/api";
+import { useMutation } from "convex/react";
+import { Id } from "@/convex/_generated/dataModel";
 
 const ICON = [
   {
@@ -91,11 +94,12 @@ export function FloatingBar({
 
   const instance = useReactFlow();
   const {setModalOpen} = ModalStore();
-  
+  const reverseHandle = useMutation(api.flows.nodes.handleSettings)
+  const {deleteNode} = useNodeDelete(id);
 
   const handleNodeDelete = () => {
     instance.deleteElements({ nodes: [{ id: id }] });
-   
+    //deleteNode(id);   
   };
 
   const handleNodeEdit = () => {
@@ -110,8 +114,18 @@ export function FloatingBar({
         setModalOpen(true);
   };
 
+
+
   const handleNodeSwitch = () => {
-    console.log("Node Switch");
+    
+    reverseHandle({
+      nodeId: id as Id<"nodes">,
+      configurations: {
+        isHandleReversed: !node.configurations.isHandleReversed,
+      },
+    });
+    
+    
   };
 
   const DATA = {

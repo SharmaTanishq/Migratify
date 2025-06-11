@@ -1,7 +1,10 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import GenericCardLayout from "../Layouts/Card/CardHolder";
-import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
-import { CardHeader } from "@/components/ui/card";
+import {
+  CardContent,
+  
+} from "@/components/ui/card";
+
 import { NodeDataType } from "@/components/Types/Flows";
 import NodeDescription from "../Layouts/GenericNodeUtils/NodeDescription";
 import NodeIcon from "../Layouts/NodeIcon";
@@ -17,124 +20,178 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ModalStore } from "@/components/Store/modal";
 import { Spinner } from "@heroui/spinner";
-import { Position, useUpdateNodeInternals,useConnection, useNodeConnections } from "@xyflow/react";
+import {
+  Position,
+  useUpdateNodeInternals,
+  useConnection,
+  useNodeConnections,
+  useStore,
+} from "@xyflow/react";
 import { Handle } from "@xyflow/react";
 import { DEFAULT_HANDLE_STYLE_SOURCE } from "@/components/Constants/HandleStyles";
 import { DEFAULT_HANDLE_STYLE_TARGET } from "@/components/Constants/HandleStyles";
+import flowStore from "@/components/Store/store";
+import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
 
 
-const MemoizedNodeIcon = memo(NodeIcon);
-const MemoizedNodeName = memo(NodeName);
-const MemoizedNodeDescription = memo(NodeDescription);
 
 
 function VoiceAgentNode({
-    data,
+  data,
   selected,
   id,
+  
+  
 }: {
-    data: NodeDataType;
-    selected?: boolean;
-    id: string;
+  data: NodeDataType;
+  selected?: boolean;
+  id: string;
+  configurations?:Record<string,any>;
 }) {
-    const updateNodeInternals = useUpdateNodeInternals();
+  const updateNodeInternals = useUpdateNodeInternals();
 
-    const [componentData,setComponentData] = useState<NodeData>(data.ui || {});
-    const [availableAgents, setAvailableAgents] = useState<any[]>([]);
-    const {modalOpen, setModalOpen} = ModalStore();
-    const getAgents = useAction(api.Integrations.Voice.elevenlabs.getAgents);
-    const getNodeConfigurations = useQuery(api.flows.node.data.getNodeConfigurations,{
+  const [componentData, setComponentData] = useState<NodeData>(data.ui || {});
+  const [availableAgents, setAvailableAgents] = useState<any[]>([]);
+  const { modalOpen, setModalOpen } = ModalStore();
+  const { getNode } = flowStore();
+  const getAgents = useAction(api.Integrations.Voice.elevenlabs.getAgents);
+  const getNodeConfigurations = useQuery(
+    api.flows.node.data.getNodeConfigurations,
+    {
       nodeId: id as Id<"nodes">,
-    })
+    }
+  );
+  
+  const [isLoading, setIsLoading] = useState(true);
 
-    
-    const [isLoading, setIsLoading] = useState(true);
+  const connections = useNodeConnections({ handleType: "source" });
 
-    
-
-    const connections = useNodeConnections(
-      {handleType:'source'}
-    )
-
-    console.log("connections",connections);
-
-    useEffect(()=>{
-      if(getNodeConfigurations?.configurations?.apiKey){
-        getAgents({apiKey:getNodeConfigurations?.configurations?.apiKey as string}).then((res)=>{
-          console.log(res)
+  useEffect(() => {
+    if (getNodeConfigurations?.configurations?.apiKey) {
+      getAgents({
+        apiKey: getNodeConfigurations?.configurations?.apiKey as string,
+      })
+        .then((res) => {
           setAvailableAgents(res.agents);
-          
-        }).finally(()=>{
+        })
+        .finally(() => {
           updateNodeInternals(id);
           setIsLoading(false);
-        })
-      }
-    },[getNodeConfigurations])
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, [getNodeConfigurations]);
 
-    
-      const MemoizedFloatingBar = useMemo(() => {
-        return <FloatingBar isOpen={selected} node={data} id={id} />;
-      }, [selected, id]);
-    
-      const MemoizedModal = useMemo(() => {
-        return (
-           selected && <Modal isOpen={true} nodeData={componentData} nodeId={id} size="default" availableAgents={availableAgents} />
-        );
-      }, [selected, id]);
+  const MemoizedFloatingBar = useMemo(() => {
+    return <FloatingBar isOpen={selected} node={data} id={id} />;
+  }, [selected, id]);
 
-      
-      const handleConnect = (event:any)=>{
-        console.log("event",event);
-      }
-
-
-
+  const MemoizedModal = useMemo(() => {
     return (
-        <div className="relative">
-      
-        <div className="absolute -top-24 left-0  min-w-full ">
-            {MemoizedFloatingBar}
-        </div>
-        <Handle type="target" position={Position.Left} id={"voice-target"} style={{...DEFAULT_HANDLE_STYLE_TARGET,left:"1px"}}  />
-        
-        <GenericCardLayout id={id} selected={selected} node = {data}>            
-            
-           
-            {/* <Separator /> */}
-            <CardContent className="flex flex-col gap-2" >
-              {isLoading ? (
-                <div className="flex w-full items-center justify-center">
-                  <Spinner size="sm" />
-                </div>
-              ) : availableAgents.length > 0 ? (
-                availableAgents.map((agent,index)=>(
-                  <div key={index} className="flex w-full justify-start items-center gap-10 p-1 bg-neutral-50 rounded-lg border border-gray-100 shadow-sm">
-                    <Handle type="source" position={Position.Right} id={`handle-${agent.agentId}`} style={DEFAULT_HANDLE_STYLE_SOURCE} onConnect={handleConnect} />
-                    <Avatar>
-                    
+      selected && (
+        <Modal
+          isOpen={true}
+          nodeData={componentData}
+          nodeId={id}
+          size="default"
+          availableAgents={availableAgents}
+        />
+      )
+    );
+  }, [selected, id]);
+
+  const handleConnect = useCallback((event: any) => {
+    console.log("event", event.targetHandle);
+    if (event.targetHandle === "tool") {
+      console.log("event", event.sourceHandle);
+    }
+  }, []);
+
+  
+
+  const isValidConnection = useCallback((connection: any) => {
+    if (
+      connection.targetHandle === "tool" ||
+      connection.targetHandle === "call-target"
+    ) {
+      return true;
+    }
+    return false;
+  }, []);
+
+  return (
+    <div className="relative">
+      <div className="absolute -top-24 left-0  min-w-full ">
+        {MemoizedFloatingBar}
+      </div>
+
+      <GenericCardLayout id={id} selected={selected} node={data}>
+        {/* <Separator /> */}
+        <CardContent className="flex flex-col gap-2">
+          {isLoading ? (
+            <div className="flex w-full items-center justify-center">
+              <Spinner size="sm" />
+            </div>
+          ) : availableAgents.length > 0 ? (
+            availableAgents.map((agent, index) => (
+              <div
+                key={index}
+                className="relative w-full  p-1 bg-neutral-50 rounded-lg border border-gray-100 shadow-sm"
+              >
+                <Handle
+                  type={"target"}
+                  position={Position.Left}
+                  id={"voice-target"}
+                  style={{ ...DEFAULT_HANDLE_STYLE_TARGET, left: "-25px" }}
+                />
+                {data.configurations.isHandleReversed !== true && (
+                   <Handle
+                   type="source"
+                   position={Position.Right}
+                   id={`${agent.agentId}`}
+                   style={{ ...DEFAULT_HANDLE_STYLE_SOURCE, right: "-25px" }}
+                   onConnect={handleConnect}
+                   isConnectableStart={true}
+                   isValidConnection={isValidConnection}
+                 />
+                )}
+               
+                <div className="flex justify-start items-center gap-10">
+                  <Avatar>
                     <AvatarFallback className="bg-white border border-black-100">
                       {agent.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
+
                   <div>
                     <h3 className="text-sm font-medium">{agent.name}</h3>
-                    
                   </div>
                 </div>
-              ))
+              </div>
+            ))
+          ) : (
+            <div className="flex w-full items-center justify-center">
+              {getNodeConfigurations?.configurations?.apiKey ? (
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    setModalOpen(true);
+                  }}
+                >
+                  Create Agent
+                </Button>
               ) : (
-                <div className="flex w-full items-center justify-center">
-                 <Button variant="primary" onClick={()=>{
-                  setModalOpen(true);
-                 }}>Create Agent</Button>
-                </div>
+                <Label>Add API Key</Label>
               )}
-              
-            </CardContent>
-        </GenericCardLayout>
-        {MemoizedModal}
-        </div>
-    )
+            </div>
+          )}
+        </CardContent>
+      </GenericCardLayout>
+      {MemoizedModal}
+    </div>
+  );
 }
 
 export default memo(VoiceAgentNode);

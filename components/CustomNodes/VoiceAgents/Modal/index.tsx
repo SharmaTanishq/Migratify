@@ -181,14 +181,14 @@ const Modal = ({
         <DialogHeader className="px-4">
           <div className="flex items-center gap-2">
             <Image
-              src={node.data.ui.node_logo.url}
+              src={node?.data?.ui?.node_logo?.url}
               alt="ElevenLabs"
               width={60}
               height={50}
             />
             <DialogTitle className="">
               <span className="text-2xl font-bold">
-                {node.data.ui.Name || "Voice Agent"}
+                {node?.data?.ui?.Name || "Voice Agent"}
               </span>
             </DialogTitle>
           </div>
@@ -306,7 +306,7 @@ const Modal = ({
             {activeSection === "Settings" && (
               <Card className="shadow-none border-none ">
                 <CardHeader>
-                  <CardTitle>{`${node.data.ui.Name || "Voice Agent"} Settings`}</CardTitle>
+                  <CardTitle>{`${node?.data?.ui?.Name || "Voice Agent"} Settings`}</CardTitle>
                   <CardDescription>
                     Configure your settings here.
                   </CardDescription>

@@ -1,7 +1,7 @@
 import { NodeDataType } from "@/components/Types/Flows";
 import { CardContent } from "@/components/ui/card";
 import GenericCardLayout from "../Layouts/Card/CardHolder";
-import { Position, Handle } from "@xyflow/react";
+import { Position, Handle, useNodeConnections } from "@xyflow/react";
 import { memo, useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,8 @@ import { debounce } from "@mui/material";
 import { FloatingBar } from "../Layouts/FloatingBar";
 import { Separator } from "@/components/ui/separator";
 import flowStore from "@/components/Store/store";
+import { Spinner } from "@heroui/spinner";
+import { toast } from "sonner";
 
 interface NodeConfigurations {
   authToken: string;
@@ -44,7 +46,12 @@ function CallProviderNode({
         inboundUrl: "",
         testPhoneNumber: ""
       });
-    
+  
+const connections = useNodeConnections({       
+     handleType: "target",
+      });
+
+  console.log("connections", connections);
   
   const saveNodeConfigurations = useMutation(
     api.flows.node.data.saveNodeConfigurations
@@ -88,15 +95,31 @@ function CallProviderNode({
   }, [selected, id]);
 
   const makeTestCall = useAction(api.Integrations.relay.index.InitiateCall);
+  const [loading, setLoading] = useState(false);
 
   const handleTestCall = ()=>{
-    console.log(getSourceNode(id))
+    setLoading(true);
     makeTestCall({
       sourceNodeId: getSourceNode(id),
       sourcePlatform: "elevenlabs",
       targetNodeId: id,
       targetPlatform: "twilio",
       phoneNumber: configurations.testPhoneNumber || ""
+    }).then((res:any)=>{
+        if(res.success){
+          toast.success("Call initiated successfully");
+          setLoading(false);
+        }else{
+          toast.error("Failed to initiate call",{
+            description: res.error
+          });
+          setLoading(false);
+        }
+    }).catch((err:any)=>{
+      toast.error("Failed to initiate call",{
+        description: err.message
+      });
+      setLoading(false);
     });
   };
 
@@ -110,6 +133,8 @@ function CallProviderNode({
         position={Position.Left}
         id={"call-target"}
         style={{ ...DEFAULT_HANDLE_STYLE_TARGET, left: "1px" }}
+        isConnectable={connections.length <= 1}
+        
       />
 
     
@@ -185,7 +210,9 @@ function CallProviderNode({
                     <Label className="text-sm text-gray-400 font-medium">Add Phone Number to Test</Label>
                     <Input type="text" placeholder="Test Phone Number" value={configurations.testPhoneNumber} onChange={(e) => setConfigurations({ ...configurations, testPhoneNumber: e.target.value })} />
                 </div>
-                <Button className="w-full" variant="primary" onClick={()=>handleTestCall()}>Test Call</Button>                
+                <Button className="w-full" variant="primary" onClick={()=>handleTestCall()} disabled={!configurations.testPhoneNumber}>
+                  {loading ? <Spinner size="sm" color="white" /> : <span>Test Call</span>}
+                  </Button>                
             </div>
           </div>
         </CardContent>

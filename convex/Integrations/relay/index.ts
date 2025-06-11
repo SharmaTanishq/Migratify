@@ -1,80 +1,66 @@
-"use node"
+"use node";
 
 import { ConvexError, v } from "convex/values";
-import { action } from "../../_generated/server"
+import { action } from "../../_generated/server";
 import { ElevenLabs, ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 
 import { api } from "../../_generated/api";
 import { Id } from "../../_generated/dataModel";
 
-
-//THIS CONNECTS WITH RELAY SERVER AND Initiates a call via relay - Currently only supports twilio. 
-
-const clientTools = {
-    getCustomerDetails: async () => {
-      // Fetch customer details (e.g., from an API)
-      const customerData = {
-        id: 123,
-        name: "Alice",
-        subscription: "Pro"
-      };
-      // Return data directly to the agent.
-      return customerData;
-    }
-  };
-
 export const InitiateCall = action({
-    args: {
-        sourceNodeId: v.string(),
-        sourcePlatform: v.string(),
-        targetNodeId:v.string(),
-        targetPlatform:v.string(),
-        phoneNumber: v.string(),
-    },
-    handler: async (ctx, args) => {
-       
+  args: {
+    sourceNodeId: v.string(),
+    sourcePlatform: v.string(),
+    targetNodeId: v.string(),
+    targetPlatform: v.string(),
+    phoneNumber: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const nodeConfigurations = await ctx.runQuery(
+      api.flows.node.data.getNodeConfigurations,
+      { nodeId: args.sourceNodeId as Id<"nodes"> }
+    );
+    const apiKey = nodeConfigurations?.configurations.apiKey;
 
-        const nodeConfigurations = await ctx.runQuery(api.flows.node.data.getNodeConfigurations, { nodeId: args.sourceNodeId as Id<"nodes"> });
-        const apiKey = nodeConfigurations?.configurations.apiKey;
+    
+    const elevenlabs = new ElevenLabsClient({
+      apiKey: apiKey!,
+    });
 
-        console.log(apiKey);
-        const elevenlabs = new ElevenLabsClient({
-            apiKey: apiKey!,
-        });
+    const getSignedURL =
+      await elevenlabs.conversationalAi.conversations.getSignedUrl({
+        agentId: "JZaQecEnUNn3lddFbV3q",
+      });
 
-        
+    const body = {
+      prompt: `
+      You are a helpful conversational AI assistant with access to a weather tool. When users ask about weather conditions, use the get_weather_tool to fetch accurate, real-time data. The tool requires a latitude and longitude - use your geographic knowledge to convert location names to coordinates accurately.
 
-            
-        
-            const getSignedURL = await elevenlabs.conversationalAi.conversations.getSignedUrl({
-                agentId: "JZaQecEnUNn3lddFbV3q",
-            });
+            Never ask users for coordinates - you must determine these yourself. Always report weather information conversationally, referring to locations by name only. For weather requests:
+            1. Extract the location from the user's message
+            2. Convert the location to coordinates and call get_weather 
+            3. Present the information naturally and helpfully
 
+            For non-weather queries, provide friendly assistance within your knowledge boundaries. Always be concise, accurate, and helpful.`,
 
+      first_message:
+        "Hey, how can I help you today?",
+      number: args.phoneNumber,
+      nodeId: args.sourceNodeId,
+      signedUrl: getSignedURL.signedUrl,
+    };
 
-            
-        
+    const response:any = await fetch(`https://bridgeflow-relay.up.railway.app/outbound-call`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    }).catch((err) => console.log(err));
 
-        const body = {
-            prompt:"You are Rajesh,an AI Sales Agent specialized in real estate for Ganga Realty, focused on promoting and assisting potential customers interested in Anantam 85, a premium residential project located in Sector 85, Gurgaon.Your goal is to engage the potential buyers, answer their queries, and convert leads by offering personalized, professional, andwell-informed responses, If the customer starts speaking hindi, you start to reply in hindi",
-            first_message:"Hello Sir, Are you looking for real estate near Dwarka Expressway?",
-            number:args.phoneNumber,
-            nodeId:args.sourceNodeId,
-            signedUrl:getSignedURL.signedUrl
-            
-        }
+    const data = await response?.json();
+    console.log(data);
 
-        //console.log(getSignedURL);
-        
-        await fetch(`https://bridgeflow-relay.up.railway.app/outbound-call`,{
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        }).catch((err)=>console.log(err));
-
-        return "Initiated Call";
-
-    }
-})
+    return data;
+  },
+});

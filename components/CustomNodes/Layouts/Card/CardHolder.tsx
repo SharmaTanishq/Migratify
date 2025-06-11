@@ -19,6 +19,7 @@ const GenericCardLayout = ({
     className,
     node,
     defaultHeader = true,
+    
 }: {
 
     id: string;
@@ -27,6 +28,7 @@ const GenericCardLayout = ({
     node?: NodeDataType;
     className?: string;
     defaultHeader?: boolean;
+    
 }) => {
 
     if(!node) {
@@ -88,9 +90,12 @@ const GenericCardLayout = ({
           {defaultHeader && (
             <CardHeader>
             <CardTitle className="flex items-center justify-between w-full ">
-            <div className="flex items-center gap-2 ">
+            <div className="flex w-full  justify-between items-center gap-2 ">
+              <div className="flex items-center gap-2">
               {renderNodeIcon()}
               {renderNodeName()}
+              </div>
+             
               
             </div>
             
@@ -98,6 +103,7 @@ const GenericCardLayout = ({
           <CardDescription>            
               {renderNodeDescription()}                          
           </CardDescription>
+            
             </CardHeader>   
             )}
             {children}

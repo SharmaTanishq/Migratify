@@ -32,6 +32,7 @@ import type * as http from "../http.js";
 import type * as mail_index from "../mail/index.js";
 import type * as mappings_dataMap from "../mappings/dataMap.js";
 import type * as projects from "../projects.js";
+import type * as utils_toolHandlers from "../utils/toolHandlers.js";
 import type * as variables_index from "../variables/index.js";
 import type * as webhooks_events from "../webhooks/events.js";
 import type * as webhooks_handlers from "../webhooks/handlers.js";
@@ -76,6 +77,7 @@ declare const fullApi: ApiFromModules<{
   "mail/index": typeof mail_index;
   "mappings/dataMap": typeof mappings_dataMap;
   projects: typeof projects;
+  "utils/toolHandlers": typeof utils_toolHandlers;
   "variables/index": typeof variables_index;
   "webhooks/events": typeof webhooks_events;
   "webhooks/handlers": typeof webhooks_handlers;
