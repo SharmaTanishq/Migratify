@@ -110,6 +110,8 @@ export default function AgentToAgentLayout({
     //Now save the connection as transfer-to-agent to the source agent
   };
 
+  
+
   return (
     <>
       <CardContent className="p-4 flex flex-col gap-2">
@@ -202,7 +204,7 @@ export default function AgentToAgentLayout({
                 position={Position.Right}
                 isValidConnection={isValidConnection}
                 isConnectableStart={true}
-                isConnectableEnd={false}
+                isConnectableEnd={false}                
                 onConnect={handleConnectTo}
                 id="to-agent"
                 style={{
